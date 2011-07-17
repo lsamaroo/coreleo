@@ -1,0 +1,818 @@
+package com.coreleo.util;
+
+import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.util.*;
+
+import com.coreleo.util.closure.Block;
+
+/**
+ * 
+ * @author Leon Samaroo
+ * 
+ */
+public final class ArrayUtil {
+	
+	
+	public static final int size( Object[] x ){
+		if( x == null ){
+			return 0;
+		}
+		
+		return x.length;
+	}
+
+	
+	public static final boolean isInbounds(Object[] x, Object index) {
+		if (x == null) {
+			return false;
+		}
+		
+	   	int ix = NumberUtil.toInteger(index,-1);
+
+		if (ix < 0 || ix >= x.length) {
+			return false;
+		}
+
+		return true;		
+	}
+	
+	
+	
+	public static final boolean isInbounds(Object[] x, int index) {
+		if (x == null) {
+			return false;
+		}
+
+		if (index < 0 || index >= x.length) {
+			return false;
+		}
+
+		return true;		
+	}
+	
+	/**
+	 * @deprecated
+	 * @see isInbounds
+	 */
+	public static final boolean isValidIndex(Object[] x, int index) {
+		return isInbounds(x, index);
+	}
+	
+	
+	
+	public static final String get(String[] x, int index, String defaultValue) {
+		if (x == null) {
+			return null;
+		}
+
+		if (index < 0 || index >= x.length) {
+			return defaultValue;
+		}
+
+		return x[index];
+	}
+	
+
+	public static final Object get(Object[] x, int index, Object defaultValue) {
+		if (x == null) {
+			return null;
+		}
+
+		if (index < 0 || index >= x.length) {
+			return defaultValue;
+		}
+
+		return x[index];
+	}
+	
+	
+	public static final String get(String[] x, int index) {
+		if (x == null) {
+			return null;
+		}
+
+		if (index < 0 || index >= x.length) {
+			return null;
+		}
+
+		return x[index];
+	}
+	
+
+	public static final Object get(Object[] x, int index) {
+		if (x == null) {
+			return null;
+		}
+
+		if (index < 0 || index >= x.length) {
+			return null;
+		}
+
+		return x[index];
+	}
+		
+	
+	public static final boolean isEmpty( Object x ){
+        if (x == null) {
+            return true;
+        }
+
+        if (x instanceof Object[]) {
+            return ((Object[]) x).length <= 0;
+        }
+
+        return true;
+	}
+	
+	public static final boolean isEmpty(int[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+	public static final boolean isEmpty(long[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+	public static final boolean isEmpty(double[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+	public static final boolean isEmpty(float[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+	public static final boolean isEmpty(char[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+	public static final boolean isEmpty(byte[] x) {
+		if (x != null) {
+			return x.length <= 0;
+		}
+
+		return true;
+	}
+
+
+	public static final boolean isNotEmpty( Object x ){
+        return !isEmpty(x);
+	}
+
+
+	public static final boolean isNotEmpty(int[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final boolean isNotEmpty(long[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final boolean isNotEmpty(double[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final boolean isNotEmpty(float[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final boolean isNotEmpty(char[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final boolean isNotEmpty(byte[] x) {
+        return !isEmpty(x);
+	}
+
+	public static final String[] toStringArray(int[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.length];
+		for (int i = 0; i < x.length; i++) {
+			strings[i] = String.valueOf((x[i]));
+		}
+		return strings;
+	}
+
+	public static final String[] toStringArray(long[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.length];
+		for (int i = 0; i < x.length; i++) {
+			strings[i] = String.valueOf((x[i]));
+		}
+		return strings;
+	}
+
+	public static final String[] toStringArray(char[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.length];
+		for (int i = 0; i < x.length; i++) {
+			strings[i] = String.valueOf((x[i]));
+		}
+		return strings;
+	}
+
+	public static final String[] toStringArray(double[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.length];
+		for (int i = 0; i < x.length; i++) {
+			strings[i] = String.valueOf((x[i]));
+		}
+		return strings;
+	}
+
+	public static final String[] toStringArray(Collection x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.size()];
+		int count = 0;
+		for (Iterator i = x.iterator(); i.hasNext();) {
+			strings[count++] = String.valueOf(i.next());
+		}
+
+		return strings;
+	}
+
+	public static final String[] toStringArray(Object[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		String[] strings = new String[x.length];
+		for (int i = 0; i < x.length; i++) {
+			strings[i] = String.valueOf((x[i]));
+		}
+		return strings;
+	}
+
+	
+	// -------------------------------------------------------------------------------------------
+	// Integer
+	// -------------------------------------------------------------------------------------------
+
+	public static final Object getIntegerObject(Object[] x, int index) {
+		return NumberUtil.toIntegerObject(get(x, index));
+	}
+
+	public static final int[] toIntegerArray(Object[] x)
+			throws NumberFormatException {
+		if (x == null) {
+			return null;
+		}
+
+		int[] ints = new int[x.length];
+		for (int i = 0; i < x.length; i++) {
+			ints[i] = NumberUtil.toInteger(x[i]);
+		}
+		return ints;
+
+	}
+
+	public static final int[] toIntegerArray(Object[] x, int[] defaultValues) {
+		try {
+			return toIntegerArray(x);
+		} catch (Exception e) {
+			return defaultValues;
+		}
+	}
+
+	public static final Integer[] toIntegerObjectArray(Object[] x)
+			throws NumberFormatException {
+		if (x == null) {
+			return null;
+		}
+
+		if (x instanceof Integer[]) {
+			return (Integer[]) x;
+		}
+
+		Integer[] integers = new Integer[x.length];
+		for (int i = 0; i < x.length; i++) {
+			integers[i] = NumberUtil.toIntegerObject(x[i]);
+		}
+		return integers;
+	}
+
+	public static final Integer[] toIntegerObjectArray(Object[] x,
+			Integer[] defaultValues) {
+		try {
+			return toIntegerObjectArray(x);
+		} catch (Exception e) {
+			return defaultValues;
+		}
+	}
+
+	public static final Integer[] toIntegerObjectArray(int[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Integer[] integers = new Integer[x.length];
+		for (int i = 0; i < x.length; i++) {
+			integers[i] = NumberUtil.toIntegerObject(x[i]);
+		}
+		return integers;
+	}
+
+	public static final Integer[] toIntegerObjectArray(List x) {
+		if (x == null) {
+			return null;
+		}
+
+		Integer[] array = null;
+		try {
+			array = (Integer[]) x.toArray(new Integer[x.size()]);
+		} catch (ArrayStoreException ase) {
+			// in case this is not a list of Integer objects,
+			// then convert the objects to Integers
+			array = new Integer[x.size()];
+			for (int i = 0; i < x.size(); i++) {
+				array[i] = NumberUtil.toIntegerObject(x.get(i));
+			}
+		}
+
+		return array;
+	}
+
+	public static final int[] toIntegerArray(List x) {
+		if (x == null) {
+			return null;
+		}
+
+		int[] array = new int[x.size()];
+		for (int i = 0; i < x.size(); i++) {
+			array[i] = NumberUtil.toInteger(x.get(i));
+		}
+
+		return array;
+	}
+
+	
+	// -------------------------------------------------------------------------------------------
+	// Double
+	// -------------------------------------------------------------------------------------------
+
+	public static final Object getDoubleObject(Object[] x, int index) {
+		return NumberUtil.toDoubleObject(get(x, index));
+	}
+
+	public static final double[] toDoubleArray(Object[] x)
+			throws NumberFormatException {
+		if (x == null) {
+			return null;
+		}
+
+		double[] ints = new double[x.length];
+		for (int i = 0; i < x.length; i++) {
+			ints[i] = NumberUtil.toDouble(x[i]);
+		}
+		return ints;
+
+	}
+
+	public static final double[] toDoubleArray(Object[] x, double[] defaultValues) {
+		try {
+			return toDoubleArray(x);
+		} catch (Exception e) {
+			return defaultValues;
+		}
+	}
+
+	public static final Double[] toDoubleObjectArray(Object[] x)
+			throws NumberFormatException {
+		if (x == null) {
+			return null;
+		}
+
+		if (x instanceof Double[]) {
+			return (Double[]) x;
+		}
+
+		Double[] Doubles = new Double[x.length];
+		for (int i = 0; i < x.length; i++) {
+			Doubles[i] = NumberUtil.toDoubleObject(x[i]);
+		}
+		return Doubles;
+	}
+
+	public static final Double[] toDoubleObjectArray(Object[] x,
+			Double[] defaultValues) {
+		try {
+			return toDoubleObjectArray(x);
+		} catch (Exception e) {
+			return defaultValues;
+		}
+	}
+
+	public static final Double[] toDoubleObjectArray(int[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Double[] Doubles = new Double[x.length];
+		for (int i = 0; i < x.length; i++) {
+			Doubles[i] = NumberUtil.toDoubleObject(x[i]);
+		}
+		return Doubles;
+	}
+
+	public static final Double[] toDoubleObjectArray(List x) {
+		if (x == null) {
+			return null;
+		}
+
+		Double[] array = null;
+		try {
+			array = (Double[]) x.toArray(new Double[x.size()]);
+		} catch (ArrayStoreException ase) {
+			// in case this is not a list of Double objects,
+			// then convert the objects to Doubles
+			array = new Double[x.size()];
+			for (int i = 0; i < x.size(); i++) {
+				array[i] = NumberUtil.toDoubleObject(x.get(i));
+			}
+		}
+
+		return array;
+	}
+
+	public static final double[] toDoubleArray(List x) {
+		if (x == null) {
+			return null;
+		}
+
+		double[] array = new double[x.size()];
+		for (int i = 0; i < x.size(); i++) {
+			array[i] = NumberUtil.toDouble(x.get(i));
+		}
+
+		return array;
+	}
+
+	
+	public static final Object[] toObjectArray(List x) {
+		if (x == null) {
+			return null;
+		}
+
+		return x.toArray(new Object[x.size()]);
+	}
+
+	public static final String toCommaDelimitedString(int[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		final StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < x.length; i++) {
+			sb.append(x[i]);
+			if (i < x.length - 1) {
+				sb.append(",");
+			}
+		}
+		return sb.toString();
+	}
+
+	public static final String toCommaDelimitedString(Object[] x) {
+		return toDelimitedString(x, ",");
+	}
+
+	public static final String toDelimitedString(Object[] x, String delimiter) {
+		if (x == null) {
+			return null;
+		}
+
+		final StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < x.length; i++) {
+			sb.append(x[i]);
+			if (i < x.length - 1) {
+				sb.append(delimiter);
+			}
+		}
+		return sb.toString();
+	}
+	
+	public static final String toDelimitedString(Object[] x, String delimiter, Block alter) {
+		if (x == null) {
+			return null;
+		}
+
+		final StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < x.length; i++) {
+			sb.append( alter.invoke(x[i]) );
+			if (i < x.length - 1) {
+				sb.append(delimiter);
+			}
+		}
+		return sb.toString();
+	}
+
+	public static final Integer[] delimitedStringToIntegerObjectArray(String x,
+			String delimiter) {
+		if (x == null || delimiter == null) {
+			return null;
+		}
+
+		List list = CollectionUtil.delimitedStringToIntegerObjectList(x,
+				delimiter);
+		return (Integer[]) list.toArray(new Integer[list.size()]);
+	}
+
+	public static final Integer[] commaDelimitedStringToIntegerObjectArray(
+			String x) {
+		return delimitedStringToIntegerObjectArray(x, ",");
+	}
+
+	public static final int[] delimitedStringToIntegerArray(String x,
+			String delimiter) {
+		if (x == null || delimiter == null) {
+			return null;
+		}
+
+		List list = new ArrayList();
+		// TODO replace tokenizer with regex or split
+		Enumeration enumerator = new StringTokenizer(x, delimiter);
+		while (enumerator.hasMoreElements()) {
+			list.add(enumerator.nextElement());
+		}
+
+		return toIntegerArray(list);
+	}
+
+	public static final int[] commaDelimitedStringToIntegerArray(String x) {
+		return delimitedStringToIntegerArray(x, ",");
+	}
+
+	/**
+	 * @deprecated - use CollectionUtil.toIntegerObjectList instead.
+	 */
+	public static final List toIntegerObjectList(Object[] x)
+			throws NumberFormatException {
+		return CollectionUtil.toIntegerObjectList(x);
+	}
+
+	public static final Integer getMax(Integer[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Integer max = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			max = NumberUtil.getMax(max, x[i]);
+		}
+
+		return max;
+	}
+
+
+	public static final Double getMax(Double[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Double max = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			max = NumberUtil.getMax(max, x[i]);
+		}
+
+		return max;
+	}
+
+	
+	
+	public static final BigDecimal getMax(Object[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Object max = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			max = NumberUtil.getMax(max, x[i]);
+		}
+		return NumberUtil.toBigDecimal(max, null);
+	}
+
+	public static final Integer getMin(Integer[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Integer min = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			min = NumberUtil.getMin(min, x[i]);
+		}
+
+		return min;
+	}
+
+
+	public static final Double getMin(Double[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Double min = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			min = NumberUtil.getMin(min, x[i]);
+		}
+
+		return min;
+	}
+
+	
+	public static final BigDecimal getMin(Object[] x) {
+		if (x == null) {
+			return null;
+		}
+
+		Object min = x[0];
+
+		for (int i = 1; i < 24; i++) {
+			min = NumberUtil.getMin(min, x[i]);
+		}
+
+		return NumberUtil.toBigDecimal(min, null);
+	}
+
+	public static final Integer getSum(Integer[] x) {
+		Integer total = NumberUtil.ZERO_INTEGER;
+		if (x != null) {
+			for (int i = 0; i < x.length; i++) {
+				total = NumberUtil.sum(total, x[i]);
+			}
+		}
+		return total;
+	}
+	
+	
+	public static final Double getSum(Double[] x) {
+		Double total = NumberUtil.ZERO_DOUBLE;
+		if (x != null) {
+			for (int i = 0; i < x.length; i++) {
+				total = NumberUtil.sum(total, x[i]);
+			}
+		}
+		return total;
+	}
+	
+
+	public static final BigDecimal getSum(Object[] x) {
+		BigDecimal total = NumberUtil.ZERO_BIGDECIMAL;
+		if (x != null) {
+			for (int i = 0; i < x.length; i++) {
+				total = NumberUtil.sum(total, NumberUtil.toBigDecimal(x[i], 0));
+			}
+		}
+		return total;
+	}
+
+	public static Object[] clone(final Object[] x) {
+		if (x == null) {
+			return null;
+		}
+		return (Object[]) x.clone();
+	}
+
+	public static int[] clone(int[] x) {
+		if (x == null) {
+			return null;
+		}
+		return (int[]) x.clone();
+	}
+
+	public static char[] clone(final char[] x) {
+		if (x == null) {
+			return null;
+		}
+		return (char[]) x.clone();
+	}
+
+	public static byte[] clone(final byte[] x) {
+		if (x == null) {
+			return null;
+		}
+		return (byte[]) x.clone();
+	}
+
+	public static boolean isIntegerArray(Object[] x) {
+		if (x == null) {
+			return false;
+		}
+
+		try {
+			for (int i = 0; i < x.length; i++) {
+				NumberUtil.toInteger(x[i]);
+			}
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean contains(Object[] xArray, Object x) {
+		if (xArray == null) {
+			return false;
+		}
+
+		if (x == null) {
+			return false;
+		}
+
+		for (int i = 0; i < xArray.length; i++) {
+			if (x.equals(xArray[i])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static Object[] add(Object[] xArray, Object x) {
+		Object[] newArray = null;
+		if (xArray == null) {
+			newArray = new Object[1];
+		} else {
+			newArray = (Object[]) expand(xArray, xArray.length + 1);
+		}
+
+		newArray[newArray.length - 1] = x;
+
+		return newArray;
+	}
+
+	public static Object expand(Object obj, int newLength) {
+		Class clazz = obj.getClass();
+		if (!clazz.isArray()) {
+			return null;
+		}
+		int length = Array.getLength(obj);
+
+		Class componentType = obj.getClass().getComponentType();
+		Object newArray = Array.newInstance(componentType, newLength);
+		System.arraycopy(obj, 0, newArray, 0, length < newLength ? length
+				: newLength);
+		return newArray;
+	}
+	
+	
+	public static Object[] addAll(Object[] toThisArray, Object[] addThisArray) {
+		if( toThisArray == null && addThisArray == null ){
+			return null;
+		}
+		
+		if( toThisArray == null ){
+			return addThisArray;
+		}
+		
+		if( addThisArray == null ){
+			return toThisArray;
+		}
+		
+		Object[] newArray = (Object[]) expand(toThisArray, toThisArray.length + addThisArray.length );
+		for( int i = toThisArray.length; i < newArray.length; i++ ){
+			newArray[i] = addThisArray[ i - toThisArray.length ];
+		}
+
+		return newArray;
+	}
+	
+	
+}
