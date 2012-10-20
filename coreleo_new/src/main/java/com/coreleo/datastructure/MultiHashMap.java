@@ -1,4 +1,4 @@
-package com.coreleo.datastructure.multimap;
+package com.coreleo.datastructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,12 +14,11 @@ import java.util.List;
  *         An HashMap which allows mapping multiple values to a single key.
  * 
  */
-public class MultiHashMap extends HashMap implements MultiMap, Serializable
+public class MultiHashMap extends HashMap implements Serializable
 {
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
 	public boolean containsValue(Object key, Object value)
 	{
 		final List list = (List) super.get(key);
@@ -33,13 +32,11 @@ public class MultiHashMap extends HashMap implements MultiMap, Serializable
 		}
 	}
 
-	@Override
 	public List getCollection(Object key)
 	{
 		return (List) super.get(key);
 	}
 
-	@Override
 	public Iterator iterator(Object key)
 	{
 		final List list = (List) super.get(key);
@@ -53,7 +50,6 @@ public class MultiHashMap extends HashMap implements MultiMap, Serializable
 		}
 	}
 
-	@Override
 	public boolean putAll(Object key, Collection values)
 	{
 		if (values == null)
@@ -73,7 +69,6 @@ public class MultiHashMap extends HashMap implements MultiMap, Serializable
 		}
 	}
 
-	@Override
 	public int size(Object key)
 	{
 		final List list = (List) super.get(key);
@@ -87,7 +82,6 @@ public class MultiHashMap extends HashMap implements MultiMap, Serializable
 		}
 	}
 
-	@Override
 	public int totalSize()
 	{
 		int size = 0;
@@ -101,7 +95,6 @@ public class MultiHashMap extends HashMap implements MultiMap, Serializable
 		return size;
 	}
 
-	@Override
 	public Object remove(Object key, Object item)
 	{
 		final List list = (List) super.get(key);
