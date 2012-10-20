@@ -3,94 +3,151 @@
  */
 package com.coreleo.util.thread;
 
-import com.coreleo.util.*;
+import com.coreleo.util.LogUtil;
 import com.coreleo.util.pool.ObjectPool;
 
 /**
  * @author Leon Samaroo
  * 
  */
-public class ThreadPool extends ObjectPool {
-    private final static int DEFAULT_EXPIRE_TIME = (60 * 1000 * 30);
-    private final static int DEFAULT_REAP_TIME = (60 * 1000 * 3);
-    private final static int DEFAULT_MAX_THREAD = 50;
-    private final static int DEFAULT_MIN_THREAD = 0;
-    private int maxThread;
-    private int threadCounter = 0;
+public class ThreadPool extends ObjectPool<WorkerThread>
+{
+	private final static int DEFAULT_EXPIRE_TIME = (60 * 1000 * 30);
+	private final static int DEFAULT_REAP_TIME = (60 * 1000 * 3);
+	private final static int DEFAULT_MAX_THREAD = 50;
+	private final static int DEFAULT_MIN_THREAD = 0;
+	private final int maxThread;
+	private int threadCounter = 0;
 
+	public ThreadPool()
+	{
+		super("Thread Pool", DEFAULT_EXPIRE_TIME, 0, DEFAULT_REAP_TIME, DEFAULT_MIN_THREAD, DEFAULT_MAX_THREAD);
+		this.maxThread = DEFAULT_MAX_THREAD;
+	}
 
-    public ThreadPool() {
-        super("Thread Pool", DEFAULT_EXPIRE_TIME, 0, DEFAULT_REAP_TIME, DEFAULT_MIN_THREAD, DEFAULT_MAX_THREAD);
-        this.maxThread = DEFAULT_MAX_THREAD;
-    }
+	@Override
+	protected WorkerThread create() throws Exception
+	{
+		final WorkerThread workerThread = new WorkerThread(this);
+		workerThread.start();
+		return workerThread;
+	}
 
+	/**
+	 * Validates the worker thread. There are 2 situations when this method returns false, first if the argument is null, and the
+	 * second is if the given thread is stopped.
+	 * 
+	 */
+	@Override
+	protected boolean validate(WorkerThread obj)
+	{
+		final WorkerThread worker = obj;
+		if (worker == null)
+		{
+			return false;
+		}
 
-    protected Object create() throws Exception {
-        WorkerThread workerThread = new WorkerThread(this);
-        workerThread.start();
-        return workerThread;
-    }
+		if (worker.isStopped())
+		{
+			return false;
+		}
 
+		return true;
+	}
 
-    /**
-     * Validates the worker thread. There are 2 situations when this method
-     * returns false, first if the argument is null, and the second is if the
-     * given thread is stopped.
-     * 
-     */
-    protected boolean validate(Object obj) {
-        WorkerThread worker = (WorkerThread) obj;
-        if (worker == null) {
-            return false;
-        }
+	@Override
+	protected void expire(WorkerThread obj)
+	{
+		LogUtil.trace(this, "ThreadPool:expire - obj=" + obj);
+		WorkerThread worker = obj;
+		if (worker != null)
+		{
+			worker.kill();
+			worker = null;
+		}
+	}
 
-        if (worker.isStopped()) {
-            return false;
-        }
+	protected void returnWorker(WorkerThread worker)
+	{
+		LogUtil.trace(this, "ThreadPool:returnWorker - WorkerThread=" + worker);
+		synchronized (this)
+		{
+			LogUtil.trace(this, "ThreadPool:returnWorker - synchronized block");
+			threadCounter--;
+			super.checkIn(worker);
+			this.notifyAll();
+		}
+	}
 
-        return true;
-    }
+	protected WorkerThread borrowWorker() throws ThreadPoolException
+	{
+		LogUtil.trace(this, "ThreadPool:borrowWorker");
+		try
+		{
+			synchronized (this)
+			{
+				LogUtil.trace(this, "ThreadPool:borrowWorker - synchronized block");
+				while (threadCounter >= maxThread)
+				{
+					LogUtil.debug(this, "ThreadPool:borrowWorker - Waiting for free Thread, count=" + threadCounter + " maxThread=" + maxThread);
+					this.wait();
+				}
 
+				threadCounter++;
+				return super.checkOut();
+			}
+		}
+		catch (final Exception ex)
+		{
+			throw new ThreadPoolException(ex);
+		}
 
-    protected void expire(Object obj) {
-        LogUtil.trace(this, "ThreadPool:expire - obj=" + obj);
-        WorkerThread worker = (WorkerThread) obj;
-        if (worker != null) {
-            worker.kill();
-            worker = null;
-        }
-    }
+	}
 
+	public void runTask(Runnable runnable) throws ThreadPoolException
+	{
+		borrowWorker().runTask(runnable);
+	}
 
-    protected void returnWorker(WorkerThread worker) {
-        LogUtil.trace(this, "ThreadPool:returnWorker - WorkerThread=" + worker);
-        synchronized (this) {
-            LogUtil.trace(this, "ThreadPool:returnWorker - synchronized block");
-            threadCounter--;
-            super.checkIn(worker);
-            this.notifyAll();
-        }
-    }
+	public static void main(String args[])
+	{
+		final ThreadPool pool = new ThreadPool();
+		final Runnable run = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					System.out.println(Thread.currentThread().getId() + " " + i);
+				}
 
+			}
+		};
 
-    public WorkerThread borrowWorker() throws ThreadPoolException {
-        LogUtil.trace(this, "ThreadPool:borrowWorker");
-        try {
-            synchronized (this) {
-                LogUtil.trace(this, "ThreadPool:borrowWorker - synchronized block");
-                while (threadCounter >= maxThread) {
-                    LogUtil.debug(this, "ThreadPool:borrowWorker - Waiting for free Thread, count=" + threadCounter + " maxThread=" + maxThread);
-                    this.wait();
-                }
+		final Runnable run2 = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					System.out.println(Thread.currentThread().getId() + " " + i);
+				}
 
-                threadCounter++;
-                return (WorkerThread) super.checkOut();
-            }
-        }
-        catch (Exception ex) {
-            throw new ThreadPoolException(ex);
-        }
+			}
+		};
 
-    }
+		try
+		{
+			pool.runTask(run);
+			pool.runTask(run2);
+		}
+		catch (final ThreadPoolException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
