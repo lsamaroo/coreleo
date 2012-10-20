@@ -82,27 +82,7 @@ public final class ReflectionUtil
 	 *            - the fully qualified name of the class.
 	 * @return a new Instance of the class specified by the string or null if it is unable to create a new instance of the class.
 	 * @throws IllegalArgumentException
-	 *             if the parameter is null or empty.
 	 */
-	public static final Object newInstance(String className) throws IllegalArgumentException
-	{
-		if (StringUtil.isEmpty(className))
-		{
-			throw new IllegalArgumentException("the class name is empty or null");
-		}
-
-		try
-		{
-			final Class<?> clazz = forName(className);
-			return clazz.newInstance();
-		}
-		catch (final Exception e)
-		{
-			LogUtil.error(e);
-			return null;
-		}
-	}
-
 	public static final Object newInstance(String className, Object... constructorParams) throws IllegalArgumentException
 	{
 		if (StringUtil.isEmpty(className))
@@ -122,36 +102,12 @@ public final class ReflectionUtil
 		}
 	}
 
-	public static final Object newInstance(Class<?> clazz) throws IllegalArgumentException
-	{
-		if (clazz == null)
-		{
-			throw new IllegalArgumentException("the class argument is null");
-		}
-
-		try
-		{
-			return clazz.newInstance();
-		}
-		catch (final Exception e)
-		{
-			LogUtil.error(e);
-			return null;
-		}
-	}
-
 	public static final Object newInstance(Class<?> clazz, Object... constructorParams) throws IllegalArgumentException
 	{
-		Object[] params = constructorParams;
-		if (params == null)
-		{
-			params = new Object[0];
-		}
-
 		try
 		{
-			final Constructor<?> constructor = findConstructor(true, clazz, params);
-			return constructor.newInstance(params);
+			final Constructor<?> constructor = findConstructor(true, clazz, constructorParams);
+			return constructor.newInstance(constructorParams);
 		}
 		catch (final Exception e)
 		{
@@ -210,21 +166,6 @@ public final class ReflectionUtil
 	}
 
 	/**
-	 * Overloaded (under-loaded) version of invoke, use this when calling a method which does not take any parameters.
-	 * 
-	 * @param object
-	 *            - the object to invoke the method on. Can be null if and only if the method is static.
-	 * @param methodName
-	 *            - the name of the method to invoke.
-	 * @return - the Object returned from invoking the method or null if the method return type is void.
-	 * @throws - SimpleException
-	 */
-	public static final Object invoke(Object object, String methodName) throws SimpleException
-	{
-		return invoke(object, methodName, new Object[0]);
-	}
-
-	/**
 	 * 
 	 * @param object
 	 *            - the object to invoke the method on. Can be null if and only if the method is static.
@@ -247,7 +188,7 @@ public final class ReflectionUtil
 	 * @param methodName
 	 *            - the name of the method to invoke.
 	 * @param params
-	 *            - the parameter values to pass to the method. May be null or of length 0 if no arguments are needed.
+	 *            - the parameter values to pass to the method. This is an optional parameter.
 	 * @return - the Object returned from invoking the method or null if the method return type is void.
 	 * @throws - SimpleException
 	 * 
@@ -391,31 +332,6 @@ public final class ReflectionUtil
 		return null;
 	}
 
-	private static boolean isMatch(Constructor<?> c, Class<?>... parameterTypes)
-	{
-		if (c == null)
-		{
-			return false;
-		}
-
-		final Class<?>[] types = c.getParameterTypes();
-		if (types.length != parameterTypes.length)
-		{
-			return false;
-		}
-
-		for (int i = 0; i < types.length; i++)
-		{
-			final Class<?> type = types[i];
-			if (!type.isAssignableFrom(parameterTypes[i]))
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	private static final Object invoke(Object object, Method method, Object... params) throws IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException
 	{
@@ -438,14 +354,12 @@ public final class ReflectionUtil
 			return m;
 		}
 
-		m = searchDeclaredAndPublicMethods(clazz, methodName, parameterTypes);
+		m = findDeclaredAndPublicMethods(clazz, methodName, parameterTypes);
 
 		if (m == null && matchSuperClassOrInterfaceOfParams)
 		{
-			m = searchMethodsMatchParametersSuperClassOrInterfaces(clazz, methodName, parameterTypes);
+			m = findMethodsMatchParametersSuperClassOrInterfaces(clazz, methodName, parameterTypes);
 		}
-
-		methodCache.put(key, m);
 
 		if (m == null)
 		{
@@ -454,11 +368,12 @@ public final class ReflectionUtil
 		else
 		{
 			LogUtil.debug("Method found=" + m);
+			methodCache.put(key, m);
 			return m;
 		}
 	}
 
-	private static final Method searchMethodsMatchParametersSuperClassOrInterfaces(Class clazz, String methodName, Class<?>... parameterTypes)
+	private static final Method findMethodsMatchParametersSuperClassOrInterfaces(Class<?> clazz, String methodName, Class<?>... parameterTypes)
 	{
 		Method[] methods = clazz.getMethods();
 		for (final Method method : methods)
@@ -481,37 +396,7 @@ public final class ReflectionUtil
 		return null;
 	}
 
-	private static boolean isMatch(Method m, String methodName, Class<?>... parameterTypes)
-	{
-		if (m == null)
-		{
-			return false;
-		}
-
-		if (StringUtil.equals(m.getName(), methodName))
-		{
-			final Class<?>[] types = m.getParameterTypes();
-			if (types.length != parameterTypes.length)
-			{
-				return false;
-			}
-
-			for (int i = 0; i < types.length; i++)
-			{
-				final Class<?> type = types[i];
-				if (!type.isAssignableFrom(parameterTypes[i]))
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private static final Method searchDeclaredAndPublicMethods(Class<?> clazz, String methodName, Class<?>... parameterTypes)
+	private static final Method findDeclaredAndPublicMethods(Class<?> clazz, String methodName, Class<?>... parameterTypes)
 	{
 		Method m = null;
 
@@ -538,11 +423,12 @@ public final class ReflectionUtil
 		if (m == null)
 		{
 			LogUtil.debug("Failed to find match for " + clazz + " methodName=" + methodName + " parameterTypes="
-					+ ArrayUtil.toCommaDelimitedString(parameterTypes));
+					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
 		}
 		else
 		{
-			LogUtil.debug("Found match for " + clazz + " methodName=" + methodName + " parameterTypes=" + ArrayUtil.toCommaDelimitedString(parameterTypes));
+			LogUtil.debug("Found match for " + clazz + " methodName=" + methodName + " parameterTypes="
+					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
 		}
 
 		return m;
@@ -570,6 +456,110 @@ public final class ReflectionUtil
 		}
 
 		return paramTypes;
+	}
+
+	private static boolean isMatch(Method m, String methodName, Class<?>... parameterTypes)
+	{
+		if (m == null)
+		{
+			return false;
+		}
+
+		if (StringUtil.equals(m.getName(), methodName))
+		{
+			final Class<?>[] types = m.getParameterTypes();
+			if (types.length != parameterTypes.length)
+			{
+				return false;
+			}
+
+			for (int i = 0; i < types.length; i++)
+			{
+				final Class<?> type = types[i];
+				if (!type.isAssignableFrom(parameterTypes[i]))
+				{
+					if (!isAutoBoxingMismatch(type, parameterTypes[i]))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private static boolean isMatch(Constructor<?> c, Class<?>... parameterTypes)
+	{
+		if (c == null)
+		{
+			return false;
+		}
+
+		final Class<?>[] types = c.getParameterTypes();
+		if (types.length != parameterTypes.length)
+		{
+			return false;
+		}
+
+		for (int i = 0; i < types.length; i++)
+		{
+			final Class<?> type = types[i];
+			if (!type.isAssignableFrom(parameterTypes[i]))
+			{
+				if (!isAutoBoxingMismatch(type, parameterTypes[i]))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private static final boolean isAutoBoxingMismatch(Class<?> methodParamType, Class<?> paramType)
+	{
+		if (!methodParamType.isPrimitive())
+		{
+			return false;
+		}
+
+		if (methodParamType == int.class && paramType == Integer.class)
+		{
+			return true;
+		}
+		else if (methodParamType == boolean.class && paramType == Boolean.class)
+		{
+			return true;
+		}
+		else if (methodParamType == char.class && paramType == Character.class)
+		{
+			return true;
+		}
+		else if (methodParamType == double.class && paramType == Double.class)
+		{
+			return true;
+		}
+		else if (methodParamType == long.class && paramType == Long.class)
+		{
+			return true;
+		}
+		else if (methodParamType == float.class && paramType == Float.class)
+		{
+			return true;
+		}
+		else if (methodParamType == short.class && paramType == Short.class)
+		{
+			return true;
+		}
+		else if (methodParamType == byte.class && paramType == Byte.class)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	private static final String getUniqueKeyForMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes)
