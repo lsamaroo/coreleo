@@ -3,7 +3,7 @@ package com.coreleo.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.coreleo.datastructure.Grid;
+import com.coreleo.datastructure.grid.Grid;
 
 /**
  * @deprecated

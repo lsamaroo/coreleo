@@ -96,12 +96,36 @@ public class ReflectionUtilTest
 	}
 
 	@Test
-	public void testInvokeObjectStringPrimitive()
+	public void testInvokeObjectStringPrimitiveInt()
 	{
 		final List<String> list = new ArrayList<String>();
 		list.add("Test");
 		final Object item = ReflectionUtil.invoke(list, "get", 0);
 		assertTrue("Test".equals(String.valueOf(item)));
+	}
+
+	@Test
+	public void testInvokeObjectStringPrimitiveBool()
+	{
+		final Object obj = new Object()
+		{
+			private boolean b = false;
+
+			@SuppressWarnings("unused")
+			public void set(boolean b)
+			{
+				this.b = b;
+			}
+
+			@Override
+			public String toString()
+			{
+				return b + "";
+			}
+		};
+
+		ReflectionUtil.invoke(obj, "set", true);
+		assertEquals("true", obj.toString());
 	}
 
 }
