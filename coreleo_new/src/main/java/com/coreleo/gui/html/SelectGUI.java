@@ -5,13 +5,16 @@ package com.coreleo.gui.html;
 
 import java.util.List;
 import java.util.Map;
-import com.coreleo.util.*;
+
+import com.coreleo.util.StringUtil;
+import com.coreleo.util.WebUtil;
 
 /**
- * @author Leron Samaroo
+ * @author Leon Samaroo
  * 
  */
-public class SelectGUI {
+public class SelectGUI
+{
 	private String id; // id of the select element
 	private String name; // name of the select element
 	private List optionLabels; // a list of option labels
@@ -25,16 +28,15 @@ public class SelectGUI {
 	private boolean disabled;
 	private String clazz;
 	private String title;
-	
 
-
-	public SelectGUI() {
+	public SelectGUI()
+	{
 		super();
 		reset();
 	}
 
-
-	protected void reset() {
+	protected void reset()
+	{
 		name = null;
 		optionLabels = null;
 		optionValues = null;
@@ -47,190 +49,201 @@ public class SelectGUI {
 		id = null;
 	}
 
-
-	public Map getChosen() {
+	public Map getChosen()
+	{
 		return this.chosen;
 	}
 
-
-	public void setChosen(Map chosen) {
+	public void setChosen(Map chosen)
+	{
 		this.chosen = chosen;
 	}
 
-
-	public boolean isMultiple() {
+	public boolean isMultiple()
+	{
 		return this.multiple;
 	}
 
-
-	public void setMultiple(boolean multiple) {
+	public void setMultiple(boolean multiple)
+	{
 		this.multiple = multiple;
 	}
 
-
-	public String getName() {
+	public String getName()
+	{
 		return this.name;
 	}
 
-
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
-
-	public String getOnClick() {
+	public String getOnClick()
+	{
 		return this.onClick;
 	}
 
-
-	public void setOnClick(String onchange) {
+	public void setOnClick(String onchange)
+	{
 		this.onClick = onchange;
 	}
 
-
-	public String getSize() {
+	public String getSize()
+	{
 		return this.size;
 	}
 
-
-	public void setSize(String size) {
+	public void setSize(String size)
+	{
 		this.size = size;
 	}
-	
-	
-	public void setSize(int size) {
+
+	public void setSize(int size)
+	{
 		this.size = String.valueOf(size);
 	}
 
-
-	public String getStyle() {
+	public String getStyle()
+	{
 		return this.style;
 	}
 
-
-	public void setStyle(String style) {
+	public void setStyle(String style)
+	{
 		this.style = style;
 	}
 
-
-	public List getOptionLabels() {
+	public List getOptionLabels()
+	{
 		return this.optionLabels;
 	}
 
-
-	public void setOptionLabels(List optionLabels) {
+	public void setOptionLabels(List optionLabels)
+	{
 		this.optionLabels = optionLabels;
 	}
 
-
-	public List getOptionValues() {
+	public List getOptionValues()
+	{
 		return this.optionValues;
 	}
 
-
-	public void setOptionValues(List optionValues) {
+	public void setOptionValues(List optionValues)
+	{
 		this.optionValues = optionValues;
 	}
 
-
-	public boolean isDisabled() {
+	public boolean isDisabled()
+	{
 		return this.disabled;
 	}
 
-
-	public void setDisabled(boolean disabled) {
+	public void setDisabled(boolean disabled)
+	{
 		this.disabled = disabled;
 	}
 
-
-	public String getId() {
+	public String getId()
+	{
 		return this.id;
 	}
 
-
-	public void setId(String id) {
+	public void setId(String id)
+	{
 		this.id = id;
 	}
 
-
-	public String getOnChange() {
+	public String getOnChange()
+	{
 		return onChange;
 	}
 
-
-	public void setOnChange(String onChange) {
+	public void setOnChange(String onChange)
+	{
 		this.onChange = onChange;
 	}
 
-
-	public String getClazz() {
+	public String getClazz()
+	{
 		return this.clazz;
 	}
 
-
-	public void setClazz(String clazz) {
+	public void setClazz(String clazz)
+	{
 		this.clazz = clazz;
 	}
-	
-	
-	public String getTitle() {
+
+	public String getTitle()
+	{
 		return title;
 	}
 
-
-	public void setTitle(String title) {
+	public void setTitle(String title)
+	{
 		this.title = title;
 	}
 
-
-	public String renderGUI() {
-		StringBuffer buffer = new StringBuffer();
+	public String renderGUI()
+	{
+		final StringBuffer buffer = new StringBuffer();
 
 		// start building up the tag
 		buffer.append("<select name=\"" + WebUtil.replaceHtmlMetaCharacters(name) + "\" ");
 
-		if (StringUtil.isNotEmpty(id)) {
+		if (StringUtil.isNotEmpty(id))
+		{
 			buffer.append("id=\"" + WebUtil.replaceHtmlMetaCharacters(id) + "\" ");
 		}
-		
-		if (StringUtil.isNotEmpty(title)) {
+
+		if (StringUtil.isNotEmpty(title))
+		{
 			buffer.append("title=\"" + WebUtil.replaceHtmlMetaCharacters(title) + "\" ");
 		}
 
-		if (multiple) {
+		if (multiple)
+		{
 			buffer.append("multiple=\"multiple\" ");
 		}
 
-		if (StringUtil.isNotEmpty(size)) {
+		if (StringUtil.isNotEmpty(size))
+		{
 			buffer.append("size=\"" + WebUtil.replaceHtmlMetaCharacters(size) + "\" ");
 		}
 
-		if (StringUtil.isNotEmpty(style)) {
+		if (StringUtil.isNotEmpty(style))
+		{
 			buffer.append("style=\"" + WebUtil.replaceHtmlMetaCharacters(style) + "\" ");
 		}
 
-		if (StringUtil.isNotEmpty(onClick)) {
+		if (StringUtil.isNotEmpty(onClick))
+		{
 			buffer.append("onclick=\"" + WebUtil.replaceHtmlMetaCharacters(onClick) + "\" ");
 		}
-		if (StringUtil.isNotEmpty(onChange)) {
+		if (StringUtil.isNotEmpty(onChange))
+		{
 			buffer.append("onChange=\"" + WebUtil.replaceHtmlMetaCharacters(onChange) + "\" ");
 		}
 
-		if (disabled) {
+		if (disabled)
+		{
 			buffer.append("disabled=\"disabled\" ");
 		}
-		
-		if (StringUtil.isNotEmpty(clazz)) {
+
+		if (StringUtil.isNotEmpty(clazz))
+		{
 			buffer.append("class=\"" + WebUtil.replaceHtmlMetaCharacters(clazz) + "\" ");
 		}
 
 		// end the starting tag
 		buffer.append(">");
 
-		if (optionLabels != null && optionValues != null ) {
-			for (int i = 0; i < optionLabels.size(); i++) {
-				Object oLabel = optionLabels.get(i);
-				Object oVal = optionValues.get(i);
+		if (optionLabels != null && optionValues != null)
+		{
+			for (int i = 0; i < optionLabels.size(); i++)
+			{
+				final Object oLabel = optionLabels.get(i);
+				final Object oVal = optionValues.get(i);
 				writeOptionElement(buffer, oLabel, oVal);
 			}
 		}
@@ -241,9 +254,9 @@ public class SelectGUI {
 
 	}
 
-
-	private void writeOptionElement(StringBuffer buff, Object oLabel, Object oValue) {
-		String label = oLabel.toString();
+	private void writeOptionElement(StringBuffer buff, Object oLabel, Object oValue)
+	{
+		final String label = oLabel.toString();
 		// Convert the value to a String if it is not already.
 		String value = (oValue != null ? oValue.toString() : null);
 
@@ -251,20 +264,25 @@ public class SelectGUI {
 		buff.append("<option");
 
 		// Output the value if there is one specified separate from the label
-		if (value != null) {
+		if (value != null)
+		{
 			buff.append(" value=\"" + WebUtil.replaceHtmlMetaCharacters(value) + "\"");
 		}
 
 		// If there is no value specified then use the label as the value, this
 		// is for checking if this option is selected based on value.
 		if (value == null)
+		{
 			value = label; // use label if value is null
+		}
 
 		// Match the VALUE of this option pair with
 		// the KEY of the 'chosen' Map (We want to match <option>s on values,
 		// not keys.)
-		if (chosen != null && chosen.containsKey(value)) {
-			if (!multiple) {
+		if (chosen != null && chosen.containsKey(value))
+		{
+			if (!multiple)
+			{
 				chosen.clear();
 				// chosen.remove(value);
 			}
