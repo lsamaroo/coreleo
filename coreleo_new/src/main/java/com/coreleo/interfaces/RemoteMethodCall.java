@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Empty interface used for cataloging a class as being accessible via a RPC call
  *
  */
-public interface RemoteProcedureCall extends Serializable {
+public interface RemoteMethodCall extends Serializable {
     
 
 }
