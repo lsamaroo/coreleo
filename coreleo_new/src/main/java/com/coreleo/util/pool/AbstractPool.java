@@ -1,5 +1,7 @@
 package com.coreleo.util.pool;
 
+import com.coreleo.util.StringUtil;
+
 public abstract class AbstractPool<T>
 {
 	private final long id = System.currentTimeMillis();
@@ -7,14 +9,13 @@ public abstract class AbstractPool<T>
 
 	public AbstractPool()
 	{
-		super();
-		this.name = "Pool" + id;
+		this("");
 	}
 
 	public AbstractPool(String name)
 	{
 		super();
-		this.name = name;
+		this.name = StringUtil.isEmpty(name) ? "Pool" + id : name;
 	}
 
 	public long getId()

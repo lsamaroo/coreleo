@@ -24,19 +24,20 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	public final static int DEFAULT_VALIDATION_QUERY_TIMEOUT = 15; // 15 seconds
 	private final int initialConnectionsInPool;
 	private final String url, username, password;
+	private final Driver driver;
 
 	private String validationQuery;
 	private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
-	private Driver driver;
 
-	public DBConnectionPool(String name, String url, String usr, String pwd, long idleTimeOut, long connectionLife, long reapTime, int initialConnections,
-			int minConnections, int maxConnections)
+	public DBConnectionPool(String name, String driverClassName, String url, String usr, String pwd, long idleTimeOut, long connectionLife, long reapTime,
+			int initialConnections, int minConnections, int maxConnections)
 	{
 		super(name, idleTimeOut, connectionLife, reapTime, minConnections, maxConnections);
 		this.url = url;
 		this.username = usr;
 		this.password = pwd;
 		this.initialConnectionsInPool = initialConnections;
+		this.driver = DBUtil.registerDriver(driverClassName);
 
 		try
 		{
@@ -44,7 +45,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		}
 		catch (final Exception e)
 		{
-			LogUtil.warn(this, "Unable to initialize the initial number of connections for " + name, e);
+			LogUtil.warn(this, "Unable to initialize the initial number of connections for pool " + super.getName(), e);
 		}
 	}
 
@@ -61,11 +62,6 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	public String getUrl()
 	{
 		return this.url;
-	}
-
-	public synchronized void setDriverClassName(String driverClassName)
-	{
-		driver = DBUtil.registerDriver(driverClassName);
 	}
 
 	public int getInitialConnectionsInPool()

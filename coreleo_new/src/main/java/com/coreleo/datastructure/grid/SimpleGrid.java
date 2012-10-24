@@ -13,7 +13,7 @@ import com.coreleo.util.CollectionUtil;
 import com.coreleo.util.ComparatorUtil;
 import com.coreleo.util.NumberUtil;
 
-public class SimpleGrid<V> implements Grid<Object, Object, V>, Serializable
+public class SimpleGrid<V> implements Grid<V>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 

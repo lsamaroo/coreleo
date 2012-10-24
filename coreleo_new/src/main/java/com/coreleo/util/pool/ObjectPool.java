@@ -52,6 +52,20 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		LogUtil.trace(this, "ObjectPool:constructor " + this.toString());
 	}
 
+	protected ObjectPool(long objectIdleTimeOut, long objectLife, long reapTime, int minObjectsInPool, int maxObjectsInPool)
+	{
+		super();
+		this.locked = new Hashtable<T, MetaData>();
+		this.unlocked = new Hashtable<T, MetaData>();
+		this.objectIdleTimeOut = objectIdleTimeOut;
+		this.objectLife = objectLife;
+		this.minObjectsInPool = minObjectsInPool;
+		this.maxObjectsInPool = maxObjectsInPool;
+		this.reapTime = reapTime;
+
+		LogUtil.trace(this, "ObjectPool:constructor " + this.toString());
+	}
+
 	public void startObjectReaper()
 	{
 		LogUtil.trace(this, "ObjectPool:startObjectReaper");
@@ -131,7 +145,7 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		for (int i = 0; i < numberOfObjectsInPool; i++)
 		{
 			unlocked.put(create(), new MetaData());
-			LogUtil.debug(this, "ObjectPool:initializeObjects - " + i);
+			LogUtil.debug(this, "ObjectPool:initializeObjects - " + i + 1);
 		}
 		this.numberOfObjectsUnLocked = unlocked.size();
 	}

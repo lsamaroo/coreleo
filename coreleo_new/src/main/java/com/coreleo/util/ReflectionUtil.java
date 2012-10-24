@@ -367,7 +367,9 @@ public final class ReflectionUtil
 		}
 		else
 		{
-			LogUtil.debug("Method found=" + m);
+			LogUtil.debug("Method " + m + " found for " + clazz + " methodName=" + methodName + " parameterTypes="
+					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
+
 			methodCache.put(key, m);
 			return m;
 		}
@@ -419,17 +421,6 @@ public final class ReflectionUtil
 		catch (final Exception e)
 		{
 		} // ignore
-
-		if (m == null)
-		{
-			LogUtil.debug("Failed to find match for " + clazz + " methodName=" + methodName + " parameterTypes="
-					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
-		}
-		else
-		{
-			LogUtil.debug("Found match for " + clazz + " methodName=" + methodName + " parameterTypes="
-					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
-		}
 
 		return m;
 	}

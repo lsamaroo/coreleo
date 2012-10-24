@@ -11,14 +11,10 @@ import java.util.List;
  *         A data structure which maps a value to a row/column. Rows and columns can be referenced by either their index or by
  *         associating them with an id and using that id as a reference.
  * 
- * @param <R>
- *            - the rowId type
- * @param <C>
- *            - the columnId type
  * @param <V>
  *            - the type of value stored in this grid
  */
-public interface Grid<R, C, V>
+public interface Grid<V>
 {
 
 	/**
@@ -32,7 +28,7 @@ public interface Grid<R, C, V>
 	 * 
 	 * @return previous value associated with specified row-column, or null if there was no mapping.
 	 */
-	public V remove(R rowId, C columnId);
+	public V remove(Object rowId, Object columnId);
 
 	/**
 	 * 
@@ -42,25 +38,25 @@ public interface Grid<R, C, V>
 
 	public boolean removeRow(int rowIndex);
 
-	public boolean removeRow(R rowId);
+	public boolean removeRow(Object rowId);
 
 	public boolean removeColumn(int columnIndex);
 
-	public boolean removeColumn(C columnId);
+	public boolean removeColumn(Object columnId);
 
 	/**
 	 * 
 	 * @return true if the value was added to the grid, false otherwise. e.g. may return false could be if the row or column
 	 *         specified does not exist in this grid.
 	 */
-	public boolean put(R rowId, C columnId, V value);
+	public boolean put(Object rowId, Object columnId, V value);
 
 	/**
 	 * @return the value located at the specified row and column, or null if the Grid contains no value at this row-column
 	 *         combination.
 	 * 
 	 */
-	public V get(R rowId, C columnId);
+	public V get(Object rowId, Object columnId);
 
 	/**
 	 * @return the value located at the specified row and column index, or null if the Grid contains no value at this row-column
@@ -80,7 +76,7 @@ public interface Grid<R, C, V>
 	 * @return true if the column was added, false otherwise.
 	 * 
 	 */
-	public boolean addColumn(int index, C columnId);
+	public boolean addColumn(int index, Object columnId);
 
 	/**
 	 * Adds a new column to the grid and associates it with the given column id. If this grid already contains this object as a
@@ -89,7 +85,7 @@ public interface Grid<R, C, V>
 	 * @return true if the column was added, false otherwise.
 	 * 
 	 */
-	public boolean addColumn(C columnId);
+	public boolean addColumn(Object columnId);
 
 	/**
 	 * Adds a new row to the grid at the given index and associates it with the given row id. If this grid already contains this
@@ -98,7 +94,7 @@ public interface Grid<R, C, V>
 	 * @return true if the row was added, false otherwise.
 	 * 
 	 */
-	public boolean addRow(int index, R rowId);
+	public boolean addRow(int index, Object rowId);
 
 	/**
 	 * Adds a new row to the grid and associates it with the given row id. If this grid already contains this row, then no row is
@@ -107,23 +103,23 @@ public interface Grid<R, C, V>
 	 * @return true if the row was added, false otherwise.
 	 * 
 	 */
-	public boolean addRow(R rowId);
+	public boolean addRow(Object rowId);
 
 	/**
 	 * 
 	 * @return the id associated with the column at the given index.
 	 */
-	public C getColumnId(int columnIndex);
+	public Object getColumnId(int columnIndex);
 
 	/**
 	 * 
 	 * @return the id associated with the row at the given index.
 	 */
-	public R getRowId(int rowIndex);
+	public Object getRowId(int rowIndex);
 
-	public boolean containsRow(R rowId);
+	public boolean containsRow(Object rowId);
 
-	public boolean containsColumn(C columnId);
+	public boolean containsColumn(Object columnId);
 
 	public boolean containsValue(V value);
 
@@ -136,7 +132,7 @@ public interface Grid<R, C, V>
 	 * 
 	 * @return a reference to this Grid
 	 */
-	public Grid<R, C, V> clearValues();
+	public Grid<V> clearValues();
 
 	/**
 	 * Removes the values, rows and columns stored in this grid. After a call to the clear method, getRowCount, getColumnCount and
@@ -146,7 +142,7 @@ public interface Grid<R, C, V>
 	 * 
 	 * 
 	 */
-	public Grid<R, C, V> clear();
+	public Grid<V> clear();
 
 	/**
 	 * 
@@ -164,21 +160,21 @@ public interface Grid<R, C, V>
 	 * 
 	 * @return the index of the row associated with the given row id.
 	 */
-	public int getRowIndex(R rowId);
+	public int getRowIndex(Object rowId);
 
 	/**
 	 * 
 	 * @return the index of the column associated with the given column id.
 	 */
-	public int getColumnIndex(C columnId);
+	public int getColumnIndex(Object columnId);
 
 	public boolean isRowEmpty(int rowIndex);
 
-	public boolean isRowEmpty(R rowId);
+	public boolean isRowEmpty(Object rowId);
 
 	public boolean isColumnEmpty(int columnIndex);
 
-	public boolean isColumnEmpty(C columnId);
+	public boolean isColumnEmpty(Object columnId);
 
 	public List<V> getRowValues(int rowIndex, boolean includeNullValues);
 
@@ -188,9 +184,9 @@ public interface Grid<R, C, V>
 
 	public List<V> getColumnValues(Object columnId, boolean includeNullValues);
 
-	public List<C> getColumnIds();
+	public List<Object> getColumnIds();
 
-	public List<R> getRowIds();
+	public List<Object> getRowIds();
 
 	/**
 	 * 
