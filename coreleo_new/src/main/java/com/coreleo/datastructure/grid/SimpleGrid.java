@@ -13,49 +13,27 @@ import com.coreleo.util.CollectionUtil;
 import com.coreleo.util.ComparatorUtil;
 import com.coreleo.util.NumberUtil;
 
-public class SimpleGrid<V> implements Grid<V>, Serializable
+public class SimpleGrid<R, C, V> implements Grid<R, C, V>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	protected final static String ROW_HEADER_KEY_PREFIX = "R";
 	protected final static String COLUMN_HEADER_KEY_PREFIX = "C";
 
-	protected List<Object> rowIds;
-	protected List<Object> columnIds;
+	protected List<R> rowIds;
+	protected List<C> columnIds;
 	protected Map<String, V> map;
-	protected Map<Integer, Comparator<?>> comparators;
+	protected Map<Integer, Comparator<V>> comparators;
 
 	public SimpleGrid()
 	{
-		rowIds = new ArrayList<Object>();
-		columnIds = new ArrayList<Object>();
+		rowIds = new ArrayList<R>();
+		columnIds = new ArrayList<C>();
 		map = new HashMap<String, V>();
-		comparators = new HashMap<Integer, Comparator<?>>();
+		comparators = new HashMap<Integer, Comparator<V>>();
 	}
 
-	/**
-	 * 
-	 * This constructor will create a Grid with the specified number of rows and columns. The names of the rows and column will be
-	 * defaulted to SimpleGrid.ROW_HEADER_KEY_PREFIX + rowIndex and SimpleGrid.COLUMN_HEADER_KEY_PREFIX + columnIndex
-	 * respectively.
-	 * 
-	 */
-	public SimpleGrid(int rows, int columns)
-	{
-		this();
-
-		for (int i = 0; i < rows; i++)
-		{
-			rowIds.add(ROW_HEADER_KEY_PREFIX + i);
-		}
-
-		for (int i = 0; i < columns; i++)
-		{
-			columnIds.add(COLUMN_HEADER_KEY_PREFIX + i);
-		}
-	}
-
-	private String getKey(Object rowId, Object columnId)
+	private String getKey(R rowId, C columnId)
 	{
 		final StringBuffer buff = new StringBuffer();
 		buff.append(ROW_HEADER_KEY_PREFIX);
@@ -84,19 +62,19 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public Comparator<?> getComparator(int column)
+	public Comparator<V> getComparator(int column)
 	{
 		return comparators.get(NumberUtil.toIntegerObject(column));
 	}
 
 	@Override
-	public void setComparator(int column, Comparator<?> comparator)
+	public void setComparator(int column, Comparator<V> comparator)
 	{
 		comparators.put(NumberUtil.toIntegerObject(column), comparator);
 	}
 
 	@Override
-	public boolean addColumn(int index, Object columnId)
+	public boolean addColumn(int index, C columnId)
 	{
 		if (!columnIds.contains(columnId))
 		{
@@ -108,7 +86,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean addColumn(Object columnId)
+	public boolean addColumn(C columnId)
 	{
 		if (!columnIds.contains(columnId))
 		{
@@ -120,7 +98,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean addRow(int index, Object rowId)
+	public boolean addRow(int index, R rowId)
 	{
 		if (!rowIds.contains(rowId))
 		{
@@ -132,7 +110,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean addRow(Object rowId)
+	public boolean addRow(R rowId)
 	{
 		if (!rowIds.contains(rowId))
 		{
@@ -154,7 +132,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public V get(Object rowId, Object columnId)
+	public V get(R rowId, C columnId)
 	{
 		return map.get(getKey(rowId, columnId));
 	}
@@ -166,7 +144,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public Object getColumnId(int columnIndex)
+	public C getColumnId(int columnIndex)
 	{
 		if (CollectionUtil.isInbounds(columnIds, columnIndex))
 		{
@@ -183,7 +161,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public Object getRowId(int rowIndex)
+	public R getRowId(int rowIndex)
 	{
 		if (CollectionUtil.isInbounds(rowIds, rowIndex))
 		{
@@ -205,7 +183,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean put(Object rowId, Object columnId, V value)
+	public boolean put(R rowId, C columnId, V value)
 	{
 		if (CollectionUtil.contains(rowIds, rowId) && CollectionUtil.contains(columnIds, columnId))
 		{
@@ -227,7 +205,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public V remove(Object rowId, Object columnId)
+	public V remove(R rowId, C columnId)
 	{
 		if (CollectionUtil.contains(rowIds, rowId) && CollectionUtil.contains(columnIds, columnId))
 		{
@@ -249,7 +227,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean removeRow(Object rowId)
+	public boolean removeRow(R rowId)
 	{
 		if (CollectionUtil.contains(rowIds, rowId))
 		{
@@ -275,7 +253,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean removeColumn(Object columnId)
+	public boolean removeColumn(C columnId)
 	{
 		if (CollectionUtil.contains(columnIds, columnId))
 		{
@@ -290,7 +268,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public Grid clear()
+	public Grid<R, C, V> clear()
 	{
 		rowIds.clear();
 		columnIds.clear();
@@ -299,20 +277,20 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public Grid clearValues()
+	public Grid<R, C, V> clearValues()
 	{
 		map.clear();
 		return this;
 	}
 
 	@Override
-	public boolean containsColumn(Object columnId)
+	public boolean containsColumn(C columnId)
 	{
 		return columnIds.contains(columnId);
 	}
 
 	@Override
-	public boolean containsRow(Object rowId)
+	public boolean containsRow(R rowId)
 	{
 		return rowIds.contains(rowId);
 	}
@@ -336,13 +314,13 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public int getColumnIndex(Object columnId)
+	public int getColumnIndex(C columnId)
 	{
 		return columnIds.indexOf(columnId);
 	}
 
 	@Override
-	public int getRowIndex(Object rowId)
+	public int getRowIndex(R rowId)
 	{
 		return rowIds.indexOf(rowId);
 	}
@@ -352,7 +330,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	{
 		if (CollectionUtil.isInbounds(rowIds, rowIndex))
 		{
-			final Object rowId = rowIds.get(rowIndex);
+			final R rowId = rowIds.get(rowIndex);
 			for (int columnIndex = 0; columnIndex < columnIds.size(); columnIndex++)
 			{
 				if (get(rowId, columnIds.get(columnIndex)) != null)
@@ -366,7 +344,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean isRowEmpty(Object rowId)
+	public boolean isRowEmpty(R rowId)
 	{
 		return isRowEmpty(getRowIndex(rowId));
 	}
@@ -376,7 +354,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	{
 		if (CollectionUtil.isInbounds(columnIds, columnIndex))
 		{
-			final Object columnId = columnIds.get(columnIndex);
+			final C columnId = columnIds.get(columnIndex);
 			for (int rowIndex = 0; rowIndex < rowIds.size(); rowIndex++)
 			{
 				if (get(rowIds.get(rowIndex), columnId) != null)
@@ -390,7 +368,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public boolean isColumnEmpty(Object columnId)
+	public boolean isColumnEmpty(C columnId)
 	{
 		return isColumnEmpty(getColumnIndex(columnId));
 	}
@@ -401,7 +379,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 		final List<V> list = new ArrayList<V>();
 		if (CollectionUtil.isInbounds(rowIds, rowIndex))
 		{
-			final Object rowId = rowIds.get(rowIndex);
+			final R rowId = rowIds.get(rowIndex);
 			for (int columnIndex = 0; columnIndex < columnIds.size(); columnIndex++)
 			{
 				final V value = get(rowId, columnIds.get(columnIndex));
@@ -415,7 +393,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public List<V> getRowValues(Object rowId, boolean includeNullValues)
+	public List<V> getRowValues(R rowId, boolean includeNullValues)
 	{
 		return getRowValues(getRowIndex(rowId), includeNullValues);
 	}
@@ -426,7 +404,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 		final List<V> list = new ArrayList<V>();
 		if (CollectionUtil.isInbounds(columnIds, columnIndex))
 		{
-			final Object columnId = columnIds.get(columnIndex);
+			final C columnId = columnIds.get(columnIndex);
 			for (int rowIndex = 0; rowIndex < rowIds.size(); rowIndex++)
 			{
 				final V value = get(rowIds.get(rowIndex), columnId);
@@ -441,19 +419,19 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	}
 
 	@Override
-	public List getColumnValues(Object columnId, boolean includeNullValues)
+	public List getColumnValues(C columnId, boolean includeNullValues)
 	{
 		return getColumnValues(getColumnIndex(columnId), includeNullValues);
 	}
 
 	@Override
-	public List getColumnIds()
+	public List<C> getColumnIds()
 	{
 		return Collections.unmodifiableList(columnIds);
 	}
 
 	@Override
-	public List getRowIds()
+	public List<R> getRowIds()
 	{
 		return Collections.unmodifiableList(rowIds);
 	}
@@ -474,7 +452,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 		}
 
 		CollectionUtil.sort(list);
-		final List<Object> sortedRowIds = new ArrayList<Object>(rowIds.size());
+		final List<R> sortedRowIds = new ArrayList<R>(rowIds.size());
 		for (int i = 0; i < list.size(); i++)
 		{
 			sortedRowIds.add(list.get(i).getRowId());
@@ -485,7 +463,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	/**
 	 * Convenience method, sets the comparator for the given column before calling sort.
 	 */
-	public void sort(int columnIndex, Comparator<?> comparator)
+	public void sort(int columnIndex, Comparator<V> comparator)
 	{
 		setComparator(columnIndex, comparator);
 		sort(columnIndex);
@@ -494,7 +472,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 	/**
 	 * Convenience method, sets the comparator for the given columns before calling sort.
 	 */
-	public void sort(int[] columnIndexes, Comparator<?> comparator)
+	public void sort(int[] columnIndexes, Comparator<V> comparator)
 	{
 		for (final int columnIndexe : columnIndexes)
 		{
@@ -503,11 +481,11 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 		sort(columnIndexes);
 	}
 
-	private class SortableEntry<T> implements Comparable<T>
+	private class SortableEntry implements Comparable<SortableEntry>
 	{
 		private final int rowIndex;
 		private final int[] columnIndexesToSortBy;
-		private final Object rowId;
+		private final R rowId;
 
 		public SortableEntry(int rowIndex, int[] columnIndexesToSortBy)
 		{
@@ -517,7 +495,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 			this.rowId = SimpleGrid.this.getRowId(rowIndex);
 		}
 
-		public Object getRowId()
+		public R getRowId()
 		{
 			return rowId;
 		}
@@ -528,9 +506,8 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 		}
 
 		@Override
-		public int compareTo(Object obj)
+		public int compareTo(SortableEntry another)
 		{
-			final SortableEntry<T> another = (SortableEntry<T>) obj;
 			if (another == null)
 			{
 				return -1;
@@ -538,7 +515,7 @@ public class SimpleGrid<V> implements Grid<V>, Serializable
 
 			for (final int columnIndex : columnIndexesToSortBy)
 			{
-				Comparator comparator = SimpleGrid.this.getComparator(columnIndex);
+				Comparator<V> comparator = SimpleGrid.this.getComparator(columnIndex);
 				if (comparator == null)
 				{
 					comparator = ComparatorUtil.NATURAL_COMPARATOR;

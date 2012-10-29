@@ -29,6 +29,14 @@ public final class ArrayUtil
 		return x.length;
 	}
 
+	/**
+	 * 
+	 * @param x
+	 *            - the array
+	 * @param index
+	 *            - index to validate
+	 * @return true if index is valid, false otherwise
+	 */
 	public static final boolean isInbounds(Object[] x, Object index)
 	{
 		if (x == null)

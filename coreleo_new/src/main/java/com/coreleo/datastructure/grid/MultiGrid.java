@@ -26,11 +26,6 @@ public class MultiGrid extends SimpleGrid
 		super();
 	}
 
-	public MultiGrid(int rows, int columns)
-	{
-		super(rows, columns);
-	}
-
 	public Object getFirstValue(int rowIndex, int columnIndex)
 	{
 		return CollectionUtil.get((List) super.get(rowIndex, columnIndex), 0);
