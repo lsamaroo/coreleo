@@ -19,7 +19,13 @@ public class JsonUtil
 		super();
 	}
 
-	public static final JSONObject toJson(Object pojo)
+	public static final JSONObject toJson(Object bean)
+	{
+		final Map<String, Object> map = BeanUtil.toMap(bean);
+		return toJson(map);
+	}
+
+	public static final JSONObject toJson(Map<String, Object> map)
 	{
 		final JSONObject json = new JSONObject();
 
