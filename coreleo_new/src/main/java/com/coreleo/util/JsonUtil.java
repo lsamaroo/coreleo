@@ -27,20 +27,32 @@ public class JsonUtil
 
 	public static final JSONObject toJson(Map<String, Object> map)
 	{
-		final JSONObject json = new JSONObject();
-
-		return json;
+		return new JSONObject(map);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static final JSONObject put(JSONObject jsonObj, String key, Object x)
 	{
 		if (jsonObj == null)
 		{
 			return null;
 		}
+
 		try
 		{
-			return jsonObj.put(key, x);
+			if (x instanceof Collection)
+			{
+				return jsonObj.put(key, (Collection) x);
+			}
+			else if (x instanceof Object[])
+			{
+				return jsonObj.put(key, toJsonArray((Object[]) x, true));
+			}
+			else
+			{
+				return jsonObj.put(key, x);
+			}
+
 		}
 		catch (final JSONException jsone)
 		{
@@ -141,6 +153,23 @@ public class JsonUtil
 		catch (final JSONException jsone)
 		{
 			return jsonObj;
+		}
+	}
+
+	public static final JSONArray toJsonArray(Object[] x, boolean returnEmptyArrayOnNull)
+	{
+		if (x == null)
+		{
+			return returnEmptyArrayOnNull ? new JSONArray() : null;
+		}
+
+		try
+		{
+			return new JSONArray(x);
+		}
+		catch (final JSONException e)
+		{
+			return returnEmptyArrayOnNull ? new JSONArray() : null;
 		}
 	}
 

@@ -23,6 +23,7 @@ public class BeanUtilTest
 		assertTrue(map.get("intValue") != null);
 		assertTrue(map.get("stringValue") != null);
 		assertTrue(map.get("booleanValue") != null);
+
 	}
 
 	@Test
