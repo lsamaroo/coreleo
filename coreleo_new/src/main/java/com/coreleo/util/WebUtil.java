@@ -31,7 +31,7 @@ public final class WebUtil
 		for (int i = 0; i < ArrayUtil.size(cookies); i++)
 		{
 			final Cookie c = cookies[i];
-			if (StringUtil.isEqual(c.getName(), name))
+			if (StringUtil.equals(c.getName(), name))
 			{
 				return c;
 			}

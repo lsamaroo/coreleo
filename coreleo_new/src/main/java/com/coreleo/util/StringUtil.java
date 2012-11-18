@@ -287,7 +287,7 @@ public final class StringUtil
 
 	/**
 	 * 
-	 * Check to string to see if it contains any of the characters specified in the char array.
+	 * Check to string to see if the string contains any of the characters specified in the char array.
 	 * 
 	 * @param string
 	 *            - the String to check.
@@ -295,7 +295,7 @@ public final class StringUtil
 	 *            - the character array
 	 * @return true if the string contains any of the specified characters, false otherwise.
 	 */
-	public static final boolean containsAny(String string, char[] characters)
+	public static final boolean containsAny(String string, char... characters)
 	{
 		if (string == null || characters == null)
 		{
@@ -400,22 +400,22 @@ public final class StringUtil
 	/**
 	 * Checks if the String contains only certain characters.
 	 */
-	public static final boolean containsOnly(String str, char[] valid)
+	public static final boolean containsOnly(String str, char... validCharacters)
 	{
-		if ((valid == null) || (str == null))
+		if ((validCharacters == null) || (str == null))
 		{
 			return false;
 		}
 
-		return containsOnly(str, new String(valid));
+		return containsOnly(str, new String(validCharacters));
 	}
 
 	/**
 	 * Checks if the String contains only certain characters.
 	 */
-	public static final boolean containsOnly(String str, String valid)
+	public static final boolean containsOnly(String str, String validCharacters)
 	{
-		if ((valid == null) || (str == null))
+		if ((validCharacters == null) || (str == null))
 		{
 			return false;
 		}
@@ -423,11 +423,11 @@ public final class StringUtil
 		{
 			return true;
 		}
-		if (valid.length() == 0)
+		if (validCharacters.length() == 0)
 		{
 			return false;
 		}
-		return indexOfAnyBut(str, valid) == -1;
+		return indexOfAnyBut(str, validCharacters) == -1;
 	}
 
 	/**
@@ -537,6 +537,40 @@ public final class StringUtil
 		else
 		{
 			return obj.toString();
+		}
+	}
+
+	public static final String toUpperCaseFirstCharacter(String x)
+	{
+		if (isEmpty(x))
+		{
+			return x;
+		}
+
+		if (x.length() > 1)
+		{
+			return toUpperCase(x.charAt(0)) + x.substring(1);
+		}
+		else
+		{
+			return x.toUpperCase();
+		}
+	}
+
+	public static final String toLowerCaseFirstCharacter(String x)
+	{
+		if (isEmpty(x))
+		{
+			return x;
+		}
+
+		if (x.length() > 1)
+		{
+			return toLowerCase(x.charAt(0)) + x.substring(1);
+		}
+		else
+		{
+			return x.toUpperCase();
 		}
 	}
 

@@ -26,6 +26,21 @@ public final class ReflectionUtil
 	private final static Map<String, Method> methodCache = new ConcurrentHashMap<String, Method>();
 	private final static Map<String, Constructor<?>> constructorCache = new ConcurrentHashMap<String, Constructor<?>>();
 
+	public static final String[] getMethodNames( Object obj ){
+		if( obj == null ){
+			return new String[0]; 
+		}
+			
+		Method[] methods = obj.getClass().getMethods();
+		String[] methodNames = new String[ methods.length ];
+		for ( int i = 0; i < methods.length; i++ )
+		{
+			methodNames[i] = methods[i].getName();
+		}
+		
+		return methodNames;
+	}
+	
 	public static final boolean isInstance(String className, Object obj)
 	{
 		try
