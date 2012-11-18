@@ -65,4 +65,10 @@ public class BeanUtil
 
 		return bean;
 	}
+
+	public static Object populateBean(String qualifiedClassName, Map<String, Object> map)
+	{
+		final Object bean = ReflectionUtil.newInstance(qualifiedClassName);
+		return populateBean(bean, map);
+	}
 }
