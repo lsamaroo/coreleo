@@ -26,21 +26,36 @@ public final class ReflectionUtil
 	private final static Map<String, Method> methodCache = new ConcurrentHashMap<String, Method>();
 	private final static Map<String, Constructor<?>> constructorCache = new ConcurrentHashMap<String, Constructor<?>>();
 
-	public static final String[] getMethodNames( Object obj ){
-		if( obj == null ){
-			return new String[0]; 
+	/**
+	 * Returns a list of method names for the given object.
+	 * 
+	 * @see getClass().getMethods
+	 * @param obj
+	 *            - the object to retrieve a method list
+	 * @return - an array of names
+	 */
+	public static final String[] getMethodNames(Object obj)
+	{
+		if (obj == null)
+		{
+			return new String[0];
 		}
-			
-		Method[] methods = obj.getClass().getMethods();
-		String[] methodNames = new String[ methods.length ];
-		for ( int i = 0; i < methods.length; i++ )
+
+		final Method[] methods = obj.getClass().getMethods();
+		final String[] methodNames = new String[methods.length];
+		for (int i = 0; i < methods.length; i++)
 		{
 			methodNames[i] = methods[i].getName();
 		}
-		
+
 		return methodNames;
 	}
-	
+
+	/**
+	 * 
+	 * Verifies if the given object is an instance of the provided className
+	 * 
+	 */
 	public static final boolean isInstance(String className, Object obj)
 	{
 		try
@@ -67,21 +82,29 @@ public final class ReflectionUtil
 	}
 
 	/**
-	 * 
-	 * @deprecated - renamed to invokeStatic
-	 * 
+	 * Calls the static method on the provided class.
 	 */
-	@Deprecated
-	public static final Object staticInvoke(String className, String methodName, Object... params) throws SimpleException
-	{
-		return invokeStatic(className, methodName, params);
-	}
-
 	public static final Object invokeStatic(String className, String methodName, Object... params) throws SimpleException
 	{
 		try
 		{
 			final Class<?> clazz = forName(className);
+			return invokeStatic(clazz, methodName, params);
+
+		}
+		catch (final Exception e)
+		{
+			throw new SimpleException(e);
+		}
+	}
+
+	/**
+	 * Calls the static method on the provided class.
+	 */
+	public static final Object invokeStatic(Class<?> clazz, String methodName, Object... params) throws SimpleException
+	{
+		try
+		{
 			final Method method = findMethod(true, clazz, methodName, params);
 			return method.invoke(null, params);
 		}
@@ -92,6 +115,8 @@ public final class ReflectionUtil
 	}
 
 	/**
+	 * 
+	 * Creates a new instance of the given className.
 	 * 
 	 * @param className
 	 *            - the fully qualified name of the class.

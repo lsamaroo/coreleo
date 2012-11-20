@@ -30,13 +30,13 @@ public class BeanUtil
 			if (name.startsWith(GET))
 			{
 				final Object returnValue = ReflectionUtil.invoke(bean, name);
-				final String key = StringUtil.toLowerCaseFirstCharacter(name.substring(3));
+				final String key = StringUtil.toLowerCaseCharAt(name.substring(3), 0);
 				map.put(key, returnValue);
 			}
 			else if (name.startsWith(IS))
 			{
 				final Object returnValue = ReflectionUtil.invoke(bean, name);
-				final String key = StringUtil.toLowerCaseFirstCharacter(name.substring(2));
+				final String key = StringUtil.toLowerCaseCharAt(name.substring(2), 0);
 				map.put(key, returnValue);
 			}
 		}
@@ -44,21 +44,21 @@ public class BeanUtil
 		return map;
 	}
 
-	public static Object populateBean(Object bean, Map<String, Object> map)
+	public static Object populateBean(Object bean, Map<String, Object> data)
 	{
 		if (bean == null)
 		{
 			return null;
 		}
 
-		if (map == null)
+		if (data == null)
 		{
 			return bean;
 		}
 
-		for (final Map.Entry<String, Object> entry : map.entrySet())
+		for (final Map.Entry<String, Object> entry : data.entrySet())
 		{
-			final String key = StringUtil.toUpperCaseFirstCharacter(entry.getKey());
+			final String key = StringUtil.capitalize(entry.getKey());
 			final Object value = entry.getValue();
 			ReflectionUtil.invoke(bean, SET + key, value);
 		}
@@ -66,9 +66,15 @@ public class BeanUtil
 		return bean;
 	}
 
-	public static Object populateBean(String qualifiedClassName, Map<String, Object> map)
+	public static Object populateBean(String qualifiedClassName, Map<String, Object> data)
 	{
 		final Object bean = ReflectionUtil.newInstance(qualifiedClassName);
-		return populateBean(bean, map);
+		return populateBean(bean, data);
+	}
+
+	public static Object populateBean(Class<?> clazz, Map<String, Object> data)
+	{
+		final Object bean = ReflectionUtil.newInstance(clazz);
+		return populateBean(bean, data);
 	}
 }

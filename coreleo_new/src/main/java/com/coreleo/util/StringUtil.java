@@ -540,38 +540,14 @@ public final class StringUtil
 		}
 	}
 
-	public static final String toUpperCaseFirstCharacter(String x)
+	public static final String capitalize(String x)
 	{
-		if (isEmpty(x))
-		{
-			return x;
-		}
-
-		if (x.length() > 1)
-		{
-			return toUpperCase(x.charAt(0)) + x.substring(1);
-		}
-		else
-		{
-			return x.toUpperCase();
-		}
+		return toUpperCaseCharAt(x, 0);
 	}
 
-	public static final String toLowerCaseFirstCharacter(String x)
+	public static final String toLowerCaseCharAt(String x, int charIndex)
 	{
-		if (isEmpty(x))
-		{
-			return x;
-		}
-
-		if (x.length() > 1)
-		{
-			return toLowerCase(x.charAt(0)) + x.substring(1);
-		}
-		else
-		{
-			return x.toUpperCase();
-		}
+		return toCaseCharAt(x, charIndex, false);
 	}
 
 	public static final String toLowerCase(String x)
@@ -592,6 +568,11 @@ public final class StringUtil
 		return null;
 	}
 
+	public static final String toUpperCaseCharAt(String x, int charIndex)
+	{
+		return toCaseCharAt(x, charIndex, true);
+	}
+
 	public static final String toUpperCase(String x)
 	{
 		if (x != null)
@@ -609,6 +590,39 @@ public final class StringUtil
 		}
 
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param x
+	 *            - the string
+	 * @param charIndex
+	 *            - index of the character to change case
+	 * @param upper
+	 *            - true for upper, false for lower case
+	 * @return - the converted string
+	 */
+	private static final String toCaseCharAt(String x, int charIndex, boolean upper)
+	{
+		if (isEmpty(x))
+		{
+			return x;
+		}
+
+		if (charIndex < 0 || charIndex >= x.length())
+		{
+			return x;
+		}
+
+		if (x.length() > 1)
+		{
+			final String s = upper ? toUpperCase(x.charAt(charIndex)) : toLowerCase(x.charAt(charIndex));
+			return x.substring(0, charIndex) + s + x.substring(charIndex + 1, x.length());
+		}
+		else
+		{
+			return upper ? x.toUpperCase() : x.toLowerCase();
+		}
 	}
 
 	public static final boolean endsWith(String x, String subString)

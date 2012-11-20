@@ -1,4 +1,4 @@
-package com.coreleo.util;
+package com.coreleo.thirdparty;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.coreleo.SimpleException;
+import com.coreleo.util.BeanUtil;
+import com.coreleo.util.NumberUtil;
 
 public class JsonUtil
 {
@@ -116,7 +118,7 @@ public class JsonUtil
 		}
 		try
 		{
-			return jsonObj.put(key, new Float(x));
+			return jsonObj.put(key, Float.valueOf(x));
 		}
 		catch (final JSONException jsone)
 		{
@@ -173,7 +175,7 @@ public class JsonUtil
 		}
 	}
 
-	public static final JSONArray toJsonArray(Collection x, boolean returnEmptyArrayOnNull)
+	public static final JSONArray toJsonArray(Collection<?> x, boolean returnEmptyArrayOnNull)
 	{
 		if (x == null)
 		{
@@ -183,12 +185,12 @@ public class JsonUtil
 		return new JSONArray(x);
 	}
 
-	public static final JSONArray toJsonArray(Collection x)
+	public static final JSONArray toJsonArray(Collection<?> x)
 	{
 		return toJsonArray(x, false);
 	}
 
-	public static final Map toMap(String jsonString)
+	public static final Map<String, Object> toMap(String jsonString)
 	{
 		if (jsonString == null)
 		{
@@ -197,24 +199,23 @@ public class JsonUtil
 
 		try
 		{
-			toMap(new JSONObject(jsonString));
+			return toMap(new JSONObject(jsonString));
 		}
 		catch (final JSONException jsone)
 		{
-			return null;
+			return new HashMap<String, Object>();
 		}
 
-		return new HashMap();
 	}
 
-	public static final Map toMap(JSONObject jsonObject)
+	public static final Map<String, Object> toMap(JSONObject jsonObject)
 	{
 		if (jsonObject == null)
 		{
 			return null;
 		}
 
-		final Map map = new LinkedHashMap();
+		final Map<String, Object> map = new LinkedHashMap<String, Object>();
 
 		final JSONArray names = jsonObject.names();
 		for (int i = 0; i < names.length(); i++)
