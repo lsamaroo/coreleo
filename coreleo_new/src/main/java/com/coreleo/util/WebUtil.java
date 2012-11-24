@@ -564,9 +564,27 @@ public final class WebUtil
 
 	}
 
+	public static Object getAttribute(HttpServletRequest request, String key)
+	{
+		if (request == null)
+		{
+			return null;
+		}
+		else
+		{
+			return request.getAttribute(key);
+		}
+
+	}
+
 	public static void setAttributeInSession(HttpServletRequest request, String key, Object value)
 	{
 		setAttribute(request.getSession(false), key, value);
+	}
+
+	public static void setAttributeInSession(HttpServletRequest request, String key, Object value, boolean createSession)
+	{
+		setAttribute(request.getSession(createSession), key, value);
 	}
 
 	public static void setAttribute(HttpSession session, String key, Object value)
@@ -590,19 +608,40 @@ public final class WebUtil
 			return "";
 		}
 
-		int index = url.lastIndexOf("/");
-
-		if (index == -1)
+		if (!url.endsWith("/"))
 		{
-			return "";
+			int index = url.lastIndexOf("/");
+
+			if (index == -1)
+			{
+				return "";
+			}
+
+			if (index++ <= url.length())
+			{
+				return url.substring(index, url.length());
+			}
 		}
-
-		if (index++ <= url.length())
+		else
 		{
-			return url.substring(index, url.length());
+			int index = url.substring(0, url.length() - 1).lastIndexOf("/");
+			if (index == -1)
+			{
+				return "";
+			}
+
+			if (index++ <= url.length())
+			{
+				return url.substring(index, url.length());
+			}
 		}
 
 		return "";
+	}
+
+	public static String getRequestedPageFileExtension(String url)
+	{
+		return url.contains(".") ? url.substring(url.indexOf(".")) : "";
 	}
 
 }

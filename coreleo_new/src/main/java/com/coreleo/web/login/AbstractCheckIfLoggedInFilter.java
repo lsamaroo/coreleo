@@ -32,7 +32,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		final HttpServletResponse response = (HttpServletResponse) res;
 
 		// exempt check
-		if (isRequestedPageExemptFromCheck(request))
+		if (isRequestedPageExempt(request))
 		{
 			chain.doFilter(request, response);
 			return;
@@ -60,7 +60,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		chain.doFilter(request, response);
 	}
 
-	protected abstract boolean isRequestedPageExemptFromCheck(HttpServletRequest request);
+	protected abstract boolean isRequestedPageExempt(HttpServletRequest request);
 
 	protected abstract String getErrorPage(int errorCode);
 

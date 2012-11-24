@@ -22,7 +22,7 @@ import com.coreleo.util.WebUtil;
  * 
  * 
  */
-public abstract class AbstractWhiteListFilter extends AbstractFilter
+public abstract class AbstractRequestValidationFilter extends AbstractFilter
 {
 	private boolean isOn = false;
 
@@ -38,29 +38,29 @@ public abstract class AbstractWhiteListFilter extends AbstractFilter
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
 	{
+
 		if (isOn)
 		{
-			for (final Enumeration e = request.getParameterNames(); e.hasMoreElements();)
+			final String url = ((HttpServletRequest) res).getRequestURL().toString();
+			for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();)
 			{
 				final String key = String.valueOf(e.nextElement());
-				final String value = request.getParameter(key);
-				if (!isValidParameterName(key) || !isValidParameterValue(value))
+				final String value = req.getParameter(key);
+				if (!isValid(key, value, url))
 				{
-					WebUtil.forward((HttpServletRequest) request, (HttpServletResponse) response, getRedirectOnFailUrl());
+					WebUtil.forward((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
 					return;
 				}
 			}
 		}
 
-		chain.doFilter(request, response);
+		chain.doFilter(req, res);
 	}
 
-	protected abstract boolean isValidParameterValue(String str);
+	protected abstract boolean isValid(String key, String value, String url);
 
-	protected abstract boolean isValidParameterName(String str);
-
-	protected abstract String getRedirectOnFailUrl();
+	protected abstract String getErrorPage();
 
 }
