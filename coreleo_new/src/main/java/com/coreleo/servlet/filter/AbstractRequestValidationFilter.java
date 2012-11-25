@@ -43,12 +43,18 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 
 		if (isOn)
 		{
-			final String url = ((HttpServletRequest) res).getRequestURL().toString();
+			final String url = ((HttpServletRequest) req).getRequestURL().toString();
+			if (!isValidUrl(url))
+			{
+				WebUtil.forward((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
+				return;
+			}
+
 			for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();)
 			{
 				final String key = String.valueOf(e.nextElement());
 				final String value = req.getParameter(key);
-				if (!isValid(key, value, url))
+				if (!isValidParam(key, value))
 				{
 					WebUtil.forward((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
 					return;
@@ -59,7 +65,9 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 		chain.doFilter(req, res);
 	}
 
-	protected abstract boolean isValid(String key, String value, String url);
+	protected abstract boolean isValidParam(String key, String value);
+
+	protected abstract boolean isValidUrl(String url);
 
 	protected abstract String getErrorPage();
 
