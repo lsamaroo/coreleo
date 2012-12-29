@@ -1,4 +1,4 @@
-package com.coreleo.servlet.filter;
+package com.coreleo.security;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.coreleo.servlet.filter.AbstractFilter;
 import com.coreleo.util.BooleanUtil;
 import com.coreleo.util.LogUtil;
 import com.coreleo.util.WebUtil;
