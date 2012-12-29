@@ -10,11 +10,11 @@ package com.coreleo.interfaces;
 public interface CrudSupport
 {
 
-	public Object create(Object obj);
+	public Object create(Object... params);
 
-	public Object read(Object obj);
+	public Object read(Object... params);
 
-	public Object update(Object obj);
+	public Object update(Object... params);
 
-	public Object remove(Object obj);
+	public Object remove(Object... params);
 }

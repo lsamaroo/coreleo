@@ -676,6 +676,10 @@ public final class DBUtil
 			{
 				pstmt.setByte(index, (Byte) x);
 			}
+			else if (x instanceof byte[])
+			{
+				pstmt.setBytes(index, (byte[]) x);
+			}
 			else if (x instanceof String)
 			{
 				pstmt.setString(index, StringUtil.toString(x));

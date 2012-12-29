@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.coreleo.servlet.filter.AbstractFilter;
-import com.coreleo.util.BooleanUtil;
-import com.coreleo.util.LogUtil;
 import com.coreleo.util.WebUtil;
 
 /**
@@ -25,41 +22,26 @@ import com.coreleo.util.WebUtil;
  */
 public abstract class AbstractRequestValidationFilter extends AbstractFilter
 {
-	private boolean isOn = false;
 
 	@Override
-	public void init(FilterConfig fc) throws ServletException
+	protected void onDoFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
 	{
-		super.init(fc);
-		if (fc != null)
+
+		final String url = ((HttpServletRequest) req).getRequestURL().toString();
+		if (!isValidUrl(url))
 		{
-			isOn = BooleanUtil.toBoolean(fc.getInitParameter("isOn"), false);
+			WebUtil.redirect((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
+			return;
 		}
-		LogUtil.info(this, "WhiteListFilter: isOn=" + isOn);
-	}
 
-	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
-	{
-
-		if (isOn)
+		for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();)
 		{
-			final String url = ((HttpServletRequest) req).getRequestURL().toString();
-			if (!isValidUrl(url))
+			final String key = String.valueOf(e.nextElement());
+			final String value = req.getParameter(key);
+			if (!isValidParam(key, value))
 			{
 				WebUtil.redirect((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
 				return;
-			}
-
-			for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();)
-			{
-				final String key = String.valueOf(e.nextElement());
-				final String value = req.getParameter(key);
-				if (!isValidParam(key, value))
-				{
-					WebUtil.redirect((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
-					return;
-				}
 			}
 		}
 

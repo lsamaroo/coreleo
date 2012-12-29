@@ -55,4 +55,12 @@ public class PasswordEncryptionService
 
 		return salt;
 	}
+
+	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		final PasswordEncryptionService service = new PasswordEncryptionService();
+		final byte[] salt = service.generateSalt();
+		final byte[] password = service.getEncryptedPassword("password", salt);
+		System.out.println("salt=" + new String(salt) + " password=" + new String(password));
+	}
 }
