@@ -59,6 +59,10 @@ public final class DateUtil
 	/** yyyy-MM-dd HH:mm aa */
 	public final static FastDateFormat yyyyMMddHyphened_hhmmColon_aa = FastDateFormat.getInstance("yyyy-MM-dd hh:mm aa");
 
+	/** yyyy-MM-dd HH:mm aa */
+	public final static FastDateFormat ISO8601DateTimeFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mmZ");
+
+	
 	private DateUtil()
 	{
 	}
