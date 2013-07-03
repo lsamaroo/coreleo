@@ -53,9 +53,13 @@ public final class DateUtil
 	/** MMM dd, yyyy */
 	public final static FastDateFormat MMM_dd_Coma_yyyy = FastDateFormat.getInstance("MMM dd, yyyy");
 
-	/** HH:mm aa - Only use this to format a date, parsing is not supported */
+	/** hh:mm aa - Only use this to format a date, parsing is not supported */
 	public final static FastDateFormat hhmmColon_aa = FastDateFormat.getInstance("hh:mm aa");
 
+	/** h:mm aa - Only use this to format a date, parsing is not supported */
+	public final static FastDateFormat hmmColon_aa = FastDateFormat.getInstance("h:mm aa");
+
+	
 	/** yyyy-MM-dd HH:mm aa */
 	public final static FastDateFormat yyyyMMddHyphened_hhmmColon_aa = FastDateFormat.getInstance("yyyy-MM-dd hh:mm aa");
 
