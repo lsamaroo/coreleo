@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -276,5 +278,12 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	{
 		return checkOutConnection();
 	}
+
+	
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		throw new SQLFeatureNotSupportedException();
+	}
+	
+	
 
 }

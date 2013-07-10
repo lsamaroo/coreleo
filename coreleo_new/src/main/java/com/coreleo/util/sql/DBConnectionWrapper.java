@@ -3,6 +3,7 @@ package com.coreleo.util.sql;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 
 public class DBConnectionWrapper implements Connection  {
@@ -227,6 +228,32 @@ public class DBConnectionWrapper implements Connection  {
 
 	public Object unwrap(Class iface) throws SQLException {
 		return connection.unwrap(iface);
+	}
+
+	
+	public void setSchema(String schema) throws SQLException {
+		connection.setSchema(schema);
+	}
+
+	public String getSchema() throws SQLException {
+		return connection.getSchema();
+	}
+
+	
+	public void abort(Executor executor) throws SQLException {
+		connection.abort(executor);		
+	}
+
+	
+	public void setNetworkTimeout(Executor executor, int milliseconds)
+			throws SQLException {
+		connection.setNetworkTimeout(executor, milliseconds);
+		
+	}
+
+	
+	public int getNetworkTimeout() throws SQLException {
+		return connection.getNetworkTimeout();
 	}
 	
 
