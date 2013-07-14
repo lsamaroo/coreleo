@@ -250,7 +250,7 @@ public final class DBUtil
 		}
 	}
 
-	private static Connection getConnection(Object connectionSource) throws SQLException, SimpleSqlException
+	public static Connection getConnection(Object connectionSource) throws SQLException, SimpleSqlException
 	{
 		Connection con = null;
 		if (connectionSource instanceof Connection)
@@ -270,7 +270,7 @@ public final class DBUtil
 		return con;
 	}
 
-	private static void closeDataSourceConnection(Object connectionSource, Connection con)
+	public static void closeDataSourceConnection(Object connectionSource, Connection con)
 	{
 		if (connectionSource instanceof DataSource)
 		{
@@ -325,8 +325,8 @@ public final class DBUtil
 			result = pstmt.executeUpdate();
 			final long timeToRun = (System.currentTimeMillis() - startTime);
 			// close as soon as possible
-			close(pstmt);
-			closeDataSourceConnection(connectionSource, con);
+			//close(pstmt);
+			//closeDataSourceConnection(connectionSource, con);
 			LogUtil.debug(new StringBuffer(log).append(" [run=").append(timeToRun).append("ms]").toString());
 		}
 		catch (final SQLException sqle)
@@ -339,6 +339,7 @@ public final class DBUtil
 			close(pstmt);
 			closeDataSourceConnection(connectionSource, con);
 		}
+		LogUtil.debug("Result of update/insert = " + result );
 		return result;
 	}
 
