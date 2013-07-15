@@ -1,6 +1,6 @@
 package com.coreleo.interfaces;
 
-public interface IdentifiableObject
+public interface Identifiable
 {
 	public String getIdentity();
 
