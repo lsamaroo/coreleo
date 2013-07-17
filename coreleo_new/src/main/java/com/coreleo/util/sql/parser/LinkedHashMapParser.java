@@ -62,7 +62,7 @@ public class LinkedHashMapParser implements ResultSetParser {
 	 * 
 	 */
 	public Object parse(Connection con, ResultSet rs) throws SQLException {
-		Map map = new LinkedHashMap();
+		Map<Object, Object> map = new LinkedHashMap<Object, Object>();
         int rowNum = 0;
         
 		while (rs.next()) {

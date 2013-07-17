@@ -9,6 +9,7 @@ import java.util.*;
  * @author Leon Samaroo
  * 
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public abstract class ObjectMonitorManager {
 	private Timer timer;
 	private Map timerEntries;

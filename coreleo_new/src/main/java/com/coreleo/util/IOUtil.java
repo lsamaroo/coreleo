@@ -25,6 +25,7 @@ import com.coreleo.SimpleException;
  * @author Leon Samaroo
  * 
  */
+@SuppressWarnings({"rawtypes"})
 public final class IOUtil
 {
 

@@ -23,6 +23,7 @@ import com.coreleo.util.WebUtil;
 public abstract class AbstractRequestValidationFilter extends AbstractFilter
 {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void onDoFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
 	{

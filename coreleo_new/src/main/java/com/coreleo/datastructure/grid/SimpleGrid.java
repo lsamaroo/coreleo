@@ -419,7 +419,7 @@ public class SimpleGrid<R, C, V> implements Grid<R, C, V>, Serializable
 	}
 
 	@Override
-	public List getColumnValues(C columnId, boolean includeNullValues)
+	public List<V> getColumnValues(C columnId, boolean includeNullValues)
 	{
 		return getColumnValues(getColumnIndex(columnId), includeNullValues);
 	}
@@ -505,6 +505,7 @@ public class SimpleGrid<R, C, V> implements Grid<R, C, V>, Serializable
 			return rowIndex;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public int compareTo(SortableEntry another)
 		{

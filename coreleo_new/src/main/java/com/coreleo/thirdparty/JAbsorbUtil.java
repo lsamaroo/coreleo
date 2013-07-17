@@ -17,6 +17,7 @@ import com.coreleo.util.ReflectionUtil;
  *         This utility is for use with the JAbsorb library. It requires the jabsorb jar.
  * 
  */
+@SuppressWarnings({"rawtypes"})
 public class JAbsorbUtil
 {
 	private final static String JSONRPCBRIDGE_KEY = "JSONRPCBridge";

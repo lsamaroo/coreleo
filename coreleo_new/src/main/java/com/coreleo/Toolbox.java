@@ -17,7 +17,7 @@ import java.util.*;
  */
 
 public class Toolbox {
-    private final Map map = new HashMap();
+    private final Map<String, Object> map = new HashMap<String, Object>();
 
 
     // restrict creating instances directly
