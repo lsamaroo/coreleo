@@ -35,4 +35,12 @@
 			<version>20090211</version>
 		</dependency>
 	</dependencies>
+	<organization>
+		<url>http://www.coreleo.com</url>
+		<name>Core Leo</name>
+	</organization>
+	<scm>
+		<url>git-coreleo@pl3.projectlocker.com:coreleo_new.git</url>
+		<developerConnection>Leon Samaroo</developerConnection>
+	</scm>
 </project>

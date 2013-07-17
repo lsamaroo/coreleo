@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  * 
  * 
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class StringUtil
 {
 

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@SuppressWarnings({ "rawtypes" })
 public final class WebUtil
 {
 
@@ -84,7 +85,7 @@ public final class WebUtil
 			final String key = String.valueOf(i.next());
 			if (key.startsWith(prefix))
 			{
-				final Object value = MapUtil.getFirstObject(parameterMap, key);
+				final Object value = MapUtil.getFirstValue(parameterMap, key);
 
 				LogUtil.debug("WebUtil:stripPrefixedRequestParameter - key=" + key.substring(prefix.length(), key.length()));
 				properties.put(key.substring(prefix.length(), key.length()), value);

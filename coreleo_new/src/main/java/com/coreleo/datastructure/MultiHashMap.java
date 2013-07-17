@@ -14,6 +14,7 @@ import java.util.List;
  *         An HashMap which allows mapping multiple values to a single key.
  * 
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MultiHashMap extends HashMap implements Serializable
 {
 

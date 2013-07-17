@@ -3,6 +3,7 @@ package com.coreleo.util;
 import java.io.Serializable;
 import java.util.Comparator;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ComparatorUtil
 {
 	public final static Comparator NATURAL_COMPARATOR = new NaturalComparator();

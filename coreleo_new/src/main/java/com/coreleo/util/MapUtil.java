@@ -16,6 +16,7 @@ import java.util.TreeMap;
  * @author Leon Samaroo
  * 
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class MapUtil
 {
 
@@ -27,7 +28,6 @@ public final class MapUtil
 	/**
 	 * Sorts the map according to the key's natural ordering.
 	 */
-	@SuppressWarnings("unchecked")
 	public static final Map<?, ?> sort(Map<?, ?> map)
 	{
 		return new TreeMap(map);

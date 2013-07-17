@@ -5,7 +5,7 @@ import java.util.*;
 
 import com.coreleo.util.StringUtil;
 
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RowAsMap implements RowParser {
 	private boolean useLowerCaseColumnNames;
 
@@ -27,7 +27,7 @@ public class RowAsMap implements RowParser {
 	public Object parse(Connection con, ResultSet rs, int rowNum) throws SQLException {
         ResultSetMetaData metaData  = rs.getMetaData();
         int columnCount = metaData.getColumnCount();
-        Map row = new HashMap();
+		Map row = new HashMap();
         for (int i = 1; i <= columnCount; i++) {
             row.put( useLowerCaseColumnNames ? StringUtil.toLowerCase(metaData.getColumnName(i)) : metaData.getColumnName(i), rs.getObject(i) );
         }      

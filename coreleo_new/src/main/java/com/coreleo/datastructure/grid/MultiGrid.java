@@ -16,6 +16,7 @@ import com.coreleo.util.CollectionUtil;
  *         return a List, holding all the values put to that row-column.
  * 
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MultiGrid extends SimpleGrid
 {
 
