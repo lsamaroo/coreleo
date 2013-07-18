@@ -38,11 +38,25 @@ public final class StringUtil
 	private final static Pattern REGEX_IPADDRESS = Pattern.compile("^(?:" + _255 + "\\.){3}" + _255 + "$");
 	private final static Pattern REGEX_DOLLARSIGN = Pattern.compile("\\$");
 	private final static Pattern REGEX_HOST_NAME = Pattern.compile("^([A-Za-z0-9\\Q-\\E.]+\\.)+[A-Za-z]{2,4}$");
+	private final static Pattern  REGEX_USPHONE_NUMBERS = Pattern.compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
 
 	private StringUtil()
 	{
 		super();
 	}
+	
+	
+	public static boolean isUSPhone(String x){
+		if (x == null)
+		{
+			return false;
+		}
+
+		return REGEX_USPHONE_NUMBERS.matcher(x).matches();
+
+		}
+	
+	
 
 	public static final String repeat(CharSequence str, int numOfTimes)
 	{
