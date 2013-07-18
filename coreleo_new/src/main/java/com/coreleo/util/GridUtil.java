@@ -11,6 +11,7 @@ import com.coreleo.datastructure.grid.Grid;
  *             Doesn't correctly handle MultiGrids
  */
 @Deprecated
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GridUtil
 {
 

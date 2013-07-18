@@ -13,6 +13,7 @@ import com.coreleo.util.WebUtil;
  * @author Leon Samaroo
  * 
  */
+@SuppressWarnings({"rawtypes"})
 public class SelectGUI
 {
 	private String id; // id of the select element

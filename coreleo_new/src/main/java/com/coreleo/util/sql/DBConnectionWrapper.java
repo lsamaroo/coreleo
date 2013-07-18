@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class DBConnectionWrapper implements Connection  {
 	private Connection connection;
 	private DBConnectionPool pool;

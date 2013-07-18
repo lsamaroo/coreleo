@@ -12,6 +12,7 @@ public class ApacheCommonsUtil {
 	private final static String SERVLETFILEUPLOAD = "org.apache.commons.fileupload.servlet.ServletFileUpload";
 	private final static String PARSEREQUEST = "parseRequest";
 
+	@SuppressWarnings("rawtypes")
 	public static List parseMultipartFormData(HttpServletRequest request) throws SimpleException {
 		try {
 			Object fileItemFactory = ReflectionUtil.newInstance(DISKFILEITEMFACTORY);

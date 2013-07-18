@@ -19,6 +19,8 @@ import com.coreleo.util.closure.Block;
  * @author Leon Samaroo
  * 
  */
+
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class CollectionUtil
 {
 
@@ -61,6 +63,7 @@ public final class CollectionUtil
 		return parts;
 	}
 
+	
 	public static final boolean contains(List x, Object value)
 	{
 		if (x != null)
@@ -81,6 +84,7 @@ public final class CollectionUtil
 		return false;
 	}
 
+	
 	public static final void clear(List x)
 	{
 		if (x != null)
@@ -89,6 +93,7 @@ public final class CollectionUtil
 		}
 	}
 
+	
 	public static final void forEach(List x, Block b)
 	{
 		for (int i = 0; i < x.size(); i++)
@@ -97,6 +102,7 @@ public final class CollectionUtil
 		}
 	}
 
+	
 	public static final void forEach(Collection x, Block b)
 	{
 		for (final Iterator i = x.iterator(); i.hasNext();)
@@ -105,6 +111,7 @@ public final class CollectionUtil
 		}
 	}
 
+	
 	public static final Object get(List x, int index)
 	{
 		if (x == null)
@@ -120,6 +127,7 @@ public final class CollectionUtil
 		return x.get(index);
 	}
 
+	
 	public static final int size(Collection x)
 	{
 		if (x == null)
@@ -130,6 +138,7 @@ public final class CollectionUtil
 		return x.size();
 	}
 
+	
 	public static final boolean isInbounds(Collection x, Object ix)
 	{
 		if (x == null)
@@ -162,6 +171,7 @@ public final class CollectionUtil
 		return false;
 	}
 
+	
 	public static final boolean isEmpty(Object x)
 	{
 		if (x == null)
@@ -214,11 +224,13 @@ public final class CollectionUtil
 		return list;
 	}
 
+	
 	public static final String toCommaDelimitedString(Collection x)
 	{
 		return toDelimitedString(x, ",");
 	}
 
+	
 	public static final String toDelimitedString(Collection x, String delimiter)
 	{
 		if (x == null)
@@ -289,6 +301,7 @@ public final class CollectionUtil
 		return sb.toString();
 	}
 
+	
 	public static final boolean compare(Collection x1, Collection x2)
 	{
 		boolean isEqual = false;
@@ -347,6 +360,7 @@ public final class CollectionUtil
 		return strings;
 	}
 
+	
 	public static final List toList(Collection c)
 	{
 		if (c == null)
@@ -362,6 +376,7 @@ public final class CollectionUtil
 		return new ArrayList(c);
 	}
 
+	
 	public static final List toList(Object[] x)
 	{
 		if (x == null)

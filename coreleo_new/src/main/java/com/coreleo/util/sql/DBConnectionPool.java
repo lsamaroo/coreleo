@@ -20,6 +20,7 @@ import com.coreleo.util.pool.ObjectPool;
  * @see ObjectPool
  * 
  */
+
 public class DBConnectionPool extends ObjectPool<Connection> implements DataSource
 {
 
@@ -255,12 +256,14 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		throw new SQLException("Unsupported method - setLogWriter");
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean isWrapperFor(Class iface) throws SQLException
 	{
 		return false;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object unwrap(Class iface) throws SQLException
 	{

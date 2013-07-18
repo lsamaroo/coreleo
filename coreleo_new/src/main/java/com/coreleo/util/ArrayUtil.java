@@ -16,6 +16,7 @@ import com.coreleo.util.closure.Block;
  * @author Leon Samaroo
  * 
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class ArrayUtil
 {
 
@@ -688,9 +689,9 @@ public final class ArrayUtil
 			return null;
 		}
 
-		final List list = new ArrayList();
+		final List<Object> list = new ArrayList<Object>();
 		// TODO replace tokenizer with regex or split
-		final Enumeration enumerator = new StringTokenizer(x, delimiter);
+		final Enumeration<Object> enumerator = new StringTokenizer(x, delimiter);
 		while (enumerator.hasMoreElements())
 		{
 			list.add(enumerator.nextElement());
