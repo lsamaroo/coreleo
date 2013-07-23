@@ -1371,6 +1371,32 @@ public final class NumberUtil
 		}
 		return x1.add(x2);
 	}
+	
+	
+	// ------------------------------------------------------------------------------
+	// Difference
+	// ------------------------------------------------------------------------------
+	
+	public static Number difference(Number x1, Number x2)
+	{
+		if (x1 == null && x2 == null)
+		{
+			return ZERO_DOUBLE;
+		}
+
+		if (x1 == null)
+		{
+			return 0 - x2.doubleValue();
+		}
+
+		if (x2 == null)
+		{
+			return x1;
+		}
+
+		return new Double(x1.doubleValue() - x2.doubleValue());
+	}
+
 
 	// ------------------------------------------------------------------------------
 	// Percent

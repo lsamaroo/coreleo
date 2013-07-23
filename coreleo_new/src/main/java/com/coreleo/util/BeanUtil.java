@@ -60,7 +60,21 @@ public class BeanUtil
 		{
 			final String key = StringUtil.capitalize(entry.getKey());
 			final Object value = entry.getValue();
-			ReflectionUtil.invoke(bean, SET + key, value);
+			
+			try{
+				if( value != null ){
+					ReflectionUtil.invoke(bean, SET + key, value);
+				}
+				else{
+					ReflectionUtil.invoke(bean, SET + key, (Object[]) value);
+				}
+				
+			}
+			catch( Exception e ){
+				LogUtil.warn(e.getMessage());
+				// ignore and continue
+			}
+			
 		}
 
 		return bean;
