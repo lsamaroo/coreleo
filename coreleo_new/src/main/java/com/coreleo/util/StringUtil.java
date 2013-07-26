@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -39,13 +40,24 @@ public final class StringUtil
 	private final static Pattern REGEX_IPADDRESS = Pattern.compile("^(?:" + _255 + "\\.){3}" + _255 + "$");
 	private final static Pattern REGEX_DOLLARSIGN = Pattern.compile("\\$");
 	private final static Pattern REGEX_HOST_NAME = Pattern.compile("^([A-Za-z0-9\\Q-\\E.]+\\.)+[A-Za-z]{2,4}$");
-	private final static Pattern  REGEX_USPHONE_NUMBERS = Pattern.compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
+	private final static Pattern REGEX_USPHONE_NUMBERS = Pattern.compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
+	private final static Pattern REGEX_PROPER_CASE = Pattern.compile("(^|\\W)([a-z])");
 
 	private StringUtil()
 	{
 		super();
 	}
 	
+	
+	public static String toProperCase(String x) {
+		Matcher m = REGEX_PROPER_CASE.matcher(x.toLowerCase());
+		StringBuffer sb = new StringBuffer(x.length());
+		while (m.find()) {
+			m.appendReplacement(sb, m.group(1) + m.group(2).toUpperCase());
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
 	
 	public static boolean isUSPhone(String x){
 		if (x == null)
