@@ -72,6 +72,12 @@ public final class DateUtil
 	private DateUtil()
 	{
 	}
+	
+	
+	public static long getUnixTimestamp( Date date ){
+		return (date.getTime() / 1000L );
+	}
+	
 
 	public final static Calendar clone(Calendar c)
 	{
