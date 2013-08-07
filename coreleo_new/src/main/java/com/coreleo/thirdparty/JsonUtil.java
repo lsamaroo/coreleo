@@ -3,6 +3,7 @@ package com.coreleo.thirdparty;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -21,6 +22,18 @@ public class JsonUtil
 		super();
 	}
 
+	/**
+	 * Converts the list to a JSONArray.  Objects in the list are converted to JSONObjects.
+	 */
+	public static String toArrayOfJsonObjects(List<?> list){	
+			final JSONArray array = new JSONArray();
+			for (Object obj : list) {
+				array.put( toJson(obj) );
+			}
+			
+			return array.toString();
+	}
+	
 	public static final JSONObject toJson(Object bean)
 	{
 		final Map<String, Object> map = BeanUtil.toMap(bean);

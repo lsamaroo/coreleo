@@ -55,7 +55,7 @@ public class RowAsBean implements RowParser {
         int columnCount = metaData.getColumnCount();
 		Map row = new HashMap();
         for (int i = 1; i <= columnCount; i++) {
-            row.put( underscoreToCamelCase ? underScoreToCamelCase(metaData.getColumnName(i)) : metaData.getColumnName(i), rs.getObject(i) );
+            row.put( underscoreToCamelCase ? underScoreToCamelCase(metaData.getColumnLabel(i)) : metaData.getColumnName(i), rs.getObject(i) );
         }      
         
         if( clazz != null ){
