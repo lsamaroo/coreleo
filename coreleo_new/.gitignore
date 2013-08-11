@@ -1,11 +1,5 @@
 /target
 /.settings
-<<<<<<< HEAD
-/.classpath
 /.project
 /.gitignore
-=======
 /bin
-/.classpath
-/.project
->>>>>>> branch 'master' of ssh://git-coreleo@pl3.projectlocker.com/coreleo_new.git
