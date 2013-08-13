@@ -20,6 +20,10 @@ import com.coreleo.util.Constants;
 public final class DateUtil
 {
 
+	
+	/** MM/dd/yyyy - Only use this to format a date, parsing is not supported */
+	public final static FastDateFormat MMddyyyyForwardSlash = FastDateFormat.getInstance("MM/dd/yyyy");
+	
 	/** ww - Only use this to format a date, parsing is not supported */
 	public final static FastDateFormat ww = FastDateFormat.getInstance("ww");
 
