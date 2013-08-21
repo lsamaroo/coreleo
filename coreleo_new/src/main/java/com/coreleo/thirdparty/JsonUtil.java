@@ -36,6 +36,9 @@ public class JsonUtil
 	
 	public static final JSONObject toJson(Object bean)
 	{
+		if( bean == null ){
+			return null;
+		}
 		final Map<String, Object> map = BeanUtil.toMap(bean);
 		return toJson(map);
 	}
