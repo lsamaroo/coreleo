@@ -21,7 +21,9 @@ public abstract class AbstractLoginServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	protected static final int FAILED_AUTHENTICATION = 0;
 	protected static final int INVALID_USER = 1;
-
+	protected static final int SUCCESS = -100;
+	protected final static int USER_LOCKED = 2;
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -34,9 +36,10 @@ public abstract class AbstractLoginServlet extends HttpServlet
 			return;
 		}
 
-		if (!isValidLogin(request, response))
+		int result = isValidLogin(request, response);
+		if (result != SUCCESS )
 		{
-			WebUtil.redirect(request, response, getFailedView(FAILED_AUTHENTICATION));
+			WebUtil.redirect(request, response, getFailedView(result));
 			WebUtil.invalidateSession(request);
 			return;
 
@@ -49,7 +52,7 @@ public abstract class AbstractLoginServlet extends HttpServlet
 
 	protected abstract boolean userExists(HttpServletRequest request, HttpServletResponse response);
 
-	protected abstract boolean isValidLogin(HttpServletRequest request, HttpServletResponse response);
+	protected abstract int isValidLogin(HttpServletRequest request, HttpServletResponse response);
 
 	protected abstract void doBeforeLogin(HttpServletRequest request, HttpServletResponse response);
 
