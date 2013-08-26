@@ -1,4 +1,4 @@
-package com.coreleo.util.sql;
+package com.coreleo.util.date;
 
 import java.util.Date;
 import java.util.SimpleTimeZone;

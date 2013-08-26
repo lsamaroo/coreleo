@@ -1,5 +1,6 @@
-package com.coreleo.util.sql;
+package com.coreleo.util.date;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -15,7 +16,9 @@ public class DateAndTimeZone {
 	}
 
 	public Date getDate() {
-		return date;
+		Calendar c = DateUtil.toCalendar(date);
+		c.setTimeZone(timezone);
+		return c.getTime();
 	}
 
 	public TimeZone getTimezone() {
