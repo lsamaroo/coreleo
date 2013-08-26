@@ -31,6 +31,7 @@ import com.coreleo.util.LogUtil;
 import com.coreleo.util.NumberUtil;
 import com.coreleo.util.ReflectionUtil;
 import com.coreleo.util.StringUtil;
+import com.coreleo.util.date.DateAndTimeZone;
 import com.coreleo.util.date.DateUtil;
 import com.coreleo.util.sql.call.NullParameter;
 import com.coreleo.util.sql.call.OutParameter;
@@ -696,6 +697,11 @@ public final class DBUtil
 			else if (x instanceof Date)
 			{
 				pstmt.setDate(index, new java.sql.Date(((Date) x).getTime()));
+			}
+			else if (x instanceof DateAndTimeZone)
+			{
+				Timestamp t = new Timestamp( ((DateAndTimeZone) x).getDate().getTime() );
+				pstmt.setTimestamp(index, t, Calendar.getInstance(((DateAndTimeZone) x).getTimezone()) );
 			}
 			else if (x instanceof Array)
 			{
