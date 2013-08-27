@@ -281,7 +281,7 @@ public final class DBUtil
 
 	public static final int update(Object connectionSource, String sql) throws SimpleSqlException
 	{
-		return update(QUERY_TIMEOUT, connectionSource, sql, (Object[]) null);
+		return update(false, QUERY_TIMEOUT, connectionSource, sql, (Object[]) null);
 	}
 
 	//	public static final int update(Object connectionSource, String sql, Object param) throws SimpleSqlException {
@@ -290,27 +290,42 @@ public final class DBUtil
 
 	public static final int update(Object connectionSource, String sql, Object... params) throws SimpleSqlException
 	{
-		return update(QUERY_TIMEOUT, connectionSource, sql, params);
+		return update(false, QUERY_TIMEOUT, connectionSource, sql, params);
 	}
 
 	public static final int update(Object connectionSource, String sql, List<Object> params) throws SimpleSqlException
 	{
-		return update(QUERY_TIMEOUT, connectionSource, sql, ArrayUtil.toObjectArray(params));
+		return update(false, QUERY_TIMEOUT, connectionSource, sql, ArrayUtil.toObjectArray(params));
 	}
 
-	private static final int update(int queryTimeOut, Object connectionSource, String sql, Object... params) throws SimpleSqlException
+	
+	public static final int updateReturnGeneratedKey(Object connectionSource, String sql, Object... params) throws SimpleSqlException
+	{
+		return update(true, QUERY_TIMEOUT, connectionSource, sql, params);
+	}
+
+
+	private static final int update(boolean returnGeneratedKey, int queryTimeOut, Object connectionSource, String sql, Object... params) throws SimpleSqlException
 	{
 		final String log = getLogString("update", -1, -1, queryTimeOut, sql, params);
 		LogUtil.trace(log);
 		PreparedStatement pstmt = null;
+		ResultSet generatedKeys = null;
 		int result = -1;
+		int generatedKey = -1;
 		Connection con = null;
 		long startTime = 0;
 
 		try
 		{
 			con = getConnection(connectionSource);
-			pstmt = con.prepareStatement(sql);
+			
+			if( returnGeneratedKey ){
+				pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			}
+			else{
+				pstmt = con.prepareStatement(sql) ;
+			}
 			pstmt.setQueryTimeout(queryTimeOut);
 
 			if (params != null)
@@ -324,10 +339,16 @@ public final class DBUtil
 
 			startTime = System.currentTimeMillis();
 			result = pstmt.executeUpdate();
+			
+			if( returnGeneratedKey ){
+				generatedKeys = pstmt.getGeneratedKeys();  
+				if( result != 0 && !generatedKeys.next()) {  
+					generatedKey = generatedKeys.getInt(1);  
+				} 
+			}
+			
+			
 			final long timeToRun = (System.currentTimeMillis() - startTime);
-			// close as soon as possible
-			//close(pstmt);
-			//closeDataSourceConnection(connectionSource, con);
 			LogUtil.debug(new StringBuffer(log).append(" [run=").append(timeToRun).append("ms]").toString());
 		}
 		catch (final SQLException sqle)
@@ -337,11 +358,12 @@ public final class DBUtil
 		}
 		finally
 		{
+			close( generatedKeys );
 			close(pstmt);
 			closeDataSourceConnection(connectionSource, con);
 		}
 		LogUtil.debug("Result of update/insert = " + result );
-		return result;
+		return returnGeneratedKey ? generatedKey : result;
 	}
 
 	public static final List<?> queryForListOfArrays(Object connectionSource, String sql) throws SimpleSqlException
