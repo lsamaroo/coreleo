@@ -231,6 +231,9 @@ public final class DateUtil
 
 	public static Date setTime(Date date, int hour, int minute, int second, int millisecond)
 	{
+		if( date == null ){
+			return null;
+		}
 		final Calendar cal = toCalendar(date);
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
