@@ -77,6 +77,12 @@ public final class DateUtil
 	{
 	}
 	
+	public static Calendar utcTo( Date date, TimeZone tz ){
+		Calendar c = Calendar.getInstance( TimeZone.getTimeZone("UTC") );
+		c.setTime(date);	
+		c.setTimeZone(tz);
+		return c;
+	}
 	
 	public static long getUnixTimestamp( Date date ){
 		return (date.getTime() / 1000L );
@@ -114,11 +120,33 @@ public final class DateUtil
 		return cal;
 	}
 
+	
+
+	public static String format( Calendar x, String pattern ){
+		return FastDateFormat.getInstance(pattern, x.getTimeZone()).format(x);
+	}
+	
+	
 	public static Date parse(String date, String pattern)
 	{
 		try
 		{
 			return new SimpleDateFormat(pattern).parse(date);
+		}
+		catch (final ParseException e)
+		{
+			throw new SimpleException(e);
+		}
+	}
+	
+	
+	public static Date parse(String date, String pattern, TimeZone tz)
+	{
+		try
+		{
+			SimpleDateFormat sf = new SimpleDateFormat(pattern);
+			sf.setTimeZone(tz);
+			return sf.parse(date);
 		}
 		catch (final ParseException e)
 		{

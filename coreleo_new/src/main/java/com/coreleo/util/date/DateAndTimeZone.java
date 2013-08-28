@@ -25,4 +25,10 @@ public class DateAndTimeZone {
 		return timezone;
 	}
 
+	@Override
+	public String toString() {
+		return date.toString() + " " + timezone.toString();
+	}
+
+	
 }
