@@ -342,7 +342,7 @@ public final class DBUtil
 			
 			if( returnGeneratedKey ){
 				generatedKeys = pstmt.getGeneratedKeys();  
-				if( result != 0 && !generatedKeys.next()) {  
+				if( result != 0 && generatedKeys.next()) {  
 					generatedKey = generatedKeys.getInt(1);  
 				} 
 			}

@@ -15,7 +15,7 @@ import com.coreleo.util.StringUtil;
  * E.g. converts the column name "last_name" to "lastName" in order to find the method "setLastName".
  *  
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class RowAsBean implements RowParser {
 	private boolean underscoreToCamelCase;
 	private Class clazz;
