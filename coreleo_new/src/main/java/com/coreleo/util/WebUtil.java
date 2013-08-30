@@ -639,6 +639,13 @@ public final class WebUtil
 
 		return "";
 	}
+	
+	public final static String getContextPath( HttpServletRequest request ){
+		String context = request.getContextPath();
+		context = StringUtil.replace(context, "/", "");
+		context = context + "/";
+		return context;
+	}
 
 	public static String getRequestedPageFileExtension(String url)
 	{
