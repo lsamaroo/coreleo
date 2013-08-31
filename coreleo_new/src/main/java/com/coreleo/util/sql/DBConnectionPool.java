@@ -154,7 +154,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		Statement stmt = null;
 		try
 		{
-			con.setAutoCommit(false);
+			DBUtil.turnOffAutoCommit(con);
 			DBUtil.commit(con); // validation 1
 
 			if (!con.isClosed())
@@ -169,8 +169,8 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 				}
 
 				con.clearWarnings();
-				con.setAutoCommit(true);
-
+				DBUtil.turnOffAutoCommit(con);
+	
 				LogUtil.trace(this, "DBConnectionPool:validate - true");
 				return true;
 			}
@@ -210,7 +210,9 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		{
 			try
 			{
+				DBUtil.turnOffAutoCommit(con);
 				DBUtil.commit(con);
+				DBUtil.turnOnAutoCommit(con);
 			}
 			catch (final Exception e)
 			{
