@@ -137,7 +137,7 @@ public class TimeZoneList {
 				WINDOWSSTANDARDTIMEZONENAMES_TO_JAVA_TIMEZONE_IDS.put( zoneMapping.getWindowsStandardName(), timeZone.getID());
 			}
 			else{
-				LogUtil.warn( "TimeZoneList: Unknown ID [" + id + "]");
+				LogUtil.trace( "TimeZoneList: Unknown ID [" + id + "]");
 			}
 		}
 		Collections.sort(timeZones, new Comparator<TimeZoneWithDisplayNames>() {
