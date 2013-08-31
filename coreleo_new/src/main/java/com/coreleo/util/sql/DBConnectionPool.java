@@ -154,6 +154,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		Statement stmt = null;
 		try
 		{
+			con.setAutoCommit(false);
 			DBUtil.commit(con); // validation 1
 
 			if (!con.isClosed())
