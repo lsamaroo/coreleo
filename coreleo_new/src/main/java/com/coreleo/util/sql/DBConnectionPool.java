@@ -31,6 +31,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 
 	private String validationQuery;
 	private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
+	
 
 	public DBConnectionPool(String name, String driverClassName, String url, String usr, String pwd, long idleTimeOut, long connectionLife, long reapTime,
 			int initialConnections, int minConnections, int maxConnections)
@@ -151,13 +152,18 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	protected boolean validate(Connection con)
 	{
 		LogUtil.trace(this, "DBConnectionPool:validate");
+		if( con == null ){
+			return false;
+		}
+		
 		Statement stmt = null;
 		try
 		{
+			
 			DBUtil.turnOffAutoCommit(con);
 			DBUtil.commit(con); // validation 1
 
-			if (!con.isClosed())
+			if (con.isValid(validationQueryTimeout) && !con.isClosed())
 			{ // validation 2
 				if (StringUtil.isNotEmpty(validationQuery))
 				{ // validation 3
@@ -169,7 +175,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 				}
 
 				con.clearWarnings();
-				DBUtil.turnOffAutoCommit(con);
+				DBUtil.turnOnAutoCommit(con);
 	
 				LogUtil.trace(this, "DBConnectionPool:validate - true");
 				return true;
@@ -182,14 +188,12 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		}
 		catch (final SQLException sqle)
 		{
-			LogUtil.warn(this, "DBConnectionPool:validate - SQL error, invalid connection, discarding from pool", sqle);
-			LogUtil.trace(this, "DBConnectionPool:validate - false");
+			LogUtil.warn(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
 			return false;
 		}
 		catch (final Exception e)
 		{
-			LogUtil.warn(this, "DBConnectionPool:validate - Unknown error, invalid connection, discarding from pool", e);
-			LogUtil.trace(this, "DBConnectionPool:validate - false");
+			LogUtil.warn(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
 			return false;
 		}
 		finally
