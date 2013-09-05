@@ -251,6 +251,14 @@ public final class DBUtil
 		}
 	}
 
+	public static void close(Object connectionSource, Connection con)
+	{
+		if (connectionSource instanceof DataSource)
+		{
+			close(con);
+		}
+	}
+
 	public static Connection getConnection(Object connectionSource) throws SQLException, SimpleSqlException
 	{
 		Connection con = null;
@@ -271,13 +279,6 @@ public final class DBUtil
 		return con;
 	}
 
-	public static void closeDataSourceConnection(Object connectionSource, Connection con)
-	{
-		if (connectionSource instanceof DataSource)
-		{
-			close(con);
-		}
-	}
 
 	public static final int update(Object connectionSource, String sql) throws SimpleSqlException
 	{
@@ -360,7 +361,7 @@ public final class DBUtil
 		{
 			close( generatedKeys );
 			close(pstmt);
-			closeDataSourceConnection(connectionSource, con);
+			close(connectionSource, con);
 		}
 		LogUtil.debug("Result of update/insert = " + result );
 		return returnGeneratedKey ? generatedKey : result;
@@ -555,7 +556,7 @@ public final class DBUtil
 		{
 			close(rs);
 			close(pstmt);
-			closeDataSourceConnection(connectionSource, con);
+			close(connectionSource, con);
 		}
 	}
 
@@ -643,7 +644,7 @@ public final class DBUtil
 		{
 			close(rs);
 			close(cstmt);
-			closeDataSourceConnection(connectionSource, con);
+			close(connectionSource, con);
 		}
 	}
 
