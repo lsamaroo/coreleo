@@ -5,6 +5,8 @@ package com.coreleo.util.sql.parser;
 
 import java.sql.*;
 
+import com.coreleo.util.sql.DBUtil;
+
 
 /**
  * 
@@ -28,7 +30,7 @@ public class RowAsArray implements RowParser {
         Object[] result = new Object[cols];
 
         for (int i = 0; i < cols; i++) {
-            result[i] = rs.getObject(i + 1);
+            result[i] = DBUtil.getObject(meta, rs, i + 1, null);
         }
 
         return result;

@@ -7,6 +7,7 @@ import org.apache.commons.lang.WordUtils;
 
 import com.coreleo.util.BeanUtil;
 import com.coreleo.util.StringUtil;
+import com.coreleo.util.sql.DBUtil;
 
 /**
  * 
@@ -97,7 +98,7 @@ public class RowAsBean implements RowParser {
         int columnCount = metaData.getColumnCount();
 		Map row = new HashMap();
         for (int i = 1; i <= columnCount; i++) {
-            row.put( underscoreToCamelCase ? underScoreToCamelCase(metaData.getColumnLabel(i)) : metaData.getColumnName(i),getObject(metaData, rs, i) );
+            row.put( underscoreToCamelCase ? underScoreToCamelCase(metaData.getColumnLabel(i)) : metaData.getColumnName(i), DBUtil.getObject(metaData, rs, i, timeZone) );
         }      
         
         if( clazz != null ){
@@ -109,12 +110,7 @@ public class RowAsBean implements RowParser {
         
 	}
 	
-	private Object getObject( ResultSetMetaData meta, ResultSet rs, int i ) throws SQLException{
-		if( meta.getColumnType(i)  == Types.TIMESTAMP && timeZone != null ){
-			return rs.getTimestamp(i, Calendar.getInstance(timeZone));
-		}
-		else return rs.getObject(i);
-	}
+
 	
 	
 

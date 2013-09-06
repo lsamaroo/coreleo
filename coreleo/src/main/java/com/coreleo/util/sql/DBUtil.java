@@ -11,6 +11,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
@@ -21,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -62,6 +64,13 @@ public final class DBUtil
 
 	private DBUtil()
 	{
+	}
+	
+	public static Object getObject( ResultSetMetaData meta, ResultSet rs, int i, TimeZone timeZone) throws SQLException{
+		if( meta.getColumnType(i)  == Types.TIMESTAMP && timeZone != null ){
+			return rs.getTimestamp(i, Calendar.getInstance(timeZone));
+		}
+		else return rs.getObject(i);
 	}
 
 	public final static Driver registerDriver(String driverClassName)
