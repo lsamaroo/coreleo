@@ -31,7 +31,7 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 		final String url = ((HttpServletRequest) req).getRequestURL().toString();
 		if (!isValidUrl(url))
 		{
-			WebUtil.redirect((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
+			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
@@ -41,7 +41,7 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 			final String value = req.getParameter(key);
 			if (!isValidParam(key, value))
 			{
-				WebUtil.redirect((HttpServletRequest) req, (HttpServletResponse) res, getErrorPage());
+				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
 		}
@@ -53,6 +53,5 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 
 	protected abstract boolean isValidUrl(String url);
 
-	protected abstract String getErrorPage();
 
 }

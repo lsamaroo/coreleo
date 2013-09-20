@@ -21,9 +21,6 @@ import com.coreleo.util.WebUtil;
  */
 public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 {
-	protected int INVALID_REQUEST = -1;
-	protected int INVALID_SESSION = -2;
-	protected int NOT_LOGGED_IN = -3;
 
 	@Override
 	protected void onDoFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
@@ -40,20 +37,20 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 
 		if (request == null)
 		{
-			WebUtil.redirect(request, response, getErrorPage(INVALID_REQUEST));
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
 		// check session
 		if (request.getSession(false) == null)
 		{
-			WebUtil.redirect(request, response, getErrorPage(INVALID_SESSION));
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
 		if (!LoginHelper.isUserLoggedIn(request))
 		{
-			WebUtil.redirect(request, response, getErrorPage(NOT_LOGGED_IN));
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
@@ -61,7 +58,5 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 	}
 
 	protected abstract boolean isRequestedPageExempt(HttpServletRequest request);
-
-	protected abstract String getErrorPage(int errorCode);
 
 }
