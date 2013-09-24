@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.coreleo.servlet.filter.AbstractFilter;
-import com.coreleo.util.WebUtil;
 
 /**
  * 
