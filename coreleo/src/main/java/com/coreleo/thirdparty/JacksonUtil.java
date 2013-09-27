@@ -14,7 +14,7 @@ public class JacksonUtil {
 		} 
 		catch (Exception e) {
 			LogUtil.error(e);
-			return "";
+			return null;
 		}
 	}
 
