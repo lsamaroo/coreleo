@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.coreleo.servlet.filter.AbstractFilter;
+import com.coreleo.util.LogUtil;
 
 /**
  * @author Leon Samaroo
@@ -36,6 +37,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 
 		if (request == null)
 		{
+			LogUtil.debug(this, "null request");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
@@ -43,12 +45,14 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		// check session
 		if (request.getSession(false) == null)
 		{
+			LogUtil.debug(this, "null session");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 
 		if (!LoginHelper.isUserLoggedIn(request))
 		{
+			LogUtil.debug(this, "User not logged in");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
