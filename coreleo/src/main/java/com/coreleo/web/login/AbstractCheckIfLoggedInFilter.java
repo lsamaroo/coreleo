@@ -39,7 +39,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		{
 			LogUtil.debug(this, "null request");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getOutputStream().write("{}".getBytes());
+			response.getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 			return;
 		}
 
@@ -48,7 +48,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		{
 			LogUtil.debug(this, "null session");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getOutputStream().write("{}".getBytes());
+			response.getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 			return;
 		}
 
@@ -56,7 +56,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 		{
 			LogUtil.debug(this, "User not logged in");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getOutputStream().write("{}".getBytes());
+			response.getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 			return;
 		}
 

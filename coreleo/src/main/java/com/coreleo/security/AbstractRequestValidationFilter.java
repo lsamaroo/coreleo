@@ -31,7 +31,7 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 		if (!isValidUrl(url))
 		{
 			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			((HttpServletResponse) res).getOutputStream().write("{}".getBytes());
+			((HttpServletResponse) res).getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 			return;
 		}
 
@@ -42,7 +42,7 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 			if (!isValidParam(key, value))
 			{
 				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				((HttpServletResponse) res).getOutputStream().write("{}".getBytes());
+				((HttpServletResponse) res).getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 				return;
 			}
 		}
