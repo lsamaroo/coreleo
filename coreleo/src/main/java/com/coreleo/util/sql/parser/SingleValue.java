@@ -9,15 +9,15 @@ public class SingleValue implements RowParser {
 	private int columnIndex;
 	private boolean convertValueToString;
 	
-	public SingleValue(String columnNameToUseAsKey) {
+	public SingleValue(String columnName) {
 		super();
-		this.columnName = columnNameToUseAsKey;
+		this.columnName = columnName;
 		this.convertValueToString = false;
 	}
 
-	public SingleValue(int columnIndexToUseAsKey) {
+	public SingleValue(int columnIndex) {
 		super();
-		this.columnIndex = columnIndexToUseAsKey;
+		this.columnIndex = columnIndex;
 		this.convertValueToString = false;
 	}
 
