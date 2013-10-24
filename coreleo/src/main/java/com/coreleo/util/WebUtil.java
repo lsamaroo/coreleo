@@ -416,7 +416,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + toUrlParameter(key, values);
 		}
@@ -433,7 +433,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + toUrlParameter(key, value);
 		}
@@ -450,7 +450,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + toUrlParameter(key, value);
 		}
@@ -467,7 +467,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + toUrlParameter(key, value);
 		}
@@ -484,7 +484,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + toUrlParameter(keys, values);
 		}
@@ -506,7 +506,7 @@ public final class WebUtil
 			return url;
 		}
 
-		if (!StringUtil.containsAny(url, "?"))
+		if (!StringUtil.containsAnyCharacters(url, "?"))
 		{
 			return url + Constants.QUESTIONMARK + queryString;
 		}
@@ -523,7 +523,7 @@ public final class WebUtil
 			return null;
 		}
 
-		if (StringUtil.containsAny(url, "?"))
+		if (StringUtil.containsAnyCharacters(url, "?"))
 		{
 			// fix for IE, when the anchor comes after the params, IE assumes
 			// its part of the preceding param,

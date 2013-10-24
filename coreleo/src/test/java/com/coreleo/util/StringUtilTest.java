@@ -134,14 +134,14 @@ public class StringUtilTest
 	public final void testContainsAnyStringCharArray()
 	{
 		final String x = "I have white spaces";
-		assertTrue(StringUtil.containsAny(x, new char[] { 'w', 'x', 'y' }));
+		assertTrue(StringUtil.containsAnyCharacters(x, new char[] { 'w', 'x', 'y' }));
 	}
 
 	@Test
 	public final void testContainsAnyStringString()
 	{
 		final String x = "I have white spaces";
-		assertTrue(StringUtil.containsAny(x, "wxy"));
+		assertTrue(StringUtil.containsAnyCharacters(x, "wxy"));
 	}
 
 	@Test

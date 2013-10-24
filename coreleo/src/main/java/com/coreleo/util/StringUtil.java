@@ -322,7 +322,7 @@ public final class StringUtil
 	 *            - the character array
 	 * @return true if the string contains any of the specified characters, false otherwise.
 	 */
-	public static final boolean containsAny(String string, char... characters)
+	public static final boolean containsAnyCharacters(String string, char... characters)
 	{
 		if (string == null || characters == null)
 		{
@@ -341,13 +341,13 @@ public final class StringUtil
 
 	/**
 	 * 
-	 * A convenience method. This method calls <code>containsCharacters( string,
+	 * A convenience method. This method calls <code>containsAnyCharacters( string,
 	 * characters.toCharArray() )</code>.
 	 * 
 	 */
-	public static final boolean containsAny(String string, String characters)
+	public static final boolean containsAnyCharacters(String string, String characters)
 	{
-		return containsAny(string, characters.toCharArray());
+		return containsAnyCharacters(string, characters.toCharArray());
 	}
 
 	public static final boolean containsSubString(String x, String subString)
@@ -360,6 +360,24 @@ public final class StringUtil
 		return x.indexOf(subString) != -1;
 	}
 
+	
+	public static final boolean containsAnySubString(Object x, String... subString)
+	{
+		if (x == null || subString == null)
+		{
+			return false;
+		}
+
+		for (String string : subString) {
+			if( containsSubString( x, string ) ){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	public static final boolean containsSubString(Object x, String subString)
 	{
 		if (x == null || subString == null)
@@ -839,6 +857,26 @@ public final class StringUtil
 	// ------------------------------------------------------------------------------
 	// Equality & Comparison
 	// ------------------------------------------------------------------------------
+	
+
+	public static final boolean equalsAny(String x, String... list)
+	{
+		if ((x == null) || (list == null))
+		{
+			return false;
+		}
+
+		for (final String string : list)
+		{
+			if (x.equals(string))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 
 	public static final boolean equalsIgnoreCase(Object x1, Object x2)
 	{
