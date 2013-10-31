@@ -138,7 +138,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 					DBUtil.update(con, sql);
 				}
 				catch (SimpleSqlException sqle) {
-					LogUtil.error(this,sqle);
+					LogUtil.warn(this,sqle);
 				}
 			}
 		}
@@ -274,6 +274,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		return checkOutConnection();
 	}
 
+	@Override
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		throw new SQLFeatureNotSupportedException();
 	}

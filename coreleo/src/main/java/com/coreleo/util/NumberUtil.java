@@ -1360,6 +1360,18 @@ public final class NumberUtil
 
 	public static BigDecimal sum(Object x1, Object x2)
 	{
+		if( x1 == null && x2 == null ){
+			return ZERO_BIGDECIMAL;
+		}
+		
+		if( x1 == null ){
+			return toBigDecimal(x2);
+		}
+		
+		if( x2 == null ){
+			toBigDecimal(x1);
+		}
+		
 		return sum(toBigDecimal(x1), toBigDecimal(x2));
 	}
 

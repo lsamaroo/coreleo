@@ -44,7 +44,7 @@ public class BooleanUtil
 	{
 		if (x == null)
 		{
-			throw new IllegalArgumentException("The string must not be null");
+			throw new IllegalArgumentException("The object must not be null");
 		}
 
 		return x.booleanValue();
@@ -108,7 +108,7 @@ public class BooleanUtil
 	{
 		if (x == null)
 		{
-			throw new IllegalArgumentException("The string must not be null");
+			throw new IllegalArgumentException("The object must not be null");
 		}
 
 		return Boolean.valueOf(x.toString().trim());
