@@ -52,7 +52,7 @@ public abstract class AbstractCheckIfLoggedInFilter extends AbstractFilter
 			return;
 		}
 
-		if (!LoginHelper.isUserLoggedIn(request))
+		if (!LoginUtil.isUserLoggedIn(request))
 		{
 			LogUtil.debug(this, "User not logged in");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -45,7 +45,7 @@ public abstract class AbstractLoginServlet extends HttpServlet
 
 		}
 
-		LoginHelper.setUserAsLoggedIn(request);
+		LoginUtil.setUserAsLoggedIn(request);
 		doAfterLogin(request, response);
 		WebUtil.redirect(request, response, getSuccessView());
 	}

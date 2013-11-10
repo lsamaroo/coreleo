@@ -11,7 +11,7 @@ import com.coreleo.util.WebUtil;
  * @author Leon Samaroo
  * 
  */
-public class LoginHelper
+public class LoginUtil
 {
 	private static String VALID_SESSION_KEY = "123abcdefg456@#!%^&*lmnopq";
 

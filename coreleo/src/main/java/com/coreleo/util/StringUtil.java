@@ -876,6 +876,24 @@ public final class StringUtil
 
 		return false;
 	}
+	
+	public static final boolean equalsAny(Object x, Object... list)
+	{
+		if ((x == null) || (list == null))
+		{
+			return false;
+		}
+
+		for (final Object string : list)
+		{
+			if ( StringUtil.equals(x, string))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 
 	public static final boolean equalsIgnoreCase(Object x1, Object x2)

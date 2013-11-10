@@ -133,6 +133,25 @@ public final class NumberUtil
 			return temp;
 		}
 	}
+	
+	
+	public static final boolean equalsAny(Integer x, Integer... list)
+	{
+		if ((x == null) || (list == null))
+		{
+			return false;
+		}
+
+		for (final Integer integer : list)
+		{
+			if ( x.equals(integer) )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public static final boolean equals(int x1, int x2)
 	{

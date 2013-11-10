@@ -197,6 +197,23 @@ public final class MapUtil
 		return null;
 	}
 
+	
+	/**
+	 * 
+	 * @param key
+	 *            the name of the parameter to find.
+	 * @param a
+	 *            map
+	 * 
+	 * @return the object or null if the parameter cannot be found.  
+	 * If the value is an array, the first value in the array is returned.
+	 */
+	public static final Object getObject(String key, Map map)
+	{
+		return getFirstValue(map, key);
+	}
+	
+	
 	/**
 	 * 
 	 * @deprecated - use getObject instead
@@ -205,7 +222,7 @@ public final class MapUtil
 	 * @param a
 	 *            map
 	 * 
-	 * @return the paramater or null if the parameter cannot be found.
+	 * @return the parameter or null if the parameter cannot be found.
 	 */
 	@Deprecated
 	public static final Object getParameter(String key, Map map)
@@ -213,6 +230,12 @@ public final class MapUtil
 		return getFirstValue(map, key);
 	}
 
+	/**
+	 * 
+	 * @return - the value as an String, or null if the value does not exist.  
+	 * If the value is an array, returns the first value in the array.
+	 * 
+	 */
 	public static final String getString(Map map, Object key)
 	{
 		return getString(map, key, null);
