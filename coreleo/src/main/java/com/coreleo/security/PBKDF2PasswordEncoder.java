@@ -9,21 +9,29 @@ import java.util.Arrays;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class PasswordEncryptionService
+/**
+ * 
+ * @deprecated in favor of PBKDF2PasswordEncoder2 which adds the salt 
+ * directly to the password hash so that you don't have to worry about 
+ * storing the salt in a separate field.
+ *
+ */
+@Deprecated
+public class PBKDF2PasswordEncoder
 {
 
 	public boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		// Encrypt the clear-text password using the same salt that was used to
 		// encrypt the original password
-		final byte[] encryptedAttemptedPassword = getEncryptedPassword(attemptedPassword, salt);
+		final byte[] encryptedAttemptedPassword = encode(attemptedPassword, salt);
 
 		// Authentication succeeds if encrypted password that the user entered
 		// is equal to the stored hash
 		return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);
 	}
 
-	public byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException
+	public byte[] encode(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		// PBKDF2 with SHA-1 as the hashing algorithm. Note that the NIST
 		// specifically names SHA-1 as an acceptable hashing algorithm for PBKDF2
@@ -58,9 +66,9 @@ public class PasswordEncryptionService
 
 	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
-		final PasswordEncryptionService service = new PasswordEncryptionService();
+		final PBKDF2PasswordEncoder service = new PBKDF2PasswordEncoder();
 		final byte[] salt = service.generateSalt();
-		final byte[] password = service.getEncryptedPassword("password", salt);
+		final byte[] password = service.encode("password", salt);
 		System.out.println("salt=" + new String(salt) + " password=" + new String(password));
 	}
 }

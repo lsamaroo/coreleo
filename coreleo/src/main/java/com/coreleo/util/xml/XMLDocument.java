@@ -6,11 +6,11 @@
 
 package com.coreleo.util.xml;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
 
 /**
  * 
- * This interface is used by classes that wish to generate and write xml content
+ * This interface is used by classes that wish to generate and write XML content
  * to a file. 
 
  * 

@@ -208,7 +208,7 @@ public final class ReflectionUtil
 	/**
 	 * 
 	 * @param object
-	 *            - the object to invoke the method on. Can be null if and only if the method is static.
+	 *            - the object to invoke the method on. 
 	 * @param methodName
 	 *            - the name of the method to invoke.
 	 * @param params
@@ -595,7 +595,7 @@ public final class ReflectionUtil
 
 	private static final String getUniqueKeyForMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes)
 	{
-		final StringBuffer sb = new StringBuffer(clazz.getName());
+		final StringBuilder sb = new StringBuilder(clazz.getName());
 		sb.append(":").append(methodName).append("-");
 
 		if (parameterTypes != null)
@@ -611,7 +611,7 @@ public final class ReflectionUtil
 
 	private static final String getUniqueKeyForConstructor(Class<?> clazz, Class<?>[] parameterTypes)
 	{
-		final StringBuffer sb = new StringBuffer(clazz.getName());
+		final StringBuilder sb = new StringBuilder(clazz.getName());
 		sb.append(":").append("constructor").append("-");
 
 		if (parameterTypes != null)

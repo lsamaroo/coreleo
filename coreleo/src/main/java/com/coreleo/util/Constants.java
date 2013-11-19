@@ -13,6 +13,7 @@ public interface Constants {
     public final static double ONE_HOUR = 3600000;
     
     /** @deprecated - use ONE_HOUR instead */
+	@Deprecated
 	public final static long HOUR = 3600000;
 	
 	/* MIME Types */
@@ -35,11 +36,7 @@ public interface Constants {
 	public final static String CSV = "csv";
 	public final static String HTML = "HTML";
 	public final static String EXCEL = "EXCEL";
-	
-	
-	public final static Integer ALL_SELECTED =  new Integer(-99);
-	public final static Integer NO_SELECTION =  new Integer(-66);
-	
+
 	
 	public final static String EMPTY_STRING = "";
 

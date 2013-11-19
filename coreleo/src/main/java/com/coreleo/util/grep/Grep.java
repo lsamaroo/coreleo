@@ -63,10 +63,11 @@ import com.coreleo.util.IOUtil;
 import com.coreleo.util.RegexUtil;
 
 /**
- * @NOT_THREAD_SAFE
+ * @NOT_THREAD_SAFE - Instances should not be shared by multiple threads.
  * 
- *                  Functionality added to original oracle version 1. Scan for more than one pattern at a time 2. Returns a list
- *                  of information objects (called GrepMatch) instead of printing to the screen
+ *                  Functionality added to original oracle version 
+ *                  1. Scan for more than one pattern at a time 
+ *                  2. Returns a list of information objects (called GrepMatch) instead of printing to the screen
  * 
  */
 public class Grep
@@ -216,7 +217,7 @@ public class Grep
 	{
 		if (args.length < 2)
 		{
-			System.err.println("Usage: java Grep pattern file...");
+			System.err.println("Usage: java Grep thepattern thefilename ...");
 			return;
 		}
 		final Grep grep = new Grep();
