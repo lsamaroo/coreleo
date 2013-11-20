@@ -25,8 +25,8 @@ public interface Grid<R, C, V>
 	public boolean put(int rowIndex, int columnIndex, V value);
 
 	/**
-	 * 
-	 * @return previous value associated with specified row-column, or null if there was no mapping.
+	 * Removes the value at the given row, column
+	 * @return the value associated with specified row-column, or null if there was no mapping.
 	 */
 	public V remove(R rowId, C columnId);
 

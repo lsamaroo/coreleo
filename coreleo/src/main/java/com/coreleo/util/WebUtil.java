@@ -109,7 +109,7 @@ public final class WebUtil
 	 */
 	public static final String toQueryString(Map map)
 	{
-		final StringBuffer buff = new StringBuffer();
+		final StringBuilder buff = new StringBuilder();
 
 		try
 		{
@@ -192,17 +192,6 @@ public final class WebUtil
 	public static final String replaceHtmlMetaCharacters(String x)
 	{
 		return HtmlUtil.toHtmlEntityString(x);
-		//        if (x == null) {
-		//            return null;
-		//        }
-		//        else {
-		//            // deal with ampersands first so we can ignore the ones we add later
-		//            x = StringUtil.replace(x, "&", "&amp;");
-		//            x = StringUtil.replace(x, "\"", "&quot;");
-		//            x = StringUtil.replace(x, "<", "&lt;");
-		//            x = StringUtil.replace(x, ">", "&gt;");
-		//            return x;
-		//        }
 	}
 
 	/**

@@ -11,8 +11,9 @@ import com.coreleo.util.WebUtil;
 
 /**
  * @author Leon Samaroo
- * 
+ * @deprecated - This class is so old :).  There are much better ways to do this.
  */
+@Deprecated
 @SuppressWarnings({"rawtypes"})
 public class SelectGUI
 {

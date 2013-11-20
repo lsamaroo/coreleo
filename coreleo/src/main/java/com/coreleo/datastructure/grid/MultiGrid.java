@@ -13,7 +13,7 @@ import com.coreleo.util.CollectionUtil;
  * @author Leon Samaroo
  * 
  *         Defines a Grid that holds a list of values against each row-column combination. Getting a value from this Grid will
- *         return a List, holding all the values put to that row-column.
+ *         return a List which contains all the values stored at that row-column.
  * 
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })

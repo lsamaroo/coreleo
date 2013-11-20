@@ -71,7 +71,7 @@ public class BeanUtil
 				
 			}
 			catch( Exception e ){
-				LogUtil.trace(e.getMessage());
+				LogUtil.debug(e.getMessage());
 				// ignore and continue
 			}
 			

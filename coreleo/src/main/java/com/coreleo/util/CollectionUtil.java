@@ -93,7 +93,9 @@ public final class CollectionUtil
 		}
 	}
 
-	
+	/**
+	 * Invokes the given Block on each item in the List
+	 */
 	public static final void forEach(List x, Block b)
 	{
 		for (int i = 0; i < x.size(); i++)
@@ -103,6 +105,9 @@ public final class CollectionUtil
 	}
 
 	
+	/**
+	 * Invokes the given Block on each item in the Collection
+	 */
 	public static final void forEach(Collection x, Block b)
 	{
 		for (final Iterator i = x.iterator(); i.hasNext();)

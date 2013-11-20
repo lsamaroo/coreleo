@@ -260,7 +260,7 @@ public final class ArrayUtil
 		final String[] strings = new String[x.length];
 		for (int i = 0; i < x.length; i++)
 		{
-			strings[i] = String.valueOf((x[i]));
+			strings[i] = StringUtil.toString((x[i]));
 		}
 		return strings;
 	}
@@ -275,7 +275,7 @@ public final class ArrayUtil
 		final String[] strings = new String[x.length];
 		for (int i = 0; i < x.length; i++)
 		{
-			strings[i] = String.valueOf((x[i]));
+			strings[i] = StringUtil.toString((x[i]));
 		}
 		return strings;
 	}
@@ -290,7 +290,7 @@ public final class ArrayUtil
 		final String[] strings = new String[x.length];
 		for (int i = 0; i < x.length; i++)
 		{
-			strings[i] = String.valueOf((x[i]));
+			strings[i] = StringUtil.toString((x[i]));
 		}
 		return strings;
 	}
@@ -305,7 +305,7 @@ public final class ArrayUtil
 		final String[] strings = new String[x.length];
 		for (int i = 0; i < x.length; i++)
 		{
-			strings[i] = String.valueOf((x[i]));
+			strings[i] = StringUtil.toString((x[i]));
 		}
 		return strings;
 	}
@@ -321,7 +321,7 @@ public final class ArrayUtil
 		int count = 0;
 		for (final Iterator i = x.iterator(); i.hasNext();)
 		{
-			strings[count++] = String.valueOf(i.next());
+			strings[count++] = StringUtil.toString(i.next());
 		}
 
 		return strings;
@@ -337,7 +337,7 @@ public final class ArrayUtil
 		final String[] strings = new String[x.length];
 		for (int i = 0; i < x.length; i++)
 		{
-			strings[i] = String.valueOf((x[i]));
+			strings[i] = StringUtil.toString((x[i]));
 		}
 		return strings;
 	}

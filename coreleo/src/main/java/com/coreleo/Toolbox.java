@@ -3,7 +3,8 @@
  */
 package com.coreleo;
 
-import java.util.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Leon Samaroo
@@ -17,7 +18,7 @@ import java.util.*;
  */
 
 public class Toolbox {
-    private final Map<String, Object> map = new HashMap<String, Object>();
+    private final Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 
 
     // restrict creating instances directly

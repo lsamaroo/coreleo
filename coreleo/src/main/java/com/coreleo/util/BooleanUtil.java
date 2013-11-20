@@ -44,7 +44,7 @@ public class BooleanUtil
 	{
 		if (x == null)
 		{
-			throw new IllegalArgumentException("The object must not be null");
+			throw new IllegalArgumentException("The object cannot not be null");
 		}
 
 		return x.booleanValue();
@@ -108,7 +108,7 @@ public class BooleanUtil
 	{
 		if (x == null)
 		{
-			throw new IllegalArgumentException("The object must not be null");
+			throw new IllegalArgumentException("The object cannot not be null");
 		}
 
 		return Boolean.valueOf(x.toString().trim());
@@ -155,7 +155,7 @@ public class BooleanUtil
 
 	/**
 	 * 
-	 * If the arg is yes or y (case doesn't matter) then it returns Boolean.TRUE, otherwise Boolean.False
+	 * If the argument is the String yes or y (case doesn't matter) then it returns Boolean.TRUE, otherwise Boolean.False
 	 * 
 	 */
 	public static final Boolean toBooleanObjectIgnoreCaseYesNoYN(Object yesNoYNString)
@@ -197,6 +197,10 @@ public class BooleanUtil
 		}
 	}
 
+	/**
+	 * 
+	 * @return the String "Yes" or "No" based for true and false respectively.
+	 */
 	public static final String toStringYesNo(Boolean bool)
 	{
 		if (bool == null)
@@ -214,6 +218,10 @@ public class BooleanUtil
 		}
 	}
 
+	/**
+	 * 
+	 * @return the String "Yes" or "No" based for true and false respectively.
+	 */
 	public static final String toStringYesNo(boolean bool)
 	{
 		if (bool)
@@ -226,6 +234,10 @@ public class BooleanUtil
 		}
 	}
 
+	/**
+	 * 
+	 * @return the String "Y" or "N" based for true and false respectively.
+	 */
 	public static final String toStringYN(Boolean bool)
 	{
 		if (bool == null)
@@ -243,6 +255,10 @@ public class BooleanUtil
 		}
 	}
 
+	/**
+	 * 
+	 * @return the String "Y" or "N" based for true and false respectively.
+	 */
 	public static final String toStringYN(boolean bool)
 	{
 		if (bool)

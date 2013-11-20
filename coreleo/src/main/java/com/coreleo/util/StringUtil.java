@@ -300,7 +300,7 @@ public final class StringUtil
 	}
 
 	/**
-	 * @return - true if it contains at least one whitespace character as defined by regex--space, tab, etc.
+	 * @return - true if it contains at least one whitespace character. Whitespace as defined in regex --space, tab, etc.
 	 */
 	public static final boolean constainsWhiteSpace(String str)
 	{

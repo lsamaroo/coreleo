@@ -14,6 +14,12 @@ import com.coreleo.SimpleException;
 import com.coreleo.util.BeanUtil;
 import com.coreleo.util.NumberUtil;
 
+/**
+ * @deprecated - use JacksonUtil instead
+ * @author lsamaroo
+ *
+ */
+@Deprecated
 public class JsonUtil
 {
 

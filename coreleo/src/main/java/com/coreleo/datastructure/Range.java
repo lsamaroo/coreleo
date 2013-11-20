@@ -12,8 +12,13 @@ package com.coreleo.datastructure;
 @SuppressWarnings("rawtypes")
 public class Range<T extends Comparable> implements Comparable
 {
-	private final T start;
-	private final T end;
+	private T start;
+	private T end;
+	
+	public Range()
+	{
+		super();
+	}
 
 	public Range(T start, T end)
 	{
@@ -30,6 +35,15 @@ public class Range<T extends Comparable> implements Comparable
 	public T getEnd()
 	{
 		return end;
+	}
+	
+
+	public void setStart(T start) {
+		this.start = start;
+	}
+
+	public void setEnd(T end) {
+		this.end = end;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -61,4 +75,10 @@ public class Range<T extends Comparable> implements Comparable
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return (start.hashCode() ^ end.hashCode());
+	}
+
+	
 }
