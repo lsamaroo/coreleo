@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.coreleo.servlet.filter.AbstractFilter;
+import com.coreleo.util.LogUtil;
 
 /**
  * 
@@ -41,6 +42,7 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 			final String value = req.getParameter(key);
 			if (!isValidParam(key, value))
 			{
+				LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_UNAUTHORIZED);
 				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				((HttpServletResponse) res).getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
 				return;
