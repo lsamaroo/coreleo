@@ -31,8 +31,10 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 		final String url = ((HttpServletRequest) req).getRequestURL().toString();
 		if (!isValidUrl(url))
 		{
-			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			((HttpServletResponse) res).getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
+			LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+			LogUtil.info( this, "Invalid Url", url);
+			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			((HttpServletResponse) res).getOutputStream().write("{\"message\":\"Bad Request\"}".getBytes());
 			return;
 		}
 
@@ -42,9 +44,10 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 			final String value = req.getParameter(key);
 			if (!isValidParam(key, value))
 			{
-				LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_UNAUTHORIZED);
-				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				((HttpServletResponse) res).getOutputStream().write("{\"message\":\"UNAUTHORIZED\"}".getBytes());
+				LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+				LogUtil.info( this, "Invalid param {} and/or key {}", key, value);
+				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				((HttpServletResponse) res).getOutputStream().write("{\"message\":\"Bad Request\"}".getBytes());
 				return;
 			}
 		}
