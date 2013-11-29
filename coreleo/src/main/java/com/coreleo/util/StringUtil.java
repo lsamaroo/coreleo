@@ -857,7 +857,24 @@ public final class StringUtil
 	// ------------------------------------------------------------------------------
 	// Equality & Comparison
 	// ------------------------------------------------------------------------------
-	
+
+	public static final boolean equalsAnyIgnoreCase(String x, String... list)
+	{
+		if ((x == null) || (list == null))
+		{
+			return false;
+		}
+
+		for (final String string : list)
+		{
+			if (x.equalsIgnoreCase(string))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public static final boolean equalsAny(String x, String... list)
 	{

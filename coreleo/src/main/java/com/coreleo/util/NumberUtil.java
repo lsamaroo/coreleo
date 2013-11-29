@@ -142,9 +142,28 @@ public final class NumberUtil
 			return false;
 		}
 
-		for (final Integer integer : list)
+		for (final Integer num : list)
 		{
-			if ( x.equals(integer) )
+			if ( x.equals(num) )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	
+	public static final boolean equalsAny(Number x, Number... list)
+	{
+		if ((x == null) || (list == null))
+		{
+			return false;
+		}
+
+		for (final Number num : list)
+		{
+			if ( x.equals(num) )
 			{
 				return true;
 			}

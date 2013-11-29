@@ -403,13 +403,11 @@ public final class ReflectionUtil
 
 		if (m == null)
 		{
-			throw new SimpleException("Method=" + methodName + " params= " + ArrayUtil.toCommaDelimitedString(params) + " not found in class " + clazz + "");
+			throw new SimpleException("Method Not Found for Class " + clazz + " Method=" + methodName + " params=" + ArrayUtil.toCommaDelimitedString(params) + " parameterTypes=" + ArrayUtil.toCommaDelimitedString( (Object[]) parameterTypes) );
 		}
 		else
 		{
-			LogUtil.debug("Method " + m + " found for " + clazz + " methodName=" + methodName + " parameterTypes="
-					+ ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
-
+			LogUtil.debug("Method Found for Class {} Method={} params={} parameterTypes={}", clazz, methodName, ArrayUtil.toCommaDelimitedString(params), ArrayUtil.toCommaDelimitedString( (Object[]) parameterTypes));
 			methodCache.put(key, m);
 			return m;
 		}

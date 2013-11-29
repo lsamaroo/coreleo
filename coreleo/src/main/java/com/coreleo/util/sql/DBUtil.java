@@ -289,7 +289,7 @@ public final class DBUtil
 	}
 
 
-	public static final int update(Object connectionSource, String sql) throws SimpleSqlException
+	public static final Object update(Object connectionSource, String sql) throws SimpleSqlException
 	{
 		return update(false, QUERY_TIMEOUT, connectionSource, sql, (Object[]) null);
 	}
@@ -298,31 +298,31 @@ public final class DBUtil
 	//		return update(QUERY_TIMEOUT, connectionSource, sql, new Object[] { param });
 	//	}
 
-	public static final int update(Object connectionSource, String sql, Object... params) throws SimpleSqlException
+	public static final Object update(Object connectionSource, String sql, Object... params) throws SimpleSqlException
 	{
 		return update(false, QUERY_TIMEOUT, connectionSource, sql, params);
 	}
 
-	public static final int update(Object connectionSource, String sql, List<Object> params) throws SimpleSqlException
+	public static final Object update(Object connectionSource, String sql, List<Object> params) throws SimpleSqlException
 	{
 		return update(false, QUERY_TIMEOUT, connectionSource, sql, ArrayUtil.toObjectArray(params));
 	}
 
 	
-	public static final int updateReturnGeneratedKey(Object connectionSource, String sql, Object... params) throws SimpleSqlException
+	public static final Object updateReturnGeneratedKey(Object connectionSource, String sql, Object... params) throws SimpleSqlException
 	{
 		return update(true, QUERY_TIMEOUT, connectionSource, sql, params);
 	}
 
 
-	private static final int update(boolean returnGeneratedKey, int queryTimeOut, Object connectionSource, String sql, Object... params) throws SimpleSqlException
+	private static final Object update(boolean returnGeneratedKey, int queryTimeOut, Object connectionSource, String sql, Object... params) throws SimpleSqlException
 	{
 		final String log = getLogString("update", -1, -1, queryTimeOut, sql, params);
 		LogUtil.trace(log);
 		PreparedStatement pstmt = null;
 		ResultSet generatedKeys = null;
 		int result = -1;
-		int generatedKey = -1;
+		Object generatedKey = -1;
 		Connection con = null;
 		long startTime = 0;
 
@@ -353,7 +353,7 @@ public final class DBUtil
 			if( returnGeneratedKey ){
 				generatedKeys = pstmt.getGeneratedKeys();  
 				if( result != 0 && generatedKeys.next()) {  
-					generatedKey = generatedKeys.getInt(1);  
+					generatedKey = generatedKeys.getObject(1);  
 				} 
 			}
 			

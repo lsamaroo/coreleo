@@ -7,7 +7,7 @@ package com.coreleo.interfaces;
  */
 public interface Identifiable
 {
-	public String getIdentity();
+	public Object getIdentity();
 
-	public String getIdentityName();
+	public Object getIdentityName();
 }
