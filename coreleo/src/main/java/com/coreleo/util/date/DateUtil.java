@@ -77,6 +77,25 @@ public final class DateUtil
 	{
 	}
 	
+	public static int compare( Date x1, Date x2 ){
+		if (x1 == null && x2 == null)
+		{
+			return 0;
+		}
+
+		if (x1 == null)
+		{
+			return -1;
+		}
+
+		if (x2 == null)
+		{
+			return 1;
+		}
+		
+		return x1.compareTo(x2);
+	}
+	
 	public static Calendar utcTo( Date date, TimeZone tz ){
 		Calendar c = Calendar.getInstance( TimeZone.getTimeZone("UTC") );
 		c.setTime(date);	
