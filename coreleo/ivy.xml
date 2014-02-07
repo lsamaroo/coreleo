@@ -1,0 +1,22 @@
+<ivy-module version="2.0">
+    <info organisation="com.agendahound" module="agendahound-ivy"/>
+    <dependencies>
+   		
+   		<!-- ========== Servlet API ===================================== -->
+		<dependency org="javax" name="javaee-web-api" rev="6.0"/>
+
+    	<!-- ========== Apache Commons ================================== -->
+        <dependency org="commons-lang" name="commons-lang" rev="2.6"/>
+
+		<!-- ========== Testing ========================================== -->
+		<dependency org="junit" name="junit" rev="4.8.1"/>
+            
+        <!-- ========== Logging ========================================== -->  
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.7.2" />
+        
+        <!-- ========== JSON Library ===================== -->
+        <dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="1.9.13"/>
+        <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.13"/>
+       
+    </dependencies>
+</ivy-module>

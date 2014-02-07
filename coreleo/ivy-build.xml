@@ -1,0 +1,53 @@
+<project name="ivy-build" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<!-- 
+        This is a child build file meant to be included by the main build file.
+        The following properties are required to be defined in the main build file.
+        
+        	${ivy.install.version}
+        	${ivy.jar.dir}
+        	${ivy.jar.file}
+        	${ivy.lib.dir}
+        	
+        	
+        -->
+
+	<target name="-ivy-download" unless="skip.download">
+		<mkdir dir="${ivy.jar.dir}" />
+		<!-- download Ivy from web site so that it can be used even without any special installation -->
+		<echo message="installing ivy..." />
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
+	</target>
+
+	<!-- ================================= 
+          target: -ivy-install        
+            this target is not necessary if you put ivy.jar in your ant lib directory
+            if you already have ivy in your ant lib, you can simply remove this
+            target and the dependency the 'go' target has on it
+         ================================= -->
+	<target name="-ivy-install" depends="-ivy-download">
+		<!-- try to load ivy here from local ivy dir, in case the user has not already dropped
+    	      it into ant's lib dir (note that the latter copy will always take precedence).
+    	      We will not fail as long as local lib dir exists (it may be empty) and
+    	      ivy is in at least one of ant's lib dir or the local lib dir. -->
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+	</target>
+
+	
+
+    <target name="-ivy-resolve" depends="-ivy-install" >
+    	<ivy:retrieve type="jar" pattern="${ivy.lib.dir}/[artifact].[ext]" sync="true" />
+    </target>
+	
+
+	<target name="ivy-clean-install">
+		<delete file="${ivy.jar.file}" />
+	</target>
+
+
+	<target name="ivy-clean-cache" depends="-ivy-install" >
+		<ivy:cleancache />
+	</target>
+</project>

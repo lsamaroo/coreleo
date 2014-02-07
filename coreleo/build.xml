@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<project name="coreleo" default="build">
+	<property name="jar.name" value="coreleo" />
+	<property name="jdk.version" value="1.7" />
+	<property name="src.dir" value="src/main/java" />
+	<property name="lib.dir" value="src/main/resources/lib" />
+	<property name="resources.dir" value="src/main/resources" />
+	<property name="build.dir" value="target-ant" />
+	<property name="build.classes.dir" value="${build.dir}/classes" />
+	<property name="build.lib.dir" value="${build.dir}/lib" />
+
+	<!-- here is the version of ivy we will use. change this property to try a newer 
+         version if you want -->
+	<property name="ivy.install.version" value="2.3.0-rc2" />
+	<property name="ivy.jar.dir" value="${basedir}" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	<property name="ivy.lib.dir" value="${lib.dir}/download-from-repo" />
+	
+	<!-- Import the common build file -->
+	<import file="common-build.xml"/>
+	
+	<!-- Import the ivy build file -->
+	<import file="ivy-build.xml"/>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: build                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="build" depends="-common-clean, -ivy-resolve, -common-setup, -common-compile, -common-jar" description="Compile main source tree java files">
+		<tstamp>
+			<format property="build.startdate" pattern="EEE, MMM d yyyy" />
+			<format property="build.starttime" pattern="HH:mm:ss z" />
+		</tstamp>
+
+		<echo message="Build started on ${build.startdate} at ${build.starttime}" level="info" />
+	</target>
+
+
+
+</project>
