@@ -6,7 +6,7 @@
 	<property name="src.dir" value="src/main/java" />
 	<property name="lib.dir" value="src/main/resources/lib" />
 	<property name="resources.dir" value="src/main/resources" />
-	<property name="build.dir" value="target-ant" />
+	<property name="build.dir" value="bin" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.lib.dir" value="${build.dir}/lib" />
 
