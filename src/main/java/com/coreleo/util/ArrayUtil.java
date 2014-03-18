@@ -2,12 +2,9 @@ package com.coreleo.util;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.coreleo.util.closure.Block;
 
@@ -20,6 +17,8 @@ import com.coreleo.util.closure.Block;
 public final class ArrayUtil
 {
 
+
+	
 	public static final int size(Object[] x)
 	{
 		if (x == null)
@@ -606,113 +605,44 @@ public final class ArrayUtil
 
 	public static final String toCommaDelimitedString(int[] x)
 	{
-		if (x == null)
-		{
-			return null;
-		}
-
-		final StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < x.length; i++)
-		{
-			sb.append(x[i]);
-			if (i < x.length - 1)
-			{
-				sb.append(",");
-			}
-		}
-		return sb.toString();
+		return DelimiterUtil.toDelimitedString(x, ",");
 	}
 
 	public static final String toCommaDelimitedString(Object... x)
 	{
-		return toDelimitedString(x, ",");
+		return DelimiterUtil.toDelimitedString(x, ",");
 	}
 
 	public static final String toDelimitedString(Object[] x, String delimiter)
 	{
-		if (x == null)
-		{
-			return null;
-		}
-
-		final StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < x.length; i++)
-		{
-			sb.append(x[i]);
-			if (i < x.length - 1)
-			{
-				sb.append(delimiter);
-			}
-		}
-		return sb.toString();
+		return DelimiterUtil.toDelimitedString(x, delimiter);
 	}
 
 	public static final String toDelimitedString(Object[] x, String delimiter, Block alter)
 	{
-		if (x == null)
-		{
-			return null;
-		}
-
-		final StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < x.length; i++)
-		{
-			sb.append(alter.invoke(x[i]));
-			if (i < x.length - 1)
-			{
-				sb.append(delimiter);
-			}
-		}
-		return sb.toString();
+		return DelimiterUtil.toDelimitedString(x, delimiter, alter);
 	}
 
 	public static final Integer[] delimitedStringToIntegerObjectArray(String x, String delimiter)
 	{
-		if (x == null || delimiter == null)
-		{
-			return null;
-		}
-
-		final List list = CollectionUtil.delimitedStringToIntegerObjectList(x, delimiter);
-		return (Integer[]) list.toArray(new Integer[list.size()]);
+		return DelimiterUtil.delimitedStringToIntegerObjectArray(x, delimiter);
 	}
 
 	public static final Integer[] commaDelimitedStringToIntegerObjectArray(String x)
 	{
-		return delimitedStringToIntegerObjectArray(x, ",");
+		return DelimiterUtil.delimitedStringToIntegerObjectArray(x, ",");
 	}
 
 	public static final int[] delimitedStringToIntegerArray(String x, String delimiter)
 	{
-		if (x == null || delimiter == null)
-		{
-			return null;
-		}
-
-		final List<Object> list = new ArrayList<Object>();
-		// TODO replace tokenizer with regex or split
-		final Enumeration<Object> enumerator = new StringTokenizer(x, delimiter);
-		while (enumerator.hasMoreElements())
-		{
-			list.add(enumerator.nextElement());
-		}
-
-		return toIntegerArray(list);
+		return DelimiterUtil.delimitedStringToIntegerArray(x, delimiter);
 	}
 
 	public static final int[] commaDelimitedStringToIntegerArray(String x)
 	{
-		return delimitedStringToIntegerArray(x, ",");
+		return DelimiterUtil.delimitedStringToIntegerArray(x, ",");
 	}
 
-	/**
-	 * @deprecated - use CollectionUtil.toIntegerObjectList instead.
-	 */
-	@Deprecated
-	public static final List toIntegerObjectList(Object[] x) throws NumberFormatException
-	{
-		return CollectionUtil.toIntegerObjectList(x);
-	}
 
 	public static final Integer getMax(Integer[] x)
 	{
