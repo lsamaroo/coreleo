@@ -19,7 +19,7 @@ public final class ArrayUtil
 
 
 	
-	public static final int size(Object[] x)
+	public static final int size(final Object[] x)
 	{
 		if (x == null)
 		{
@@ -37,7 +37,7 @@ public final class ArrayUtil
 	 *            - index to validate
 	 * @return true if index is valid, false otherwise
 	 */
-	public static final boolean isInbounds(Object[] x, Object index)
+	public static final boolean isInbounds(final Object[] x, final Object index)
 	{
 		if (x == null)
 		{
@@ -54,7 +54,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isInbounds(Object[] x, int index)
+	public static final boolean isInbounds(final Object[] x, final int index)
 	{
 		if (x == null)
 		{
@@ -74,12 +74,12 @@ public final class ArrayUtil
 	 * @see isInbounds
 	 */
 	@Deprecated
-	public static final boolean isValidIndex(Object[] x, int index)
+	public static final boolean isValidIndex(final Object[] x, final int index)
 	{
 		return isInbounds(x, index);
 	}
 
-	public static final String get(String[] x, int index, String defaultValue)
+	public static final String get(final String[] x, final int index, final String defaultValue)
 	{
 		if (x == null)
 		{
@@ -94,7 +94,7 @@ public final class ArrayUtil
 		return x[index];
 	}
 
-	public static final Object get(Object[] x, int index, Object defaultValue)
+	public static final Object get(final Object[] x, final int index, final Object defaultValue)
 	{
 		if (x == null)
 		{
@@ -109,7 +109,7 @@ public final class ArrayUtil
 		return x[index];
 	}
 
-	public static final String get(String[] x, int index)
+	public static final String get(final String[] x, final int index)
 	{
 		if (x == null)
 		{
@@ -124,7 +124,7 @@ public final class ArrayUtil
 		return x[index];
 	}
 
-	public static final Object get(Object[] x, int index)
+	public static final Object get(final Object[] x, final int index)
 	{
 		if (x == null)
 		{
@@ -139,7 +139,7 @@ public final class ArrayUtil
 		return x[index];
 	}
 
-	public static final boolean isEmpty(Object x)
+	public static final boolean isEmpty(final Object x)
 	{
 		if (x == null)
 		{
@@ -154,7 +154,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(int[] x)
+	public static final boolean isEmpty(final int[] x)
 	{
 		if (x != null)
 		{
@@ -164,7 +164,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(long[] x)
+	public static final boolean isEmpty(final long[] x)
 	{
 		if (x != null)
 		{
@@ -174,7 +174,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(double[] x)
+	public static final boolean isEmpty(final double[] x)
 	{
 		if (x != null)
 		{
@@ -184,7 +184,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(float[] x)
+	public static final boolean isEmpty(final float[] x)
 	{
 		if (x != null)
 		{
@@ -194,7 +194,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(char[] x)
+	public static final boolean isEmpty(final char[] x)
 	{
 		if (x != null)
 		{
@@ -204,7 +204,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isEmpty(byte[] x)
+	public static final boolean isEmpty(final byte[] x)
 	{
 		if (x != null)
 		{
@@ -214,42 +214,42 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static final boolean isNotEmpty(Object x)
+	public static final boolean isNotEmpty(final Object x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(int[] x)
+	public static final boolean isNotEmpty(final int[] x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(long[] x)
+	public static final boolean isNotEmpty(final long[] x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(double[] x)
+	public static final boolean isNotEmpty(final double[] x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(float[] x)
+	public static final boolean isNotEmpty(final float[] x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(char[] x)
+	public static final boolean isNotEmpty(final char[] x)
 	{
 		return !isEmpty(x);
 	}
 
-	public static final boolean isNotEmpty(byte[] x)
+	public static final boolean isNotEmpty(final byte[] x)
 	{
 		return !isEmpty(x);
 	}
-
-	public static final String[] toStringArray(int[] x)
+	
+	public static final String[] toStringArray(final int[] x)
 	{
 		if (x == null)
 		{
@@ -264,7 +264,7 @@ public final class ArrayUtil
 		return strings;
 	}
 
-	public static final String[] toStringArray(long[] x)
+	public static final String[] toStringArray(final long[] x)
 	{
 		if (x == null)
 		{
@@ -279,7 +279,7 @@ public final class ArrayUtil
 		return strings;
 	}
 
-	public static final String[] toStringArray(char[] x)
+	public static final String[] toStringArray(final char[] x)
 	{
 		if (x == null)
 		{
@@ -294,7 +294,7 @@ public final class ArrayUtil
 		return strings;
 	}
 
-	public static final String[] toStringArray(double[] x)
+	public static final String[] toStringArray(final double[] x)
 	{
 		if (x == null)
 		{
@@ -309,7 +309,7 @@ public final class ArrayUtil
 		return strings;
 	}
 
-	public static final String[] toStringArray(Collection x)
+	public static final String[] toStringArray(final Collection x)
 	{
 		if (x == null)
 		{
@@ -326,7 +326,7 @@ public final class ArrayUtil
 		return strings;
 	}
 
-	public static final String[] toStringArray(Object[] x)
+	public static final String[] toStringArray(final Object[] x)
 	{
 		if (x == null)
 		{
@@ -345,12 +345,12 @@ public final class ArrayUtil
 	// Integer
 	// -------------------------------------------------------------------------------------------
 
-	public static final Object getIntegerObject(Object[] x, int index)
+	public static final Object getIntegerObject(final Object[] x, final int index)
 	{
 		return NumberUtil.toIntegerObject(get(x, index));
 	}
 
-	public static final int[] toIntegerArray(Object[] x) throws NumberFormatException
+	public static final int[] toIntegerArray(final Object[] x) throws NumberFormatException
 	{
 		if (x == null)
 		{
@@ -366,7 +366,7 @@ public final class ArrayUtil
 
 	}
 
-	public static final int[] toIntegerArray(Object[] x, int[] defaultValues)
+	public static final int[] toIntegerArray(final Object[] x, final int[] defaultValues)
 	{
 		try
 		{
@@ -378,7 +378,7 @@ public final class ArrayUtil
 		}
 	}
 
-	public static final Integer[] toIntegerObjectArray(Object[] x) throws NumberFormatException
+	public static final Integer[] toIntegerObjectArray(final Object[] x) throws NumberFormatException
 	{
 		if (x == null)
 		{
@@ -398,7 +398,7 @@ public final class ArrayUtil
 		return integers;
 	}
 
-	public static final Integer[] toIntegerObjectArray(Object[] x, Integer[] defaultValues)
+	public static final Integer[] toIntegerObjectArray(final Object[] x, final Integer[] defaultValues)
 	{
 		try
 		{
@@ -410,7 +410,7 @@ public final class ArrayUtil
 		}
 	}
 
-	public static final Integer[] toIntegerObjectArray(int[] x)
+	public static final Integer[] toIntegerObjectArray(final int[] x)
 	{
 		if (x == null)
 		{
@@ -425,7 +425,7 @@ public final class ArrayUtil
 		return integers;
 	}
 
-	public static final Integer[] toIntegerObjectArray(List x)
+	public static final Integer[] toIntegerObjectArray(final List x)
 	{
 		if (x == null)
 		{
@@ -451,7 +451,7 @@ public final class ArrayUtil
 		return array;
 	}
 
-	public static final int[] toIntegerArray(List x)
+	public static final int[] toIntegerArray(final List x)
 	{
 		if (x == null)
 		{
@@ -471,12 +471,12 @@ public final class ArrayUtil
 	// Double
 	// -------------------------------------------------------------------------------------------
 
-	public static final Object getDoubleObject(Object[] x, int index)
+	public static final Object getDoubleObject(final Object[] x, final int index)
 	{
 		return NumberUtil.toDoubleObject(get(x, index));
 	}
 
-	public static final double[] toDoubleArray(Object[] x) throws NumberFormatException
+	public static final double[] toDoubleArray(final Object[] x) throws NumberFormatException
 	{
 		if (x == null)
 		{
@@ -492,7 +492,7 @@ public final class ArrayUtil
 
 	}
 
-	public static final double[] toDoubleArray(Object[] x, double[] defaultValues)
+	public static final double[] toDoubleArray(final Object[] x, final double[] defaultValues)
 	{
 		try
 		{
@@ -504,7 +504,7 @@ public final class ArrayUtil
 		}
 	}
 
-	public static final Double[] toDoubleObjectArray(Object[] x) throws NumberFormatException
+	public static final Double[] toDoubleObjectArray(final Object[] x) throws NumberFormatException
 	{
 		if (x == null)
 		{
@@ -524,7 +524,7 @@ public final class ArrayUtil
 		return Doubles;
 	}
 
-	public static final Double[] toDoubleObjectArray(Object[] x, Double[] defaultValues)
+	public static final Double[] toDoubleObjectArray(final Object[] x, final Double[] defaultValues)
 	{
 		try
 		{
@@ -536,7 +536,7 @@ public final class ArrayUtil
 		}
 	}
 
-	public static final Double[] toDoubleObjectArray(int[] x)
+	public static final Double[] toDoubleObjectArray(final int[] x)
 	{
 		if (x == null)
 		{
@@ -551,7 +551,7 @@ public final class ArrayUtil
 		return Doubles;
 	}
 
-	public static final Double[] toDoubleObjectArray(List x)
+	public static final Double[] toDoubleObjectArray(final List x)
 	{
 		if (x == null)
 		{
@@ -577,7 +577,7 @@ public final class ArrayUtil
 		return array;
 	}
 
-	public static final double[] toDoubleArray(List x)
+	public static final double[] toDoubleArray(final List x)
 	{
 		if (x == null)
 		{
@@ -593,7 +593,7 @@ public final class ArrayUtil
 		return array;
 	}
 
-	public static final Object[] toObjectArray(List x)
+	public static final Object[] toObjectArray(final List x)
 	{
 		if (x == null)
 		{
@@ -603,48 +603,48 @@ public final class ArrayUtil
 		return x.toArray(new Object[x.size()]);
 	}
 
-	public static final String toCommaDelimitedString(int[] x)
+	public static final String toCommaDelimitedString(final int[] x)
 	{
 		return DelimiterUtil.toDelimitedString(x, ",");
 	}
 
-	public static final String toCommaDelimitedString(Object... x)
+	public static final String toCommaDelimitedString(final Object... x)
 	{
 		return DelimiterUtil.toDelimitedString(x, ",");
 	}
 
-	public static final String toDelimitedString(Object[] x, String delimiter)
+	public static final String toDelimitedString(final Object[] x, final String delimiter)
 	{
 		return DelimiterUtil.toDelimitedString(x, delimiter);
 	}
 
-	public static final String toDelimitedString(Object[] x, String delimiter, Block alter)
+	public static final String toDelimitedString(final Object[] x, final String delimiter, final Block alter)
 	{
 		return DelimiterUtil.toDelimitedString(x, delimiter, alter);
 	}
 
-	public static final Integer[] delimitedStringToIntegerObjectArray(String x, String delimiter)
+	public static final Integer[] delimitedStringToIntegerObjectArray(final String x, final String delimiter)
 	{
 		return DelimiterUtil.delimitedStringToIntegerObjectArray(x, delimiter);
 	}
 
-	public static final Integer[] commaDelimitedStringToIntegerObjectArray(String x)
+	public static final Integer[] commaDelimitedStringToIntegerObjectArray(final String x)
 	{
 		return DelimiterUtil.delimitedStringToIntegerObjectArray(x, ",");
 	}
 
-	public static final int[] delimitedStringToIntegerArray(String x, String delimiter)
+	public static final int[] delimitedStringToIntegerArray(final String x, final String delimiter)
 	{
 		return DelimiterUtil.delimitedStringToIntegerArray(x, delimiter);
 	}
 
-	public static final int[] commaDelimitedStringToIntegerArray(String x)
+	public static final int[] commaDelimitedStringToIntegerArray(final String x)
 	{
 		return DelimiterUtil.delimitedStringToIntegerArray(x, ",");
 	}
 
 
-	public static final Integer getMax(Integer[] x)
+	public static final Integer getMax(final Integer[] x)
 	{
 		if (x == null)
 		{
@@ -661,7 +661,7 @@ public final class ArrayUtil
 		return max;
 	}
 
-	public static final Double getMax(Double[] x)
+	public static final Double getMax(final Double[] x)
 	{
 		if (x == null)
 		{
@@ -678,7 +678,7 @@ public final class ArrayUtil
 		return max;
 	}
 
-	public static final BigDecimal getMax(Object[] x)
+	public static final BigDecimal getMax(final Object[] x)
 	{
 		if (x == null)
 		{
@@ -694,7 +694,7 @@ public final class ArrayUtil
 		return NumberUtil.toBigDecimal(max, null);
 	}
 
-	public static final Integer getMin(Integer[] x)
+	public static final Integer getMin(final Integer[] x)
 	{
 		if (x == null)
 		{
@@ -711,7 +711,7 @@ public final class ArrayUtil
 		return min;
 	}
 
-	public static final Double getMin(Double[] x)
+	public static final Double getMin(final Double[] x)
 	{
 		if (x == null)
 		{
@@ -728,7 +728,7 @@ public final class ArrayUtil
 		return min;
 	}
 
-	public static final BigDecimal getMin(Object[] x)
+	public static final BigDecimal getMin(final Object[] x)
 	{
 		if (x == null)
 		{
@@ -745,7 +745,7 @@ public final class ArrayUtil
 		return NumberUtil.toBigDecimal(min, null);
 	}
 
-	public static final Integer getSum(Integer[] x)
+	public static final Integer getSum(final Integer[] x)
 	{
 		Integer total = NumberUtil.ZERO_INTEGER;
 		if (x != null)
@@ -758,7 +758,7 @@ public final class ArrayUtil
 		return total;
 	}
 
-	public static final Double getSum(Double[] x)
+	public static final Double getSum(final Double[] x)
 	{
 		Double total = NumberUtil.ZERO_DOUBLE;
 		if (x != null)
@@ -771,7 +771,7 @@ public final class ArrayUtil
 		return total;
 	}
 
-	public static final BigDecimal getSum(Object[] x)
+	public static final BigDecimal getSum(final Object[] x)
 	{
 		BigDecimal total = NumberUtil.ZERO_BIGDECIMAL;
 		if (x != null)
@@ -793,7 +793,7 @@ public final class ArrayUtil
 		return x.clone();
 	}
 
-	public static int[] clone(int[] x)
+	public static int[] clone(final int[] x)
 	{
 		if (x == null)
 		{
@@ -820,7 +820,7 @@ public final class ArrayUtil
 		return x.clone();
 	}
 
-	public static boolean isIntegerArray(Object[] x)
+	public static boolean isIntegerArray(final Object[] x)
 	{
 		if (x == null)
 		{
@@ -842,7 +842,7 @@ public final class ArrayUtil
 		return true;
 	}
 
-	public static boolean contains(Object[] xArray, Object x)
+	public static boolean contains(final Object[] xArray, final Object x)
 	{
 		if (xArray == null)
 		{
@@ -865,7 +865,7 @@ public final class ArrayUtil
 		return false;
 	}
 
-	public static Object[] add(Object[] xArray, Object x)
+	public static Object[] add(final Object[] xArray, final Object x)
 	{
 		Object[] newArray = null;
 		if (xArray == null)
@@ -882,7 +882,7 @@ public final class ArrayUtil
 		return newArray;
 	}
 
-	public static Object expand(Object obj, int newLength)
+	public static Object expand(final Object obj, final int newLength)
 	{
 		final Class clazz = obj.getClass();
 		if (!clazz.isArray())
@@ -897,7 +897,7 @@ public final class ArrayUtil
 		return newArray;
 	}
 
-	public static Object[] addAll(Object[] toThisArray, Object[] addThisArray)
+	public static Object[] addAll(final Object[] toThisArray, final Object[] addThisArray)
 	{
 		if (toThisArray == null && addThisArray == null)
 		{

@@ -15,8 +15,9 @@
         <dependency org="org.slf4j" name="slf4j-api" rev="1.7.2" />
         
         <!-- ========== JSON Library ===================== -->
-        <dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="1.9.13"/>
-        <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.13"/>
-       
+        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2"/>
+        
     </dependencies>
 </ivy-module>

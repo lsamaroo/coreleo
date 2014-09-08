@@ -38,7 +38,7 @@
 	
 
     <target name="-ivy-resolve" depends="-ivy-install" >
-    	<ivy:retrieve type="jar" pattern="${ivy.lib.dir}/[artifact].[ext]" sync="true" />
+    	<ivy:retrieve type="jar,bundle" pattern="${ivy.lib.dir}/[artifact].[ext]" sync="true" />
     </target>
 	
 
