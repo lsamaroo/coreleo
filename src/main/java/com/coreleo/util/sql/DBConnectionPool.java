@@ -33,17 +33,18 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	private String validationQuery;
 	private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
 
-	public DBConnectionPool(String name, String driverClassName, String url, String usr, String pwd, int maxConnections) {
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final int maxConnections) {
 		this(name, driverClassName, url, usr, pwd, 18000, 18000, 21000, 0, 0, maxConnections, null);
 	}
 
-	public DBConnectionPool(String name, String driverClassName, String url, String usr, String pwd, long idleTimeOut, long connectionLife, long reapTime,
-			int initialConnections, int minConnections, int maxConnections) {
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final long idleTimeOut,
+			final long connectionLife, final long reapTime, final int initialConnections, final int minConnections, final int maxConnections) {
 		this(name, driverClassName, url, usr, pwd, idleTimeOut, connectionLife, reapTime, initialConnections, minConnections, maxConnections, null);
 	}
 
-	public DBConnectionPool(String name, String driverClassName, String url, String usr, String pwd, long idleTimeOut, long connectionLife, long reapTime,
-			int initialConnections, int minConnections, int maxConnections, String[] executeSqlOnCreate) {
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final long idleTimeOut,
+			final long connectionLife, final long reapTime, final int initialConnections, final int minConnections, final int maxConnections,
+			final String[] executeSqlOnCreate) {
 		super(name, idleTimeOut, connectionLife, reapTime, minConnections, maxConnections);
 		this.url = url;
 		this.username = usr;
@@ -80,7 +81,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		return validationQuery;
 	}
 
-	public synchronized void setValidationQuery(String validationQuery) {
+	public synchronized void setValidationQuery(final String validationQuery) {
 		this.validationQuery = validationQuery;
 	}
 
@@ -88,7 +89,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		return validationQueryTimeout;
 	}
 
-	public synchronized void setValidationQueryTimeout(int seconds) {
+	public synchronized void setValidationQueryTimeout(final int seconds) {
 		this.validationQueryTimeout = seconds;
 	}
 
@@ -131,14 +132,14 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	@Override
 	protected Connection create() throws SQLException {
 		LogUtil.trace(this, "DBConnectionPool:create");
-		Connection con = (DriverManager.getConnection(url, username, password));
+		final Connection con = (DriverManager.getConnection(url, username, password));
 		if (ArrayUtil.isNotEmpty(executeSqlOnCreate)) {
-			for (String sql : executeSqlOnCreate) {
+			for (final String sql : executeSqlOnCreate) {
 				try {
 					DBUtil.update(con, sql);
 				}
-				catch (SimpleSqlException sqle) {
-					LogUtil.warn(this,sqle);
+				catch (final SimpleSqlException sqle) {
+					LogUtil.warn(this, sqle);
 				}
 			}
 		}
@@ -155,7 +156,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	 *            - the Connection to validate.
 	 */
 	@Override
-	protected boolean validate(Connection con) {
+	protected boolean validate(final Connection con) {
 		LogUtil.trace(this, "DBConnectionPool:validate");
 		if (con == null) {
 			return false;
@@ -189,11 +190,11 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 			}
 		}
 		catch (final SQLException sqle) {
-			LogUtil.warn(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
+			LogUtil.debug(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
 			return false;
 		}
 		catch (final Exception e) {
-			LogUtil.warn(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
+			LogUtil.debug(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
 			return false;
 		}
 		finally {
@@ -205,7 +206,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	 * Closes the connection.
 	 */
 	@Override
-	protected void expire(Connection con) {
+	protected void expire(final Connection con) {
 		LogUtil.trace(this, "DBConnectionPool:expire");
 
 		if (con != null) {
@@ -222,7 +223,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 				((DBConnectionWrapper) con).closePhysicalConnection();
 			}
 			catch (final Exception e) {
-				LogUtil.warn(this, "DBConnectionPool:expire - unable to close connection", e);
+				LogUtil.debug(this, "DBConnectionPool:expire - unable to close connection", e);
 			}
 
 		}
@@ -243,24 +244,24 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	}
 
 	@Override
-	public void setLoginTimeout(int seconds) throws SQLException {
+	public void setLoginTimeout(final int seconds) throws SQLException {
 		throw new SQLException("Unsupported method - setLoginTimeout");
 	}
 
 	@Override
-	public void setLogWriter(PrintWriter out) throws SQLException {
+	public void setLogWriter(final PrintWriter out) throws SQLException {
 		throw new SQLException("Unsupported method - setLogWriter");
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean isWrapperFor(Class iface) throws SQLException {
+	public boolean isWrapperFor(final Class iface) throws SQLException {
 		return false;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object unwrap(Class iface) throws SQLException {
+	public Object unwrap(final Class iface) throws SQLException {
 		throw new SQLException("DBConnectionPool is not a wrapper.");
 	}
 
@@ -270,7 +271,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	}
 
 	@Override
-	public Connection getConnection(String username, String password) throws SQLException {
+	public Connection getConnection(final String username, final String password) throws SQLException {
 		return checkOutConnection();
 	}
 
@@ -283,7 +284,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 		return executeSqlOnCreate;
 	}
 
-	public void setExecuteSqlOnCreate(String[] executeSqlOnCreate) {
+	public void setExecuteSqlOnCreate(final String[] executeSqlOnCreate) {
 		this.executeSqlOnCreate = executeSqlOnCreate;
 	}
 
