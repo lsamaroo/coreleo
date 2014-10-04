@@ -20,34 +20,30 @@ import com.coreleo.util.LogUtil;
  * 
  * 
  */
-public abstract class AbstractRequestValidationFilter extends AbstractFilter
-{
+public abstract class AbstractRequestValidationFilter extends AbstractFilter {
+	private final static String JSON_ERROR_BAD_REQUEST = "{\"error\":\"Bad Request\"}";
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected void onDoFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
-	{
+	protected void onDoFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain) throws IOException, ServletException {
 
 		final String url = ((HttpServletRequest) req).getRequestURL().toString();
-		if (!isValidUrl(url))
-		{
-			LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
-			LogUtil.info( this, "Invalid Url", url);
+		if (!isValidUrl(url)) {
+			LogUtil.info(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+			LogUtil.info(this, "Invalid Url", url);
 			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			((HttpServletResponse) res).getOutputStream().write("{\"message\":\"Bad Request\"}".getBytes());
+			((HttpServletResponse) res).getOutputStream().write(JSON_ERROR_BAD_REQUEST.getBytes());
 			return;
 		}
 
-		for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();)
-		{
+		for (final Enumeration e = req.getParameterNames(); e.hasMoreElements();) {
 			final String key = String.valueOf(e.nextElement());
 			final String value = req.getParameter(key);
-			if (!isValidParam(key, value))
-			{
-				LogUtil.info( this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
-				LogUtil.info( this, "Invalid param {} and/or key {}", key, value);
+			if (!isValidParam(key, value)) {
+				LogUtil.info(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+				LogUtil.info(this, "Invalid param {} and/or key {}", key, value);
 				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				((HttpServletResponse) res).getOutputStream().write("{\"message\":\"Bad Request\"}".getBytes());
+				((HttpServletResponse) res).getOutputStream().write(JSON_ERROR_BAD_REQUEST.getBytes());
 				return;
 			}
 		}
@@ -58,6 +54,5 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter
 	protected abstract boolean isValidParam(String key, String value);
 
 	protected abstract boolean isValidUrl(String url);
-
 
 }
