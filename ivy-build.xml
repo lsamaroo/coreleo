@@ -11,7 +11,7 @@
         	
         -->
 
-	<target name="-ivy-download" unless="skip.download">
+	<target name="ivy-download" unless="skip.download">
 		<mkdir dir="${ivy.jar.dir}" />
 		<!-- download Ivy from web site so that it can be used even without any special installation -->
 		<echo message="installing ivy..." />
@@ -24,7 +24,7 @@
             if you already have ivy in your ant lib, you can simply remove this
             target and the dependency the 'go' target has on it
          ================================= -->
-	<target name="-ivy-install" depends="-ivy-download">
+	<target name="ivy-install" depends="ivy-download">
 		<!-- try to load ivy here from local ivy dir, in case the user has not already dropped
     	      it into ant's lib dir (note that the latter copy will always take precedence).
     	      We will not fail as long as local lib dir exists (it may be empty) and
@@ -37,7 +37,7 @@
 
 	
 
-    <target name="-ivy-resolve" depends="-ivy-install" >
+    <target name="ivy-resolve" depends="ivy-install" >
     	<ivy:retrieve type="jar,bundle" pattern="${ivy.lib.dir}/[artifact].[ext]" sync="true" />
     </target>
 	
@@ -47,7 +47,13 @@
 	</target>
 
 
-	<target name="ivy-clean-cache" depends="-ivy-install" >
+	<target name="ivy-clean-cache" depends="ivy-install" >
 		<ivy:cleancache />
+	</target>
+	
+	
+	<target name="ivy-report" depends="ivy-install" >
+	    <ivy:resolve />
+	    <ivy:report  />
 	</target>
 </project>

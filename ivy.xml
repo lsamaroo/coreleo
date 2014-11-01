@@ -1,6 +1,12 @@
 <ivy-module version="2.0">
     <info organisation="com.agendahound" module="agendahound-ivy"/>
-    <dependencies>
+    
+    <configurations defaultconfmapping="default">
+        <conf name="default" visibility="public"/>          
+    </configurations>
+    
+    	
+    <dependencies defaultconf="default" >
    		
    		<!-- ========== Servlet API ===================================== -->
 		<dependency org="javax" name="javaee-web-api" rev="6.0"/>
@@ -15,9 +21,9 @@
         <dependency org="org.slf4j" name="slf4j-api" rev="1.7.2" />
         
         <!-- ========== JSON Library ===================== -->
-        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2" transitive="false"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2" transitive="false"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2" transitive="false"/>
         
     </dependencies>
 </ivy-module>

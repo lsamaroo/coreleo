@@ -6,7 +6,7 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: -common-clean                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="-common-clean" description="Scrub files from output directories">
+	<target name="common-clean" description="Scrub files from output directories">
 		<echo message="Scrub files from output directories" level="info" />
 		
 		<mkdir dir="${build.lib.dir}" />
@@ -24,9 +24,9 @@
 
 
 	<!-- - - - - - - - - - - - - - - - - - 
-          target: -common-setup                      
+          target: common-setup                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="-common-setup" description="Setup directory structures and libraries before the build">
+	<target name="common-setup" description="Setup directory structures and libraries before the build">
 		<echo message="Setup directory structures and libraries before the build" level="info" />
 		
 		<mkdir dir="${build.lib.dir}" />
@@ -47,10 +47,10 @@
 
 
 	<!-- - - - - - - - - - - - - - - - - - 
-          target: -common-compile                      
+          target: common-compile                      
          - - - - - - - - - - - - - - - - - -->
 	
-	<target name="-common-compile">
+	<target name="common-compile">
 		<echo message="Compiling using jdk version ${jdk.version}" level="info" />
 		<javac destdir="${build.classes.dir}" source="${jdk.version}" target="${jdk.version}" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<src path="${src.dir}" />
@@ -70,7 +70,7 @@
 		<!-- - - - - - - - - - - - - - - - - - 
           target: -common-jar                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="-common-jar">
+    <target name="common-jar">
         <jar destfile="${build.dir}/${jar.name}.jar" basedir="${build.classes.dir}">
         </jar>
     </target>
