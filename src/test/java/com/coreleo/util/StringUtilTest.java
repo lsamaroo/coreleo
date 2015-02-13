@@ -1,6 +1,10 @@
 package com.coreleo.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,39 +187,16 @@ public class StringUtilTest {
 
 	@Test
 	public final void testGetContentOfStream() {
-		try {
+		try
+		{
 			final String x = "abcdefg";
 			final InputStream stream = StringUtil.toInputStream(x);
 			assertEquals(x, StringUtil.getContentOfStream(stream));
 		}
-		catch (final IOException ioe) {
+		catch (final IOException ioe)
+		{
 			fail("IOException");
 		}
-	}
-
-	@Test
-	public final void testIsEqualIgnoreCase() {
-		final String x = "abcdefg";
-		final String y = "ABCDEFG";
-		assertTrue(StringUtil.isEqualIgnoreCase(x, y));
-	}
-
-	@Test
-	public final void testIsEqualObjectInt() {
-		final Object x = "1";
-		assertTrue(StringUtil.isEqual(x, 1));
-	}
-
-	@Test
-	public final void testIsEqualStringString() {
-		assertTrue(StringUtil.isEqual("1", "1"));
-	}
-
-	@Test
-	public final void testIsEqualObjectObject() {
-		final Object x = "1";
-		final Object y = Integer.valueOf(1);
-		assertTrue(StringUtil.isEqual(x, y));
 	}
 
 	@Test

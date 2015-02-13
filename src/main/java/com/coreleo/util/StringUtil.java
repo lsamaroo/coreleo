@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.coreleo.util;
 
@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 
 /**
  * @author Leon Samaroo
- * 
- * 
+ *
+ *
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class StringUtil {
@@ -32,14 +32,19 @@ public final class StringUtil {
 	private final static Pattern REGEX_NUMERIC = Pattern.compile("^[0-9]+$");
 	private final static Pattern REGEX_NUMERIC_ALLOW_SPACES = Pattern.compile("^[0-9\\s]*[0-9]+$");
 	private final static Pattern REGEX_QUESTIONMARK = Pattern.compile("\\?");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE = Pattern.compile("^[a-zA-Z_0-9\\Q-\\E\\s]*\\w+$");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_HYPHEN_UNDERSCORE = Pattern.compile("^[a-zA-Z_0-9\\Q-\\E]*\\w+$");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE_PERIOD_COMMA = Pattern.compile("^[a-zA-Z_0-9\\Q-\\E.,\\s]*\\w+$");
-	private final static Pattern REGEX_EMAIL = Pattern.compile("^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9\\Q-\\E]+\\.)+[A-Za-z]{2,4}$");
+	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE = Pattern
+			.compile("^[a-zA-Z_0-9\\Q-\\E\\s]*\\w+$");
+	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_HYPHEN_UNDERSCORE = Pattern
+			.compile("^[a-zA-Z_0-9\\Q-\\E]*\\w+$");
+	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE_PERIOD_COMMA = Pattern
+			.compile("^[a-zA-Z_0-9\\Q-\\E.,\\s]*\\w+$");
+	private final static Pattern REGEX_EMAIL = Pattern
+			.compile("^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9\\Q-\\E]+\\.)+[A-Za-z]{2,4}$");
 	private final static Pattern REGEX_IPADDRESS = Pattern.compile("^(?:" + _255 + "\\.){3}" + _255 + "$");
 	private final static Pattern REGEX_DOLLARSIGN = Pattern.compile("\\$");
 	private final static Pattern REGEX_HOST_NAME = Pattern.compile("^([A-Za-z0-9\\Q-\\E.]+\\.)+[A-Za-z]{2,4}$");
-	private final static Pattern REGEX_USPHONE_NUMBERS = Pattern.compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
+	private final static Pattern REGEX_USPHONE_NUMBERS = Pattern
+			.compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
 	private final static Pattern REGEX_PROPER_CASE = Pattern.compile("(^|\\W)([a-z])");
 
 	private StringUtil() {
@@ -67,7 +72,8 @@ public final class StringUtil {
 	public static String toProperCase(final String x) {
 		final Matcher m = REGEX_PROPER_CASE.matcher(x.toLowerCase());
 		final StringBuffer sb = new StringBuffer(x.length());
-		while (m.find()) {
+		while (m.find())
+		{
 			m.appendReplacement(sb, m.group(1) + m.group(2).toUpperCase());
 		}
 		m.appendTail(sb);
@@ -75,7 +81,8 @@ public final class StringUtil {
 	}
 
 	public static boolean isUSPhone(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 
@@ -85,22 +92,27 @@ public final class StringUtil {
 
 	public static final String repeat(final CharSequence str, final int numOfTimes) {
 		final StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < numOfTimes; i++) {
+		for (int i = 0; i < numOfTimes; i++)
+		{
 			builder.append(str);
 		}
 		return builder.toString();
 	}
 
-	public static final String padStringWithCharacter(final CharSequence string, final char c, final int numOfTimes, final boolean asPrefix) {
+	public static final String padStringWithCharacter(final CharSequence string, final char c, final int numOfTimes,
+			final boolean asPrefix) {
 		final StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < numOfTimes; i++) {
+		for (int i = 0; i < numOfTimes; i++)
+		{
 			builder.append(c);
 		}
 
-		if (asPrefix) {
+		if (asPrefix)
+		{
 			builder.append(string);
 		}
-		else {
+		else
+		{
 			builder.insert(0, string);
 		}
 
@@ -108,15 +120,18 @@ public final class StringUtil {
 	}
 
 	public static final boolean isPalindrome(final Object obj) {
-		if (obj == null) {
+		if (obj == null)
+		{
 			return false;
 		}
 
 		final char[] c = String.valueOf(obj).toCharArray();
 		int start = 0;
 		int end = c.length - 1;
-		for (int i = 0; i < c.length / 2; i++) {
-			if (c[start] != c[end]) {
+		for (int i = 0; i < (c.length / 2); i++)
+		{
+			if (c[start] != c[end])
+			{
 				return false;
 			}
 			start++;
@@ -126,7 +141,8 @@ public final class StringUtil {
 	}
 
 	public static final String hexToString(String hex) {
-		if (isEmpty(hex)) {
+		if (isEmpty(hex))
+		{
 			return hex;
 		}
 
@@ -135,7 +151,8 @@ public final class StringUtil {
 		final StringBuilder sb = new StringBuilder();
 
 		// 49204c6f7665204a617661 split into two characters 49, 20, 4c...
-		for (int i = 0; i < hex.length() - 1; i += 2) {
+		for (int i = 0; i < (hex.length() - 1); i += 2)
+		{
 
 			// grab the hex in pairs
 			final String output = hex.substring(i, (i + 2));
@@ -243,10 +260,12 @@ public final class StringUtil {
 	}
 
 	public static final boolean isEmpty(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return trim(x).length() <= 0;
 		}
 	}
@@ -256,10 +275,12 @@ public final class StringUtil {
 	}
 
 	public static final boolean isEmpty(final Object x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return true;
 		}
-		else {
+		else
+		{
 			return trim(x).length() <= 0;
 		}
 	}
@@ -273,7 +294,8 @@ public final class StringUtil {
 	 *         Whitespace as defined in regex --space, tab, etc.
 	 */
 	public static final boolean constainsWhiteSpace(final String str) {
-		if (str == null) {
+		if (str == null)
+		{
 			return false;
 		}
 
@@ -281,10 +303,10 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * Check to string to see if the string contains any of the characters
 	 * specified in the char array.
-	 * 
+	 *
 	 * @param string
 	 *            - the String to check.
 	 * @param characters
@@ -293,12 +315,15 @@ public final class StringUtil {
 	 *         false otherwise.
 	 */
 	public static final boolean containsAnyCharacters(final String string, final char... characters) {
-		if (string == null || characters == null) {
+		if ((string == null) || (characters == null))
+		{
 			return false;
 		}
 
-		for (final char character : characters) {
-			if (string.indexOf(character) != -1) {
+		for (final char character : characters)
+		{
+			if (string.indexOf(character) != -1)
+			{
 				return true;
 			}
 		}
@@ -306,18 +331,19 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * A convenience method. This method calls
 	 * <code>containsAnyCharacters( string,
 	 * characters.toCharArray() )</code>.
-	 * 
+	 *
 	 */
 	public static final boolean containsAnyCharacters(final String string, final String characters) {
 		return containsAnyCharacters(string, characters.toCharArray());
 	}
 
 	public static final boolean containsSubString(final String x, final String subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
@@ -325,12 +351,15 @@ public final class StringUtil {
 	}
 
 	public static final boolean containsAnySubString(final Object x, final String... subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
-		for (final String string : subString) {
-			if (containsSubString(x, string)) {
+		for (final String string : subString)
+		{
+			if (containsSubString(x, string))
+			{
 				return true;
 			}
 		}
@@ -339,7 +368,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean containsSubString(final Object x, final String subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
@@ -347,7 +377,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean containsSubStringIgnoreCase(final String x, final String subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
@@ -355,7 +386,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean containsSubStringIgnoreCase(final Object x, final String subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
@@ -365,18 +397,21 @@ public final class StringUtil {
 	/**
 	 * Search a String to find the first index of any character not in the given
 	 * set of allowed characters.
-	 * 
+	 *
 	 * StringUtils.indexOfAnyBut("zzabyycdxx", "za") = 3, because 'b' is the
 	 * first character that is IN the search string BUT NOT in the given set of
 	 * characters.
-	 * 
+	 *
 	 */
 	public static final int indexOfAnyBut(final String str, final String allowedCharacters) {
-		if (str == null || allowedCharacters == null || isEmpty(str) || isEmpty(allowedCharacters)) {
+		if ((str == null) || (allowedCharacters == null) || isEmpty(str) || isEmpty(allowedCharacters))
+		{
 			return -1;
 		}
-		for (int i = 0; i < str.length(); i++) {
-			if (allowedCharacters.indexOf(str.charAt(i)) < 0) {
+		for (int i = 0; i < str.length(); i++)
+		{
+			if (allowedCharacters.indexOf(str.charAt(i)) < 0)
+			{
 				return i;
 			}
 		}
@@ -386,9 +421,9 @@ public final class StringUtil {
 	/**
 	 * Search a String to find the first index of any character not in the given
 	 * set of characters.
-	 * 
+	 *
 	 * @see indexOfAnyBut(String str, String searchChars)
-	 * 
+	 *
 	 */
 	public static final int indexOfAnyBut(final String str, final char[] allowedCharacters) {
 		return indexOfAnyBut(str, new String(allowedCharacters));
@@ -398,7 +433,8 @@ public final class StringUtil {
 	 * Checks if the String contains only certain characters.
 	 */
 	public static final boolean containsOnly(final String str, final char... validCharacters) {
-		if ((validCharacters == null) || (str == null)) {
+		if ((validCharacters == null) || (str == null))
+		{
 			return false;
 		}
 
@@ -409,31 +445,35 @@ public final class StringUtil {
 	 * Checks if the String contains only certain characters.
 	 */
 	public static final boolean containsOnly(final String str, final String validCharacters) {
-		if ((validCharacters == null) || (str == null)) {
+		if ((validCharacters == null) || (str == null))
+		{
 			return false;
 		}
-		if (str.length() == 0) {
+		if (str.length() == 0)
+		{
 			return true;
 		}
-		if (validCharacters.length() == 0) {
+		if (validCharacters.length() == 0)
+		{
 			return false;
 		}
 		return indexOfAnyBut(str, validCharacters) == -1;
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * Efficient string replace function. Replaces instances of the substring
 	 * find with replace in the string subject.
-	 * 
+	 *
 	 */
 	public static final String replace(final String subject, final String find, final String replace) {
 		final StringBuffer buf = new StringBuffer();
 		final int l = find.length();
 		int s = 0;
 		int i = subject.indexOf(find);
-		while (i != -1) {
+		while (i != -1)
+		{
 			buf.append(subject.substring(s, i));
 			buf.append(replace);
 			s = i + l;
@@ -445,12 +485,12 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @deprecated - user toString with a default argument of empty string
-	 * 
+	 *
 	 *             If the param is Null, it will return a blank string,
 	 *             otherwise it returns the obj.toString
-	 * 
+	 *
 	 * @return a non null string
 	 */
 	@Deprecated
@@ -467,7 +507,8 @@ public final class StringUtil {
 	public static final String getContentOfStream(final InputStream stream) throws IOException {
 		final StringBuffer buff = new StringBuffer();
 		int ch = 0;
-		while ((ch = stream.read()) > -1) {
+		while ((ch = stream.read()) > -1)
+		{
 			buff.append((char) ch);
 		}
 
@@ -475,7 +516,8 @@ public final class StringUtil {
 	}
 
 	public static String trim(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return null;
 		}
 
@@ -483,11 +525,13 @@ public final class StringUtil {
 	}
 
 	public static String trim(final Object x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return null;
 		}
 
-		if (x instanceof String) {
+		if (x instanceof String)
+		{
 			return ((String) x).trim();
 		}
 
@@ -495,22 +539,27 @@ public final class StringUtil {
 	}
 
 	public static final String toString(final Object obj, final Object defaultValue) {
-		if (obj != null) {
+		if (obj != null)
+		{
 			return obj.toString();
 		}
-		else {
+		else
+		{
 			return String.valueOf(defaultValue);
 		}
 	}
 
 	public static final String toString(final Object obj) {
-		if (obj == null) {
+		if (obj == null)
+		{
 			return null;
 		}
-		else if (obj instanceof String) {
+		else if (obj instanceof String)
+		{
 			return (String) obj;
 		}
-		else {
+		else
+		{
 			return obj.toString();
 		}
 	}
@@ -524,14 +573,16 @@ public final class StringUtil {
 	}
 
 	public static final String toLowerCase(final String x) {
-		if (x != null) {
+		if (x != null)
+		{
 			return x.toLowerCase();
 		}
 		return null;
 	}
 
 	public static final String toLowerCase(final Object x) {
-		if (x != null) {
+		if (x != null)
+		{
 			return toString(x).toLowerCase();
 		}
 		return null;
@@ -542,14 +593,16 @@ public final class StringUtil {
 	}
 
 	public static final String toUpperCase(final String x) {
-		if (x != null) {
+		if (x != null)
+		{
 			return x.toUpperCase();
 		}
 		return null;
 	}
 
 	public static final String toUpperCase(final Object x) {
-		if (x != null) {
+		if (x != null)
+		{
 			return toString(x).toUpperCase();
 		}
 
@@ -557,7 +610,7 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param x
 	 *            - the string
 	 * @param charIndex
@@ -567,25 +620,30 @@ public final class StringUtil {
 	 * @return - the converted string
 	 */
 	private static final String toCaseCharAt(final String x, final int charIndex, final boolean upper) {
-		if (isEmpty(x)) {
+		if (isEmpty(x))
+		{
 			return x;
 		}
 
-		if (charIndex < 0 || charIndex >= x.length()) {
+		if ((charIndex < 0) || (charIndex >= x.length()))
+		{
 			return x;
 		}
 
-		if (x.length() > 1) {
+		if (x.length() > 1)
+		{
 			final String s = upper ? toUpperCase(x.charAt(charIndex)) : toLowerCase(x.charAt(charIndex));
 			return x.substring(0, charIndex) + s + x.substring(charIndex + 1, x.length());
 		}
-		else {
+		else
+		{
 			return upper ? x.toUpperCase() : x.toLowerCase();
 		}
 	}
 
 	public static final boolean endsWith(final String x, final String subString) {
-		if (x == null || subString == null) {
+		if ((x == null) || (subString == null))
+		{
 			return false;
 		}
 
@@ -594,7 +652,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean isAlphaNumeric(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 
@@ -602,14 +661,16 @@ public final class StringUtil {
 	}
 
 	public static final boolean isAlpha(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHA.matcher(x).matches();
 	}
 
 	public static final boolean isNumeric(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 
@@ -617,14 +678,16 @@ public final class StringUtil {
 	}
 
 	public static final boolean isAlphaAllowSpaces(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHA_ALLOW_SPACES.matcher(x).matches();
 	}
 
 	public static final boolean isNumericAllowSpaces(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 
@@ -632,51 +695,57 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * true if the string contains alpha-numeric characters and spaces. If the
 	 * string is an empty string or only contains spaces, then it returns false.
-	 * 
-	 * 
+	 *
+	 *
 	 * "abc 123" = true "" = false " " = false
-	 * 
+	 *
 	 */
 	public static final boolean isAlphaNumericAllowSpaces(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHANUMERIC_ALLOW_SPACES.matcher(x).matches();
 	}
 
 	public static final boolean isAlphaNumericAllowSpacesHyphenUnderscore(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE.matcher(x).matches();
 	}
 
 	public static final boolean isAlphaNumericAllowHyphenUnderscore(final String x) {
-		if (x == null) {
+		if (x == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHANUMERIC_ALLOW_HYPHEN_UNDERSCORE.matcher(x).matches();
 	}
 
 	public static final boolean isAlphaNumericAllowSpacesHyphenUnderscorePeriodComma(final String str) {
-		if (str == null) {
+		if (str == null)
+		{
 			return false;
 		}
 		return REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE_PERIOD_COMMA.matcher(str).matches();
 	}
 
 	public static final String dropCharactersFromEnd(final String x, final int numOfCharacters) {
-		if (x.length() <= numOfCharacters) {
+		if (x.length() <= numOfCharacters)
+		{
 			return "";
 		}
 		return x.substring(0, x.length() - numOfCharacters);
 	}
 
 	public static final String removeSpaces(final String str) {
-		if (isEmpty(str)) {
+		if (isEmpty(str))
+		{
 			return str;
 		}
 		return str.replaceAll(" ", "");
@@ -688,7 +757,8 @@ public final class StringUtil {
 	}
 
 	public static final String[] split(final String x, final String regex) {
-		if (x == null) {
+		if (x == null)
+		{
 			return null;
 		}
 
@@ -696,7 +766,8 @@ public final class StringUtil {
 	}
 
 	public static final String[] split(final Object x, final String regex) {
-		if (x == null) {
+		if (x == null)
+		{
 			return null;
 		}
 		final String str = toString(x);
@@ -704,28 +775,32 @@ public final class StringUtil {
 	}
 
 	public static final boolean isValidEmail(final String x) {
-		if (StringUtil.isEmpty(x)) {
+		if (StringUtil.isEmpty(x))
+		{
 			return false;
 		}
 		return REGEX_EMAIL.matcher(x).matches();
 	}
 
 	public static final boolean isValidHostName(final String x) {
-		if (StringUtil.isEmpty(x)) {
+		if (StringUtil.isEmpty(x))
+		{
 			return false;
 		}
 		return REGEX_HOST_NAME.matcher(x).matches();
 	}
 
 	public static final boolean isValidIPAddress(final String x) {
-		if (StringUtil.isEmpty(x)) {
+		if (StringUtil.isEmpty(x))
+		{
 			return false;
 		}
 		return REGEX_IPADDRESS.matcher(x).matches();
 	}
 
 	public static String replace(final String x, final char oldChar, final char newChar) {
-		if (x == null) {
+		if (x == null)
+		{
 			return null;
 		}
 		return x.replace(oldChar, newChar);
@@ -736,12 +811,15 @@ public final class StringUtil {
 	// ------------------------------------------------------------------------------
 
 	public static final boolean equalsAnyIgnoreCase(final String x, final String... list) {
-		if ((x == null) || (list == null)) {
+		if ((x == null) || (list == null))
+		{
 			return false;
 		}
 
-		for (final String string : list) {
-			if (x.equalsIgnoreCase(string)) {
+		for (final String string : list)
+		{
+			if (x.equalsIgnoreCase(string))
+			{
 				return true;
 			}
 		}
@@ -750,12 +828,15 @@ public final class StringUtil {
 	}
 
 	public static final boolean equalsAny(final String x, final String... list) {
-		if ((x == null) || (list == null)) {
+		if ((x == null) || (list == null))
+		{
 			return false;
 		}
 
-		for (final String string : list) {
-			if (x.equals(string)) {
+		for (final String string : list)
+		{
+			if (x.equals(string))
+			{
 				return true;
 			}
 		}
@@ -764,12 +845,15 @@ public final class StringUtil {
 	}
 
 	public static final boolean equalsAny(final Object x, final Object... list) {
-		if ((x == null) || (list == null)) {
+		if ((x == null) || (list == null))
+		{
 			return false;
 		}
 
-		for (final Object string : list) {
-			if (StringUtil.equals(x, string)) {
+		for (final Object string : list)
+		{
+			if (StringUtil.equals(x, string))
+			{
 				return true;
 			}
 		}
@@ -778,7 +862,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean equalsIgnoreCase(final Object x1, final Object x2) {
-		if (x1 == null || x2 == null) {
+		if ((x1 == null) || (x2 == null))
+		{
 			return false;
 		}
 
@@ -786,7 +871,8 @@ public final class StringUtil {
 	}
 
 	public static final boolean equalsIgnoreCase(final String x1, final String x2) {
-		if (x1 == null || x2 == null) {
+		if ((x1 == null) || (x2 == null))
+		{
 			return false;
 		}
 
@@ -794,38 +880,56 @@ public final class StringUtil {
 	}
 
 	public static final boolean equals(final Object x1, final int x2) {
-		if (x1 == null) {
+		if (x1 == null)
+		{
 			return false;
 		}
 
 		return String.valueOf(x1).equals(String.valueOf(x2));
 	}
 
+	public static final boolean notEquals(final Object x1, final int x2) {
+		return !equals(x1, x2);
+	}
+
 	public static final boolean equals(final String x1, final String x2) {
-		if (x1 == null || x2 == null) {
+		if ((x1 == null) || (x2 == null))
+		{
 			return false;
 		}
 
 		return x1.equals(x2);
 	}
 
+	public static final boolean notEquals(final String x1, final String x2) {
+		return !equals(x1, x2);
+	}
+
 	public static final boolean equals(final Object x1, final Object x2) {
-		if (x1 == null || x2 == null) {
+		if ((x1 == null) || (x2 == null))
+		{
 			return false;
 		}
-		return toString(x1).equals(toString(x2));
+		return equals(toString(x1), (toString(x2)));
+	}
+
+	public static final boolean notEquals(final Object x1, final Object x2) {
+		return !equals(x1, x2);
 	}
 
 	public static final int compareIgnoreCase(final String x1, final String x2) {
-		if (x1 == null && x2 == null) {
+		if ((x1 == null) && (x2 == null))
+		{
 			return 0;
 		}
 
-		if (x1 == null) {
+		if (x1 == null)
+		{
 			return -1;
 		}
 
-		if (x2 == null) {
+		if (x2 == null)
+		{
 			return 1;
 		}
 
@@ -837,59 +941,22 @@ public final class StringUtil {
 	}
 
 	public static final int compare(final String x1, final String x2) {
-		if (x1 == null && x2 == null) {
+		if ((x1 == null) && (x2 == null))
+		{
 			return 0;
 		}
 
-		if (x1 == null) {
+		if (x1 == null)
+		{
 			return -1;
 		}
 
-		if (x2 == null) {
+		if (x2 == null)
+		{
 			return 1;
 		}
 
 		return x1.compareTo(x2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	public static final boolean isEqualIgnoreCase(final Object x1, final Object x2) {
-		return equalsIgnoreCase(x1, x2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	public static final boolean isEqualIgnoreCase(final String x1, final String x2) {
-		return equalsIgnoreCase(x1, x2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	public static final boolean isEqual(final Object x1, final int x2) {
-		return equalsIgnoreCase(x1, x2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	public static final boolean isEqual(final String x1, final String x2) {
-		return equalsIgnoreCase(x1, x2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	public static final boolean isEqual(final Object x1, final Object x2) {
-		return equalsIgnoreCase(x1, x2);
 	}
 
 	// ------------------------------------------------------------------------------
@@ -899,14 +966,14 @@ public final class StringUtil {
 	/**
 	 * Performs a case insensitive wild-card matching for the text and pattern
 	 * provided.
-	 * 
+	 *
 	 * @param text
 	 *            the text to be tested for matches.
-	 * 
+	 *
 	 * @param pattern
 	 *            the pattern to be matched for. This can contain the wild-card
 	 *            character '*' (asterisk) or '?'.
-	 * 
+	 *
 	 * @return <tt>true</tt> if a match is found, <tt>false</tt> otherwise.
 	 */
 	public static boolean wildCardMatch(final String text, final String pattern) {
@@ -915,25 +982,28 @@ public final class StringUtil {
 
 	/**
 	 * Performs a wild-card matching for the text and pattern provided.
-	 * 
+	 *
 	 * @param text
 	 *            the text to be tested for matches.
-	 * 
+	 *
 	 * @param pattern
 	 *            the pattern to be matched for. This can contain the wild-card
 	 *            character '*' (asterisk) or '?'.
-	 * 
+	 *
 	 * @return <tt>true</tt> if a match is found, <tt>false</tt> otherwise.
 	 */
 	public static boolean wildCardMatch(String text, String pattern, final boolean caseInsensitive) {
-		if (text == null && pattern == null) {
+		if ((text == null) && (pattern == null))
+		{
 			return true;
 		}
-		if (text == null || pattern == null) {
+		if ((text == null) || (pattern == null))
+		{
 			return false;
 		}
 
-		if (caseInsensitive) {
+		if (caseInsensitive)
+		{
 			text = toLowerCase(text);
 			pattern = toLowerCase(pattern);
 		}
@@ -945,8 +1015,10 @@ public final class StringUtil {
 		final Stack backtrack = new Stack();
 
 		// loop around a backtrack stack, to handle complex * matching
-		do {
-			if (backtrack.size() > 0) {
+		do
+		{
+			if (backtrack.size() > 0)
+			{
 				final int[] array = (int[]) backtrack.pop();
 				wcsIdx = array[0];
 				textIdx = array[1];
@@ -954,39 +1026,49 @@ public final class StringUtil {
 			}
 
 			// loop whilst tokens and text left to process
-			while (wcsIdx < wcs.length) {
+			while (wcsIdx < wcs.length)
+			{
 
-				if (wcs[wcsIdx].equals("?")) {
+				if (wcs[wcsIdx].equals("?"))
+				{
 					// ? so move to next text char
 					textIdx++;
 					anyChars = false;
 
 				}
-				else if (wcs[wcsIdx].equals("*")) {
+				else if (wcs[wcsIdx].equals("*"))
+				{
 					// set any chars status
 					anyChars = true;
-					if (wcsIdx == wcs.length - 1) {
+					if (wcsIdx == (wcs.length - 1))
+					{
 						textIdx = text.length();
 					}
 
 				}
-				else {
+				else
+				{
 					// matching text token
-					if (anyChars) {
+					if (anyChars)
+					{
 						// any chars then try to locate text token
 						textIdx = text.indexOf(wcs[wcsIdx], textIdx);
-						if (textIdx == -1) {
+						if (textIdx == -1)
+						{
 							// token not found
 							break;
 						}
 						final int repeat = text.indexOf(wcs[wcsIdx], textIdx + 1);
-						if (repeat >= 0) {
+						if (repeat >= 0)
+						{
 							backtrack.push(new int[] { wcsIdx, repeat });
 						}
 					}
-					else {
+					else
+					{
 						// matching from current position
-						if (!text.startsWith(wcs[wcsIdx], textIdx)) {
+						if (!text.startsWith(wcs[wcsIdx], textIdx))
+						{
 							// couldnt match token
 							break;
 						}
@@ -1002,19 +1084,19 @@ public final class StringUtil {
 			}
 
 			// full match
-			if (wcsIdx == wcs.length && textIdx == text.length()) {
+			if ((wcsIdx == wcs.length) && (textIdx == text.length()))
+			{
 				return true;
 			}
 
-		}
-		while (backtrack.size() > 0);
+		} while (backtrack.size() > 0);
 
 		return false;
 	}
 
 	/**
 	 * Splits a string into a number of tokens.
-	 * 
+	 *
 	 * @param text
 	 *            the text to split
 	 * @return the tokens, never null
@@ -1023,31 +1105,39 @@ public final class StringUtil {
 		// used by wildcardMatch
 		// package level so a unit test may run on this
 
-		if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
+		if ((text.indexOf("?") == -1) && (text.indexOf("*") == -1))
+		{
 			return new String[] { text };
 		}
 
 		final char[] array = text.toCharArray();
 		final ArrayList list = new ArrayList();
 		final StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == '?' || array[i] == '*') {
-				if (buffer.length() != 0) {
+		for (int i = 0; i < array.length; i++)
+		{
+			if ((array[i] == '?') || (array[i] == '*'))
+			{
+				if (buffer.length() != 0)
+				{
 					list.add(buffer.toString());
 					buffer.setLength(0);
 				}
-				if (array[i] == '?') {
+				if (array[i] == '?')
+				{
 					list.add("?");
 				}
-				else if (list.size() == 0 || (i > 0 && list.get(list.size() - 1).equals("*") == false)) {
+				else if ((list.size() == 0) || ((i > 0) && (list.get(list.size() - 1).equals("*") == false)))
+				{
 					list.add("*");
 				}
 			}
-			else {
+			else
+			{
 				buffer.append(array[i]);
 			}
 		}
-		if (buffer.length() != 0) {
+		if (buffer.length() != 0)
+		{
 			list.add(buffer.toString());
 		}
 
