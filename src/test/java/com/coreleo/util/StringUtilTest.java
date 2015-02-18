@@ -11,7 +11,6 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-@SuppressWarnings("deprecation")
 public class StringUtilTest {
 
 	@Test

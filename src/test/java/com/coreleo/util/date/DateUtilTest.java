@@ -1,6 +1,10 @@
 package com.coreleo.util.date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -313,12 +317,20 @@ public class DateUtilTest {
 
 	@Test
 	public void testGetNumberOfDaysBetweenCalendarCalendarBoolean() {
-		fail("Not yet implemented");
+		final int addDays = 7;
+		final Calendar start = Calendar.getInstance();
+		final Calendar end = DateUtil.addDays(start, addDays);
+		final int numOfDays = DateUtil.getNumberOfDaysBetween(start, end, false);
+		assertEquals(addDays, numOfDays);
 	}
 
 	@Test
 	public void testGetNumberOfDaysBetweenDateDateBoolean() {
-		fail("Not yet implemented");
+		final int addDays = 7;
+		final Date start = new Date();
+		final Date end = DateUtil.addDays(start, addDays);
+		final int numOfDays = DateUtil.getNumberOfDaysBetween(start, end, false);
+		assertEquals(addDays, numOfDays);
 	}
 
 	@Test
