@@ -9,6 +9,10 @@
 	<property name="build.dir" value="bin" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.lib.dir" value="${build.dir}/lib" />
+	
+	<property name="js.name" value="${jar.name}.js" />
+	<property name="js.src.dir" value="src/main/javascript/coreleo" />
+	
 
 	<!-- here is the version of ivy we will use. change this property to try a newer 
          version if you want -->
@@ -22,6 +26,26 @@
 	
 	<!-- Import the ivy build file -->
 	<import file="ivy-build.xml"/>
+	
+	
+	<target name="concat-alljs">
+	    <filelist id="filelist" dir="${js.src.dir}">
+	    	<file name="Logger.js" />
+	    	<file name="Namespace.js"/>
+	    	<file name="Util.js" />
+	    	<file name="PollerUtil.js" />
+	    	<file name="DialogUtil.js" />
+	    	<file name="MenuUtil.js" />
+	    	<file name="MobileUtil.js" />
+	    	<file name="TabUtil.js" />
+	    </filelist>
+	    	
+	    <concat destfile="${build.dir}/${js.name}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+	        <filelist refid="filelist" />
+	    </concat>
+	</target>
+	
+	    	
 	
 	<!-- - - - - - - - - - - - - - - - - - 
           target: build                      
