@@ -28,7 +28,7 @@
 	<import file="ivy-build.xml"/>
 	
 	
-	<target name="concat-alljs">
+	<target name="js-concatAll">
 	    <filelist id="filelist" dir="${js.src.dir}">
 	    	<file name="Logger.js" />
 	    	<file name="Namespace.js"/>

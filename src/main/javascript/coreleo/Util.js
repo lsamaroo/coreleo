@@ -321,21 +321,6 @@ $(function() {
 	};
 
     
-    var redirectToLoginPage = function(){
-    	window.location.replace("Login.jsp");
-    };
-    
-    
-    var addCsrfTokenToUrl = function( url ){
-		var csrfTokenKey = myapi.common.csrf.csrfTokenKey;
-	    var containsCsrf = url.indexOf(csrfTokenKey) != -1;
-	    if( containsCsrf ){
-	    	return url;
-	    }
-		var csrfToken = myapi.common.csrf.getCsrfToken();
-		return addParamToUrl( url, csrfTokenKey, csrfToken);
-    };
-    
 	
 	// public API
     myapi.util.ONE_SECOND = 1000;
@@ -370,7 +355,6 @@ $(function() {
 	myapi.util.getParameterFromUrl = getParameterFromUrl;	
 	myapi.util.loading = loading;
 	myapi.util.endLoading = endLoading;
-	myapi.util.addCsrfTokenToUrl = addCsrfTokenToUrl;
-	myapi.util.redirectToLoginPage = redirectToLoginPage;
+
 	
 });
