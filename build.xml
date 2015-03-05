@@ -38,6 +38,7 @@
 	    	<file name="MenuUtil.js" />
 	    	<file name="MobileUtil.js" />
 	    	<file name="TabUtil.js" />
+	    	<file name="IdleUtil.js" />
 	    </filelist>
 	    	
 	    <concat destfile="${build.dir}/${js.name}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">

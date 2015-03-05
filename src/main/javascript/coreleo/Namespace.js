@@ -5,7 +5,6 @@ if(typeof myapi.strings == "undefined") myapi.strings = {};
 
 
 if(typeof myapi.util == "undefined") myapi.util = {};
-if(typeof myapi.util.poller == "undefined") myapi.util.poller = {};
 
 
 if(typeof myapi.ui == "undefined") myapi.ui = {};
@@ -19,6 +18,10 @@ if(typeof myapi.mobile.util == "undefined") myapi.mobile.util = {};
 if(typeof myapi.mobile.util.selectmenu == "undefined") myapi.mobile.util.selectmenu = {};
 if(typeof myapi.mobile.util.table == "undefined") myapi.mobile.util.table = {};
 if(typeof myapi.mobile.util.input == "undefined") myapi.mobile.util.input = {};
+
+if(typeof myapi.event == "undefined") myapi.event = {};
+if(typeof myapi.event.poller == "undefined") myapi.event.poller = {};
+
 
 
 // custom namespace for library

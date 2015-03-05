@@ -75,8 +75,8 @@ $(function() {
 	
 	
 	// public API
-	myapi.util.poller.pollUrl = pollUlr;
-	myapi.util.poller.pollFunction = pollFunction;	
+	myapi.event.poller.pollUrl = pollUlr;
+	myapi.event.poller.pollFunction = pollFunction;	
 	
 
 });
