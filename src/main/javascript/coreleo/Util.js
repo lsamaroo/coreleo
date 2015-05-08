@@ -50,7 +50,6 @@ $(function() {
 		$( itemId ).prop( "disabled", true );
 		
 		setTimeout(function(){
-			var itemId = myapi.util.formatId( id );
 			$( itemId ).prop( "disabled", false );
 		}, time );
 	};
@@ -81,9 +80,9 @@ $(function() {
 	    var minus = '';
 	    if(i < 0) { minus = '-'; }
 	    i = Math.abs(i);
-	    i = parseInt((i + .005) * 100);
+	    i = parseInt((i + 0.005) * 100);
 	    i = i / 100;
-	    s = new String(i);
+	    s = i.toString();
 	    if(s.indexOf('.') < 0) { s += '.00'; }
 	    if(s.indexOf('.') == (s.length - 2)) { s += '0'; }
 	    s = minus + s;
@@ -104,8 +103,10 @@ $(function() {
 		return ( 
 				 text == null || text === null || 
 				 text === undefined || 
+				 typeof text === 'undefined' ||
 				 $.trim(text) == 'null' || 
-				 $.trim(text) == '' 
+				 $.trim(text) === '' ||
+				 ( $.isArray( text ) && text.length === 0 )
 			   );
 	};
 	
@@ -126,11 +127,11 @@ $(function() {
     
     var addParamToUrl = function(url, param, value)
     {
-       if( param == undefined ){
+       if( typeof param === 'undefined' ){
     	   return url;
        }
 	       
-       if( value == undefined ){
+       if( typeof value === 'undefined' ){
     	   return url;
        }
 	       
@@ -298,8 +299,8 @@ $(function() {
        if( !s ){
     	   return s;
        }
-	   var s = s.toLowerCase();
-	   return s.replace(/\b[a-z]/g, function(f){return f.toUpperCase()});
+	   s = s.toLowerCase();
+	   return s.replace(/\b[a-z]/g, function(f){return f.toUpperCase(); });
     };    
     
     

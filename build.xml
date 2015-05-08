@@ -28,6 +28,7 @@
 	<import file="ivy-build.xml"/>
 	
 	
+	<!-- Deprecated, replaced by gulp -->
 	<target name="js-concatAll">
 	    <filelist id="filelist" dir="${js.src.dir}">
 	    	<file name="Logger.js" />

@@ -70,7 +70,7 @@ $(function() {
 	var getTabIndexById = function(tabContainerId, tabId){ 
 		tabContainerId = myapi.util.formatId( tabContainerId );
 		var tabAnchor = $( tabContainerId + ' a[id="tab-anchor-' + tabId + '"]');
-		if( tabAnchor.length == 0 ){
+		if( tabAnchor.length === 0 ){
 			return -1;
 		}
 		
@@ -115,7 +115,7 @@ $(function() {
 		var index = getSelectedTabIndex( tabContainerId );
 		var id = ($( tabContainerId + " ul>li a").eq(index).attr('href'));
 		return myapi.util.startsWith( id, "#") ? id.substring( 1, id.lenght ) : id;
-	}
+	};
 	
 	
 	
