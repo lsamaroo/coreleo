@@ -18,7 +18,7 @@ $(function() {
 	var closeButtonTmpl = "<button class='ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close' role='button' aria-disabled='false' title='close'><span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span><span class='ui-button-text'>close</span></button>"; 
 		
 	var open = function( id ){
-		var itemId = myapi.util.formatId( id );
+		var itemId = coreleo.util.formatId( id );
 		
 		if( $(itemId).panel ){
 			$(itemId).panel("open");
@@ -29,7 +29,7 @@ $(function() {
 	};
 	
 	var close = function( id ){
-		var itemId = myapi.util.formatId( id );
+		var itemId = coreleo.util.formatId( id );
 		
 		if( $(itemId).panel ){
 			$(itemId).panel("close");
@@ -40,8 +40,8 @@ $(function() {
 	};
 	
 	var init = function( id, width, height ){
-		if( !myapi.util.isMobileClient() ){
-			$( myapi.util.formatId( id ) ).dialog({
+		if( !coreleo.util.isMobileClient() ){
+			$( coreleo.util.formatId( id ) ).dialog({
 				autoOpen : false,
 				height : height,
 				width : width,
@@ -55,7 +55,7 @@ $(function() {
 			iconClass = "";
 		}
 		
-		if( myapi.util.isMobileClient() ){
+		if( coreleo.util.isMobileClient() ){
 			showConfirmPopup( title, text, successFunction, iconClass );			
 		}
 		else{
@@ -120,7 +120,7 @@ $(function() {
 	var destroyDialogOrPopup = function ( id ){
 		var item = null;
 		if( typeof id == 'string' ){
-			var itemId = myapi.util.formatId( id );
+			var itemId = coreleo.util.formatId( id );
 			item = $(itemId);
 		}
 		else {
@@ -138,7 +138,7 @@ $(function() {
 	var closeDialogOrPopup = function( id ){
 		var item = null;
 		if( typeof id == 'string' ){
-			var itemId = myapi.util.formatId( id );
+			var itemId = coreleo.util.formatId( id );
 			item = $(itemId);
 		}
 		else {
@@ -171,7 +171,7 @@ $(function() {
 		template = template.replace( "{text}", text );
 		
 		var item = $( template );
-		if( myapi.util.isMobileClient() ){
+		if( coreleo.util.isMobileClient() ){
 			item.popup();	
 			item.popup("open");
 		}
@@ -211,7 +211,7 @@ $(function() {
 		template = template.replace( "{text}", text );
 		template = template.replace( "{iconClass}", iconClass );
 		
-		if( myapi.util.isMobileClient() ){
+		if( coreleo.util.isMobileClient() ){
 			var header = "<div class='header ui-dialog-titlebar ui-widget-header ui-corner-all' data-role='header'><span class='ui-dialog-title'>{title}</span>{close}</div>".replace( "{title}", title );
 			header = header.replace( "{close}", closeButtonTmpl );
 			template = template.replace( "{header}", header );
@@ -235,12 +235,12 @@ $(function() {
 
 
 	// public API
-	myapi.ui.dialog.open = open;
-	myapi.ui.dialog.close = close;
-	myapi.ui.dialog.init = init;
-	myapi.ui.dialog.confirm = confirm;
-	myapi.ui.dialog.showLoadingDialog = showLoadingDialog;
-	myapi.ui.dialog.hideLoadingDialog = hideLoadingDialog;
-	myapi.ui.dialog.alert = alert;
+	coreleo.ui.dialog.open = open;
+	coreleo.ui.dialog.close = close;
+	coreleo.ui.dialog.init = init;
+	coreleo.ui.dialog.confirm = confirm;
+	coreleo.ui.dialog.showLoadingDialog = showLoadingDialog;
+	coreleo.ui.dialog.hideLoadingDialog = hideLoadingDialog;
+	coreleo.ui.dialog.alert = alert;
 
 });

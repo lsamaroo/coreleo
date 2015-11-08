@@ -6,6 +6,6 @@ $(function() {
 	
 
 	// public API
-	myapi.ui.menu.isMenuItemDisabled = isMenuItemDisabled;
+	coreleo.ui.menu.isMenuItemDisabled = isMenuItemDisabled;
 
 });

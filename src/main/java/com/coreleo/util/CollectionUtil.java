@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.coreleo.util;
 
@@ -15,7 +15,7 @@ import com.coreleo.util.closure.Block;
 
 /**
  * @author Leon Samaroo
- * 
+ *
  */
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -36,7 +36,7 @@ public final class CollectionUtil {
 
 	/**
 	 * Splits a list into sublists of length <code>subListLength</code>
-	 * 
+	 *
 	 * @param subListAsView
 	 *            - true if the sublists should remain as views of the original
 	 *            list, false to create copies. @ return a List containing the
@@ -294,17 +294,17 @@ public final class CollectionUtil {
 		return list;
 	}
 
-	public static final Collection sort(final Collection x) {
+	public static <T extends Comparable<T>> Collection<T> sort(final Collection<T> x) {
 		if (x == null) {
 			return null;
 		}
 
 		if (x instanceof List) {
-			Collections.sort((List) x);
+			Collections.sort((List<T>) x);
 			return x;
 		}
 		else {
-			final List list = new ArrayList(x);
+			final List<T> list = new ArrayList<T>(x);
 			Collections.sort(list);
 			return list;
 		}

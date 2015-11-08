@@ -15,8 +15,8 @@ $(function() {
 	    //Increment the idle time counter every minute.
 	    idleInterval = setInterval( function(){
 	    	idleTime++;
-	    	doSomethingOnIdle( idleTime * myapi.util.ONE_MINUTE );
-	    }, myapi.util.ONE_MINUTE );
+	    	doSomethingOnIdle( idleTime * coreleo.util.ONE_MINUTE );
+	    }, coreleo.util.ONE_MINUTE );
 
 	    //Zero the idle timer on mouse movement.
 	    $(document).mousemove(function (e) {
@@ -31,7 +31,7 @@ $(function() {
 	
 	
 	var stopIdleTimer = function(){
-		if( idleInterval != null ){
+		if( idleInterval !== null ){
 			clearInterval(idleInterval);
 			started = false;
 			return true;
@@ -42,6 +42,6 @@ $(function() {
 	
 	
 	// public API
-	myapi.event.startIdleTimer = startIdleTimer;
-	myapi.event.stopIdleTimer = stopIdleTimer;	
+	coreleo.event.startIdleTimer = startIdleTimer;
+	coreleo.event.stopIdleTimer = stopIdleTimer;	
 });

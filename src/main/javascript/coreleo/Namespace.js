@@ -1,29 +1,13 @@
-if(typeof myapi == "undefined") var myapi = {};
-
-if(typeof myapi.url == "undefined") myapi.url = {};
-if(typeof myapi.strings == "undefined") myapi.strings = {};
-
-
-if(typeof myapi.util == "undefined") myapi.util = {};
-
-
-if(typeof myapi.ui == "undefined") myapi.ui = {};
-if(typeof myapi.ui.menu == "undefined") myapi.ui.menu = {};
-if(typeof myapi.ui.dialog == "undefined") myapi.ui.dialog = {};
-if(typeof myapi.ui.tabs == "undefined") myapi.ui.tabs = {};
-
-
-if(typeof myapi.mobile == "undefined") myapi.mobile = {};
-if(typeof myapi.mobile.util == "undefined") myapi.mobile.util = {};
-if(typeof myapi.mobile.util.selectmenu == "undefined") myapi.mobile.util.selectmenu = {};
-if(typeof myapi.mobile.util.table == "undefined") myapi.mobile.util.table = {};
-if(typeof myapi.mobile.util.input == "undefined") myapi.mobile.util.input = {};
-
-if(typeof myapi.event == "undefined") myapi.event = {};
-if(typeof myapi.event.poller == "undefined") myapi.event.poller = {};
-
-
-
-// custom namespace for library
-if(typeof coreleo == "undefined") var coreleo = myapi;
-
+if(typeof coreleo == "undefined") var coreleo = {};
+if(typeof coreleo.util == "undefined") coreleo.util = {};
+if(typeof coreleo.ui == "undefined") coreleo.ui = {};
+if(typeof coreleo.ui.menu == "undefined") coreleo.ui.menu = {};
+if(typeof coreleo.ui.dialog == "undefined") coreleo.ui.dialog = {};
+if(typeof coreleo.ui.tabs == "undefined") coreleo.ui.tabs = {};
+if(typeof coreleo.mobile == "undefined") coreleo.mobile = {};
+if(typeof coreleo.mobile.util == "undefined") coreleo.mobile.util = {};
+if(typeof coreleo.mobile.util.selectmenu == "undefined") coreleo.mobile.util.selectmenu = {};
+if(typeof coreleo.mobile.util.table == "undefined") coreleo.mobile.util.table = {};
+if(typeof coreleo.mobile.util.input == "undefined") coreleo.mobile.util.input = {};
+if(typeof coreleo.event == "undefined") coreleo.event = {};
+if(typeof coreleo.event.poller == "undefined") coreleo.event.poller = {};

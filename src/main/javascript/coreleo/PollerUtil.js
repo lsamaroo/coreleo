@@ -75,8 +75,8 @@ $(function() {
 	
 	
 	// public API
-	myapi.event.poller.pollUrl = pollUlr;
-	myapi.event.poller.pollFunction = pollFunction;	
+	coreleo.event.poller.pollUrl = pollUlr;
+	coreleo.event.poller.pollFunction = pollFunction;	
 	
 
 });

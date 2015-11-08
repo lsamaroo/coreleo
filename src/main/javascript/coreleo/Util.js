@@ -44,9 +44,9 @@ $(function() {
 	
 	var timeoutButton = function( id, time ){
 		if( !time ){	
-			time = myapi.util.ONE_SECOND * 2;
+			time = coreleo.util.ONE_SECOND * 2;
 		}
-		var itemId = myapi.util.formatId( id );
+		var itemId = coreleo.util.formatId( id );
 		$( itemId ).prop( "disabled", true );
 		
 		setTimeout(function(){
@@ -99,6 +99,7 @@ $(function() {
 		}
 	};
 	
+	/*jshint eqnull:true */
 	var isEmpty = function(text){
 		return ( 
 				 text == null || text === null || 
@@ -151,15 +152,15 @@ $(function() {
     };
     
 	var enableTextField = function( id ){
-		var item = $( myapi.util.formatId( id ) );
+		var item = $( coreleo.util.formatId( id ) );
 		item.attr('disabled', false );
-		myapi.mobile.util.input.enableTextField( id );
+		coreleo.mobile.util.input.enableTextField( id );
 	};
 	
 	var disableTextField = function( id ){
-		var item = $( myapi.util.formatId( id ) );
+		var item = $( coreleo.util.formatId( id ) );
 		item.attr('disabled', true );	
-		myapi.mobile.util.input.disableTextField( id );
+		coreleo.mobile.util.input.disableTextField( id );
 	};
 	
 	var contains = function ( string, subString ){
@@ -239,7 +240,7 @@ $(function() {
 			$.extend( optionsObject, options);
 		}
 
-		$( myapi.util.formatId( id ) ).tablesorter( optionsObject );
+		$( coreleo.util.formatId( id ) ).tablesorter( optionsObject );
 	};
 	
 	
@@ -310,52 +311,57 @@ $(function() {
 	
 
 	var loading = function( id ){
-		var div = $( myapi.util.formatId( id ) );
+		var div = $( coreleo.util.formatId( id ) );
 		div.empty();
 		div.html("<image src='images/ajax-loader2.gif'></image>");
 	};
 	
 	
 	var endLoading = function( id ){
-		var div = $( myapi.util.formatId( id ) );
+		var div = $( coreleo.util.formatId( id ) );
 		div.empty();
+	};
+	
+	var toKeyValueHash = function(key, value){
+		return {'key': key, 'value': value};
 	};
 
     
 	
 	// public API
-    myapi.util.ONE_SECOND = 1000;
-    myapi.util.ONE_MINUTE = 60000;
-    myapi.util.redirectPost = redirectPost;
-	myapi.util.formatPhone = formatPhone;
-	myapi.util.blankNull = blankNull;
-	myapi.util.zeroFill = zeroFill;
-	myapi.util.currencyFormatted = currencyFormatted;
-	myapi.util.isEmpty = isEmpty;
-	myapi.util.replaceCharAt = replaceCharAt;
-	myapi.util.formatPhone = formatPhone;
-	myapi.util.isNotEmpty = isNotEmpty;
-	myapi.util.addParamToUrl = addParamToUrl;
-	myapi.util.formatId = formatId;
-	myapi.util.timeoutButton = timeoutButton;
-	myapi.util.enableTextField = enableTextField;
-	myapi.util.disableTextField = disableTextField;
-	myapi.util.initTableSorter = initTableSorter;
-	myapi.util.isMobileClient = isMobileClient;
-	myapi.util.isSmallScreen = isSmallScreen;
-	myapi.util.contains = contains;
-	myapi.util.containsIgnoreCase = containsIgnoreCase;
-	myapi.util.trimNewLineChar = trimNewLineChar;
-	myapi.util.trimWhiteSpaceChar = trimWhiteSpaceChar;
-	myapi.util.formatClass = formatClass;
-	myapi.util.startsWith = startsWith;
-	myapi.util.renderTemplate = renderTemplate;	
-	myapi.util.renderTemplateWithCaching = renderTemplateWithCaching;	
-	myapi.util.hasWhiteSpace = hasWhiteSpace;
-	myapi.util.properCase = properCase;	
-	myapi.util.getParameterFromUrl = getParameterFromUrl;	
-	myapi.util.loading = loading;
-	myapi.util.endLoading = endLoading;
+    coreleo.util.ONE_SECOND = 1000;
+    coreleo.util.ONE_MINUTE = 60000;
+    coreleo.util.redirectPost = redirectPost;
+	coreleo.util.formatPhone = formatPhone;
+	coreleo.util.blankNull = blankNull;
+	coreleo.util.zeroFill = zeroFill;
+	coreleo.util.currencyFormatted = currencyFormatted;
+	coreleo.util.isEmpty = isEmpty;
+	coreleo.util.replaceCharAt = replaceCharAt;
+	coreleo.util.formatPhone = formatPhone;
+	coreleo.util.isNotEmpty = isNotEmpty;
+	coreleo.util.addParamToUrl = addParamToUrl;
+	coreleo.util.formatId = formatId;
+	coreleo.util.timeoutButton = timeoutButton;
+	coreleo.util.enableTextField = enableTextField;
+	coreleo.util.disableTextField = disableTextField;
+	coreleo.util.initTableSorter = initTableSorter;
+	coreleo.util.isMobileClient = isMobileClient;
+	coreleo.util.isSmallScreen = isSmallScreen;
+	coreleo.util.contains = contains;
+	coreleo.util.containsIgnoreCase = containsIgnoreCase;
+	coreleo.util.trimNewLineChar = trimNewLineChar;
+	coreleo.util.trimWhiteSpaceChar = trimWhiteSpaceChar;
+	coreleo.util.formatClass = formatClass;
+	coreleo.util.startsWith = startsWith;
+	coreleo.util.renderTemplate = renderTemplate;	
+	coreleo.util.renderTemplateWithCaching = renderTemplateWithCaching;	
+	coreleo.util.hasWhiteSpace = hasWhiteSpace;
+	coreleo.util.properCase = properCase;	
+	coreleo.util.getParameterFromUrl = getParameterFromUrl;	
+	coreleo.util.loading = loading;
+	coreleo.util.endLoading = endLoading;
+	coreleo.util.toKeyValueHash = toKeyValueHash;
 
 	
 });
