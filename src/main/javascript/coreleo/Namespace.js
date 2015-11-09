@@ -11,3 +11,4 @@ if(typeof coreleo.mobile.util.table == "undefined") coreleo.mobile.util.table = 
 if(typeof coreleo.mobile.util.input == "undefined") coreleo.mobile.util.input = {};
 if(typeof coreleo.event == "undefined") coreleo.event = {};
 if(typeof coreleo.event.poller == "undefined") coreleo.event.poller = {};
+if(typeof coreleo.console == "undefined") coreleo.console = {};

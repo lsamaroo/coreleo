@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 var sourceDirectory = 'src/main/javascript';
 var targetDirectory = 'bin';
 var targetOutputFileName = 'coreleo.js';
-var jsFileNames = ['Logger.js', 'Namespace.js', 'Util.js', 'PollerUtil.js', 'DialogUtil.js', 
+var jsFileNames = ['Namespace.js', 'Logger.js', 'Util.js', 'PollerUtil.js', 'DialogUtil.js', 
                'MenuUtil.js', 'MobileUtil.js', 'TabUtil.js', 'IdleUtil.js'];
 var jsFiles = [];
 // append the source directory to create full path

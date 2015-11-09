@@ -9,4 +9,6 @@ $(function() {
 	    error: function(){}
 	  };
 	}	
+	
+	coreleo.console = console;
 });
