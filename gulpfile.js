@@ -25,7 +25,7 @@ gulp.task('lint', function() {
 });
 
 
-gulp.task('minify', function(){
+gulp.task('minify', ['beautify'], function(){
     gulp.src(jsFiles)
         .pipe(concat(targetOutputFileName))
         .pipe(gulp.dest( targetDirectory ))
@@ -42,5 +42,5 @@ gulp.task('beautify', function() {
 });
 
 
-gulp.task('default', ['lint', 'beautify', 'minify'] );
+gulp.task('default', ['lint', 'minify'] );
 
