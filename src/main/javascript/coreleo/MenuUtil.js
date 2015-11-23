@@ -1,11 +1,11 @@
 $(function() {
 
-	var isMenuItemDisabled = function( selector ){
-		return false;
-	};
-	
+    var isMenuItemDisabled = function(selector) {
+        return false;
+    };
 
-	// public API
-	coreleo.ui.menu.isMenuItemDisabled = isMenuItemDisabled;
+
+    // public API
+    coreleo.ui.menu.isMenuItemDisabled = isMenuItemDisabled;
 
 });

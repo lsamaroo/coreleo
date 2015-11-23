@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    beautify = require('gulp-jsbeautifier');
 
 
 var sourceDirectory = 'src/main/javascript';
@@ -34,5 +35,12 @@ gulp.task('minify', function(){
 });
 
 
-gulp.task('default', ['lint','minify'] );
+gulp.task('beautify', function() {
+	  gulp.src(jsFiles)
+	    .pipe(beautify({indentSize: 4}))
+	    .pipe(gulp.dest(sourceDirectory))
+});
+
+
+gulp.task('default', ['lint', 'beautify', 'minify'] );
 
