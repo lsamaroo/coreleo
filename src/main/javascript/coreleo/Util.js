@@ -48,10 +48,10 @@ $(function() {
             time = coreleo.util.ONE_SECOND * 2;
         }
         var itemId = coreleo.util.formatId(id);
-        $(itemId).prop("disabled", true);
+        $(itemId).prop('disabled', true);
 
         setTimeout(function() {
-            $(itemId).prop("disabled", false);
+            $(itemId).prop('disabled', false);
         }, time);
     };
 
@@ -63,7 +63,7 @@ $(function() {
 
     var formatPhone = function(phone) {
         if (isEmpty(phone)) {
-            return "";
+            return '';
         }
         return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
     };
@@ -100,7 +100,7 @@ $(function() {
 
     var blankNull = function(text) {
         if (isEmpty(text)) {
-            return "";
+            return '';
         } else {
             return text;
         }
@@ -123,12 +123,31 @@ $(function() {
     };
 
 
+    var toBoolean = function(text) {
+        if (isEmpty(text)) {
+            return false;
+        }
+
+        text = text.trim().toLowerCase();
+        if (text === 'true' || text === 't' || text === '1' || text === 'y' || text === 'yes' || text === 1 || text === true) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+
+    var isTrue = function(text) {
+        return toBoolean(text) === true;
+    };
+
+
     var zeroFill = function(number, size) {
         if (isEmpty(number)) {
             return '';
         }
         number = number.toString();
-        while (number.length < size) number = "0" + number;
+        while (number.length < size) number = '0' + number;
         return number;
     };
 
@@ -149,11 +168,11 @@ $(function() {
     var formatId = function(id) {
         id = id.trim();
 
-        if (startsWith(id, ".")) {
+        if (startsWith(id, '.')) {
             return id;
         }
 
-        return startsWith(id, "#") ? id : "#" + id;
+        return startsWith(id, '#') ? id : '#' + id;
     };
 
     var enableTextField = function(id) {
@@ -201,7 +220,7 @@ $(function() {
         }
 
         var groupFormatterWrapper = function(txt, col, table, c, wo) {
-            txt === "" ? "Empty" : txt;
+            txt === '' ? 'Empty' : txt;
             if (!groupFormatter) {
                 return txt;
             }
@@ -219,18 +238,19 @@ $(function() {
             group_collapsed: false, // start with all groups collapsed (if true)
             group_saveGroups: false, // remember collapsed groups
             group_saveReset: '.group_reset', // element to clear saved collapsed groups
-            group_count: " ({num} items)", // if not false, the "{num}" string is replaced with the number of rows in the group
+            group_count: ' ({num} items)', // if not false, the '{num}' string is replaced with the number of rows in the group
             group_formatter: groupFormatterWrapper,
             group_callback: groupCallbackWrapper,
             // event triggered on the table when the grouping widget has finished work
-            group_complete: "groupingComplete"
+            group_complete: 'groupingComplete',
+            filter_hideFilters: true
         };
 
         if (widgetOptions && $.isPlainObject(widgetOptions)) {
             $.extend(widgetOptionsObject, widgetOptions);
         }
 
-        var widgetsArray = ["group"];
+        var widgetsArray = ['group', 'filter'];
         if (widgets && $.isArray(widgets)) {
             $.merge(widgetsArray, widgets);
         }
@@ -254,7 +274,7 @@ $(function() {
             return false;
         }
 
-        return string.replace(/(\r\n|\n|\r)/gm, "");
+        return string.replace(/(\r\n|\n|\r)/gm, '');
     };
 
 
@@ -263,7 +283,7 @@ $(function() {
             return false;
         }
 
-        return string.replace(/(\s)/gm, "");
+        return string.replace(/(\s)/gm, '');
     };
 
 
@@ -369,6 +389,8 @@ $(function() {
     coreleo.util.loading = loading;
     coreleo.util.endLoading = endLoading;
     coreleo.util.toKeyValueHash = toKeyValueHash;
+    coreleo.util.toBoolean = toBoolean;
+    coreleo.util.isTrue = isTrue;
 
 
 });
