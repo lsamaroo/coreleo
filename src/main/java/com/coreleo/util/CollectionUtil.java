@@ -294,14 +294,14 @@ public final class CollectionUtil {
 		return list;
 	}
 
-	public static <T extends Comparable<T>> Collection<T> sort(final Collection<T> x) {
+	public static <T extends Comparable<T>> List<T> sort(final Collection<T> x) {
 		if (x == null) {
 			return null;
 		}
 
 		if (x instanceof List) {
 			Collections.sort((List<T>) x);
-			return x;
+			return (List) x;
 		}
 		else {
 			final List<T> list = new ArrayList<T>(x);
@@ -328,15 +328,6 @@ public final class CollectionUtil {
 			Collections.sort(list, c);
 			return list;
 		}
-	}
-
-	public static final List sort(final List list) {
-		if (list == null) {
-			return null;
-		}
-
-		Collections.sort(list);
-		return list;
 	}
 
 	public static final List sort(final List list, final Comparator c) {
