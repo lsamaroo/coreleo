@@ -271,6 +271,34 @@ public final class StringUtil {
 		return replaceFirstDollarSign(string, String.valueOf(value));
 	}
 
+	/**
+	 *
+	 * @return true if all the strings in the list are empty, false if at least
+	 *         one is non-empty
+	 */
+	public static final boolean isAllEmpty(final Object... strings) {
+		for (final Object string : strings) {
+			if (isNotEmpty(string)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * @return true if all the strings in the list are not empty, false if at
+	 *         least one is empty
+	 */
+	public static final boolean isAllNotEmpty(final Object... strings) {
+		for (final Object string : strings) {
+			if (isEmpty(string)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static final boolean isEmpty(final String x) {
 		if (x == null) {
 			return true;

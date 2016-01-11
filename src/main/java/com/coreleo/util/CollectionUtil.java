@@ -96,8 +96,12 @@ public final class CollectionUtil {
 		}
 	}
 
-	public static final Object get(final List x, final int index) {
-		if (x == null) {
+	public static <T> T getFirst(final List<T> list) {
+		return get(list, 0);
+	}
+
+	public static final <T> T get(final List<T> x, final int index) {
+		if (isEmpty(x)) {
 			return null;
 		}
 

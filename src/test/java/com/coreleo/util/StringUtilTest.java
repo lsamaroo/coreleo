@@ -105,6 +105,18 @@ public class StringUtilTest {
 	}
 
 	@Test
+	public final void testIsAllEmpty() {
+		assertTrue(StringUtil.isAllEmpty("", null, "", "     ", ""));
+		assertFalse(StringUtil.isAllEmpty("", null, "", " ", "I am a non empty string"));
+	}
+
+	@Test
+	public final void testIsAllNotEmpty() {
+		assertTrue(StringUtil.isAllNotEmpty("I", "am", "not", "  empty   "));
+		assertFalse(StringUtil.isAllNotEmpty("I", "am", "not", "  empty   ", "    ", null));
+	}
+
+	@Test
 	public final void testIsEmpty() {
 		Object x = null;
 		assertTrue(StringUtil.isEmpty(x));
@@ -186,14 +198,12 @@ public class StringUtilTest {
 
 	@Test
 	public final void testGetContentOfStream() {
-		try
-		{
+		try {
 			final String x = "abcdefg";
 			final InputStream stream = StringUtil.toInputStream(x);
 			assertEquals(x, StringUtil.getContentOfStream(stream));
 		}
-		catch (final IOException ioe)
-		{
+		catch (final IOException ioe) {
 			fail("IOException");
 		}
 	}
