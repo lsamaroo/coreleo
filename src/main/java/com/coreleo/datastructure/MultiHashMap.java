@@ -8,87 +8,71 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
+ * @deprecated - use apache's MultiHashMap instead
  * @author Leon Samaroo
- * 
+ *
  *         An HashMap which allows mapping multiple values to a single key.
- * 
+ *
  */
+@Deprecated
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class MultiHashMap extends HashMap implements Serializable
-{
+public class MultiHashMap extends HashMap implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public boolean containsValue(Object key, Object value)
-	{
+	public boolean containsValue(final Object key, final Object value) {
 		final List list = (List) super.get(key);
-		if (list != null)
-		{
+		if (list != null) {
 			return list.contains(value);
 		}
-		else
-		{
+		else {
 			return false;
 		}
 	}
 
-	public List getCollection(Object key)
-	{
+	public List getCollection(final Object key) {
 		return (List) super.get(key);
 	}
 
-	public Iterator iterator(Object key)
-	{
+	public Iterator iterator(final Object key) {
 		final List list = (List) super.get(key);
-		if (list != null)
-		{
+		if (list != null) {
 			return list.iterator();
 		}
-		else
-		{
+		else {
 			return new ArrayList().iterator();
 		}
 	}
 
-	public boolean putAll(Object key, Collection values)
-	{
-		if (values == null)
-		{
+	public boolean putAll(final Object key, final Collection values) {
+		if (values == null) {
 			return false;
 		}
 
 		final List list = (List) super.get(key);
-		if (list != null)
-		{
+		if (list != null) {
 			return list.addAll(values);
 		}
-		else
-		{
+		else {
 			super.put(key, list);
 			return true;
 		}
 	}
 
-	public int size(Object key)
-	{
+	public int size(final Object key) {
 		final List list = (List) super.get(key);
-		if (list != null)
-		{
+		if (list != null) {
 			return list.size();
 		}
-		else
-		{
+		else {
 			return 0;
 		}
 	}
 
-	public int totalSize()
-	{
+	public int totalSize() {
 		int size = 0;
 
-		for (final Iterator i = super.values().iterator(); i.hasNext();)
-		{
+		for (final Iterator i = super.values().iterator(); i.hasNext();) {
 			final List list = (List) i.next();
 			size = size + list.size();
 		}
@@ -96,26 +80,21 @@ public class MultiHashMap extends HashMap implements Serializable
 		return size;
 	}
 
-	public Object remove(Object key, Object item)
-	{
+	public Object remove(final Object key, final Object item) {
 		final List list = (List) super.get(key);
-		if (list != null)
-		{
+		if (list != null) {
 			final boolean containsItem = list.remove(item);
 			return containsItem ? item : null;
 		}
-		else
-		{
+		else {
 			return null;
 		}
 	}
 
 	@Override
-	public Object put(Object key, Object value)
-	{
+	public Object put(final Object key, final Object value) {
 		List list = (List) super.get(key);
-		if (list == null)
-		{
+		if (list == null) {
 			list = new ArrayList();
 		}
 
@@ -124,13 +103,10 @@ public class MultiHashMap extends HashMap implements Serializable
 	}
 
 	@Override
-	public boolean containsValue(Object value)
-	{
-		for (final Iterator i = super.values().iterator(); i.hasNext();)
-		{
+	public boolean containsValue(final Object value) {
+		for (final Iterator i = super.values().iterator(); i.hasNext();) {
 			final List list = (List) i.next();
-			if (list.contains(value))
-			{
+			if (list.contains(value)) {
 				return true;
 			}
 		}
@@ -139,11 +115,9 @@ public class MultiHashMap extends HashMap implements Serializable
 	}
 
 	@Override
-	public List values()
-	{
+	public List values() {
 		final List all = new ArrayList();
-		for (final Iterator i = super.values().iterator(); i.hasNext();)
-		{
+		for (final Iterator i = super.values().iterator(); i.hasNext();) {
 			final List list = (List) i.next();
 			all.addAll(list);
 		}

@@ -27,32 +27,12 @@
 	<!-- Import the ivy build file -->
 	<import file="ivy-build.xml"/>
 	
-	
-	<!-- Deprecated, replaced by gulp -->
-	<target name="js-concatAll">
-	    <filelist id="filelist" dir="${js.src.dir}">
-	    	<file name="Logger.js" />
-	    	<file name="Namespace.js"/>
-	    	<file name="Util.js" />
-	    	<file name="PollerUtil.js" />
-	    	<file name="DialogUtil.js" />
-	    	<file name="MenuUtil.js" />
-	    	<file name="MobileUtil.js" />
-	    	<file name="TabUtil.js" />
-	    	<file name="IdleUtil.js" />
-	    </filelist>
-	    	
-	    <concat destfile="${build.dir}/${js.name}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
-	        <filelist refid="filelist" />
-	    </concat>
-	</target>
-	
 	    	
 	
 	<!-- - - - - - - - - - - - - - - - - - 
           target: build                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="build" depends="common-clean, ivy-resolve, common-setup, common-compile, common-jar" description="Compile main source tree java files">
+	<target name="build" depends="common-clean, ivy-resolve, common-setup, common-compile, common-jar, UI-npm-install, UI-gulp" description="Compile main source tree java files">
 		<tstamp>
 			<format property="build.startdate" pattern="EEE, MMM d yyyy" />
 			<format property="build.starttime" pattern="HH:mm:ss z" />
@@ -61,6 +41,20 @@
 		<echo message="Build started on ${build.startdate} at ${build.starttime}" level="info" />
 	</target>
 
-
+	<!-- - - - - - - - - - - - - - - - - - 
+	      target: UI-npm-install                      
+	     - - - - - - - - - - - - - - - - - -->
+	<target name="UI-npm-install">
+	  <exec vmlauncher="false" executable="npm" dir="." failonerror="true" >
+	  	<arg value="install"/>
+	  </exec>
+	</target>
+		
+	<!-- - - - - - - - - - - - - - - - - - 
+	      target: UI-gulp                      
+	     - - - - - - - - - - - - - - - - - -->
+	<target name="UI-gulp">
+	  <exec vmlauncher="false" executable="gulp" dir="." failonerror="true"></exec>
+	</target>
 
 </project>
