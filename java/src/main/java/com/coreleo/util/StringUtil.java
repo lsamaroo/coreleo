@@ -273,6 +273,21 @@ public final class StringUtil {
 
 	/**
 	 *
+	 * @param strings
+	 *            - list of strings
+	 * @return - true if any of the strings is null or empty, false otherwise.
+	 */
+	public static final boolean isAnyEmpty(final Object... strings) {
+		for (final Object string : strings) {
+			if (isEmpty(string)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 *
 	 * @return true if all the strings in the list are empty, false if at least
 	 *         one is non-empty
 	 */

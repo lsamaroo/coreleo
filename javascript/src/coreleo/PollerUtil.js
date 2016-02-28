@@ -46,7 +46,7 @@ $(function() {
         (function loopsiloop() {
             setTimeout(function() {
                 var data = {};
-                if (typeof(postData) == "function") {
+                if (typeof(postData) === 'function') {
                     data = postData();
                 } else {
                     data = postData;

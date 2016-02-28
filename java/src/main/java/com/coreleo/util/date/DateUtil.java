@@ -54,7 +54,7 @@ public final class DateUtil {
 	 * supported
 	 */
 	public final static FastDateFormat MMddyyyyForwardSlash_HHmmssColon = FastDateFormat
-			.getInstance("MM/dd/yyyy HH:mm:ss");
+	        .getInstance("MM/dd/yyyy HH:mm:ss");
 
 	/**
 	 * MM-dd-yyyy HH:mm:ss - Only use this to format a date, parsing is not
@@ -73,29 +73,26 @@ public final class DateUtil {
 
 	/** yyyy-MM-dd HH:mm aa */
 	public final static FastDateFormat yyyyMMddHyphened_hhmmColon_aa = FastDateFormat
-			.getInstance("yyyy-MM-dd hh:mm aa");
+	        .getInstance("yyyy-MM-dd hh:mm aa");
 
 	public final static FastDateFormat ISO8601DateTimeFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mmZ");
 
 	public final static FastDateFormat yyyyMMddHyphened_T_HHmmssColon = FastDateFormat
-			.getInstance("yyyy-MM-dd'T'HH:mm:ss");
+	        .getInstance("yyyy-MM-dd'T'HH:mm:ss");
 
 	private DateUtil() {
 	}
 
 	public static int compare(final Date x1, final Date x2) {
-		if ((x1 == null) && (x2 == null))
-		{
+		if ((x1 == null) && (x2 == null)) {
 			return 0;
 		}
 
-		if (x1 == null)
-		{
+		if (x1 == null) {
 			return -1;
 		}
 
-		if (x2 == null)
-		{
+		if (x2 == null) {
 			return 1;
 		}
 
@@ -145,26 +142,53 @@ public final class DateUtil {
 		return FastDateFormat.getInstance(pattern, x.getTimeZone()).format(x);
 	}
 
+	/**
+	 *
+	 * @param date
+	 *            - the date string to parse
+	 * @param pattern
+	 *            - the pattern the date string should be
+	 * @return - true if it is a valid date, false otherwise
+	 */
 	public static Date parse(final String date, final String pattern) {
-		try
-		{
+		try {
 			return new SimpleDateFormat(pattern).parse(date);
 		}
-		catch (final ParseException e)
-		{
+		catch (final ParseException e) {
+			throw new SimpleException(e);
+		}
+	}
+
+	/**
+	 *
+	 * @param date
+	 *            - the date string to parse
+	 * @param pattern
+	 *            - the pattern the date string should be
+	 * @param lenient
+	 *            - Specify whether or not date/time parsing is to be lenient.
+	 * @return - Date object if parsed successfully
+	 * @throws SimpleException
+	 *             if it fails to parse the date
+	 */
+	public static Date parse(final String date, final String pattern, final boolean lenient) {
+		try {
+			final SimpleDateFormat df = new SimpleDateFormat(pattern);
+			df.setLenient(lenient);
+			return df.parse(date);
+		}
+		catch (final ParseException e) {
 			throw new SimpleException(e);
 		}
 	}
 
 	public static Date parse(final String date, final String pattern, final TimeZone tz) {
-		try
-		{
+		try {
 			final SimpleDateFormat sf = new SimpleDateFormat(pattern);
 			sf.setTimeZone(tz);
 			return sf.parse(date);
 		}
-		catch (final ParseException e)
-		{
+		catch (final ParseException e) {
 			throw new SimpleException(e);
 		}
 	}
@@ -173,19 +197,16 @@ public final class DateUtil {
 	 *
 	 */
 	public static Date parse(final DateFormat format, final String date) {
-		try
-		{
+		try {
 			return format.parse(date);
 		}
-		catch (final ParseException e)
-		{
+		catch (final ParseException e) {
 			return null;
 		}
 	}
 
 	public static Timestamp toTimestamp(final Calendar cal) {
-		if (cal == null)
-		{
+		if (cal == null) {
 			throw new IllegalArgumentException("Calendar is null");
 		}
 
@@ -193,8 +214,7 @@ public final class DateUtil {
 	}
 
 	public static Timestamp toTimestamp(final Date date) {
-		if (date == null)
-		{
+		if (date == null) {
 			throw new IllegalArgumentException("Date is null");
 		}
 
@@ -214,8 +234,7 @@ public final class DateUtil {
 	}
 
 	public static Calendar toCalendar(final Date date) {
-		if (date == null)
-		{
+		if (date == null) {
 			throw new IllegalArgumentException("Date is null");
 		}
 		final Calendar cal = Calendar.getInstance();
@@ -228,7 +247,7 @@ public final class DateUtil {
 	 * @return a new calendar
 	 */
 	public static Calendar setTime(final Calendar c, final int hour, final int minute, final int second,
-			final int millisecond) {
+	        final int millisecond) {
 		final Calendar cal = clone(c);
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
@@ -238,9 +257,8 @@ public final class DateUtil {
 	}
 
 	public static Date setTime(final Date date, final int hour, final int minute, final int second,
-			final int millisecond) {
-		if (date == null)
-		{
+	        final int millisecond) {
+		if (date == null) {
 			return null;
 		}
 		final Calendar cal = toCalendar(date);
@@ -264,7 +282,7 @@ public final class DateUtil {
 	}
 
 	public static Calendar toCalendar(final Date date, final int hourOfDay, final int minute, final int second,
-			final int millisecond) {
+	        final int millisecond) {
 		final Calendar cal = toCalendar(date);
 		cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 		cal.set(Calendar.MINUTE, minute);
@@ -273,7 +291,8 @@ public final class DateUtil {
 		return cal;
 	}
 
-	public static Calendar toCalendar(final Date date, final String hourOfDay, final String minute, final String second) {
+	public static Calendar toCalendar(final Date date, final String hourOfDay, final String minute,
+	        final String second) {
 		final Calendar cal = toCalendar(date);
 		cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
 		cal.set(Calendar.MINUTE, Integer.parseInt(minute));
@@ -332,7 +351,7 @@ public final class DateUtil {
 	 * @return a lenient Calendar set to the given values
 	 */
 	public static Calendar toCalendar(final String year, final String month, final String day, final String hourOfDay,
-			final String minute, final String second) {
+	        final String minute, final String second) {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(year));
 		cal.set(Calendar.MONTH, Integer.parseInt(month));
@@ -344,7 +363,7 @@ public final class DateUtil {
 	}
 
 	public static Calendar toCalendar(final String year, final String month, final String day, final String hourOfDay,
-			final String minute, final String second, final String millisecond) {
+	        final String minute, final String second, final String millisecond) {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(year));
 		cal.set(Calendar.MONTH, Integer.parseInt(month));
@@ -361,7 +380,7 @@ public final class DateUtil {
 	 * @return a lenient Calendar set to the given values
 	 */
 	public static Calendar toCalendar(final int year, final int month, final int day, final int hourOfDay,
-			final int minute, final int second) {
+	        final int minute, final int second) {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
@@ -377,7 +396,7 @@ public final class DateUtil {
 	 * @return a lenient Calendar set to the given values
 	 */
 	public static Calendar toCalendar(final int year, final int month, final int day, final int hourOfDay,
-			final int minute, final int second, final int millisecond) {
+	        final int minute, final int second, final int millisecond) {
 		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
@@ -410,28 +429,46 @@ public final class DateUtil {
 	}
 
 	public static Date toDate(final int year, final int month, final int day, final int hourOfDay, final int minute,
-			final int second) {
+	        final int second) {
 		return toCalendar(year, month, day, hourOfDay, minute, second).getTime();
 	}
 
 	public static Date toDate(final String year, final String month, final String day, final String hourOfDay,
-			final String minute, final String second) {
+	        final String minute, final String second) {
 		return toCalendar(year, month, day, hourOfDay, minute, second).getTime();
 	}
 
 	public static Date toDate(final int year, final int month, final int day, final int hourOfDay, final int minute,
-			final int second, final int millisecond) {
+	        final int second, final int millisecond) {
 		return toCalendar(year, month, day, hourOfDay, minute, second, millisecond).getTime();
 	}
 
 	public static Date toDate(final String year, final String month, final String day, final String hourOfDay,
-			final String minute, final String second, final String millisecond) {
+	        final String minute, final String second, final String millisecond) {
 		return toCalendar(year, month, day, hourOfDay, minute, second, millisecond).getTime();
 	}
 
+	/**
+	 *
+	 * @param date
+	 *            - the date string to parse
+	 * @param pattern
+	 *            - the pattern the date string should be
+	 *
+	 * @return - true if it is a valid date, false otherwise
+	 */
+	public static final boolean isValidDate(final String date, final String pattern) {
+		try {
+			parse(date, pattern, false);
+			return true;
+		}
+		catch (final Exception e) {
+			return false;
+		}
+	}
+
 	public static final boolean isValidDate(final int month, final int day, final int year) {
-		try
-		{
+		try {
 			final Calendar cal = Calendar.getInstance();
 			cal.setLenient(false); // must do this
 			cal.set(Calendar.YEAR, year);
@@ -439,8 +476,7 @@ public final class DateUtil {
 			cal.set(Calendar.DAY_OF_MONTH, day);
 			cal.getTime(); // exception thrown here
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return false;
 		}
 
@@ -448,12 +484,10 @@ public final class DateUtil {
 	}
 
 	public static final boolean isValidDate(final String month, final String day, final String year) {
-		try
-		{
+		try {
 			return isValidDate(Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(year));
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return false;
 		}
 	}
@@ -519,8 +553,7 @@ public final class DateUtil {
 	}
 
 	public final static Calendar set(final Calendar c, final int field, final int value) {
-		if (c == null)
-		{
+		if (c == null) {
 			throw new IllegalArgumentException("Calendar is null");
 		}
 
@@ -561,7 +594,7 @@ public final class DateUtil {
 	 *
 	 */
 	public static final int getNumberOfDaysBetween(final Calendar start, final Calendar end,
-			final boolean includeTimeInCalculation) {
+	        final boolean includeTimeInCalculation) {
 		final long time = subtract(end, start, includeTimeInCalculation);
 		return (int) Math.round(((time) / Constants.ONE_DAY));
 	}
@@ -572,7 +605,7 @@ public final class DateUtil {
 	 *
 	 */
 	public static final int getNumberOfDaysBetween(final Date start, final Date end,
-			final boolean includeTimeInCalculation) {
+	        final boolean includeTimeInCalculation) {
 		final Calendar cal1 = toCalendar(start);
 		final Calendar cal2 = toCalendar(end);
 		return getNumberOfDaysBetween(cal1, cal2, includeTimeInCalculation);
@@ -590,26 +623,21 @@ public final class DateUtil {
 	public static Calendar[] getDaysBetween(final Calendar start, final Calendar end, final boolean includeEndDate) {
 		final int numberOfDaysBetween = getNumberOfDaysBetween(start, end, false);
 
-		if (numberOfDaysBetween < 0)
-		{
+		if (numberOfDaysBetween < 0) {
 			return null;
 		}
 
 		Calendar[] dates = null;
 
-		if (includeEndDate)
-		{
+		if (includeEndDate) {
 			dates = new Calendar[numberOfDaysBetween == 1 ? 2 : numberOfDaysBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addDays(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Calendar[numberOfDaysBetween < 1 ? 0 : numberOfDaysBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addDays(start, i + 1);
 			}
 		}
@@ -620,26 +648,21 @@ public final class DateUtil {
 	public static Date[] getDaysBetween(final Date start, final Date end, final boolean includeEndDate) {
 		final int numberOfDaysBetween = getNumberOfDaysBetween(start, end, false);
 
-		if (numberOfDaysBetween < 0)
-		{
+		if (numberOfDaysBetween < 0) {
 			return null;
 		}
 
 		Date[] dates = null;
 
-		if (includeEndDate)
-		{
+		if (includeEndDate) {
 			dates = new Date[numberOfDaysBetween == 1 ? 2 : numberOfDaysBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addDays(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Date[numberOfDaysBetween < 1 ? 0 : numberOfDaysBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addDays(start, i + 1);
 			}
 		}
@@ -648,29 +671,24 @@ public final class DateUtil {
 	}
 
 	public static String[] getFormattedDaysBetween(final Calendar start, final Calendar end, final boolean inclusive,
-			final Format format) {
+	        final Format format) {
 		final int numberOfDaysBetween = getNumberOfDaysBetween(start, end, false);
 
-		if (numberOfDaysBetween < 0)
-		{
+		if (numberOfDaysBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfDaysBetween == 1 ? 2 : numberOfDaysBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addDays(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfDaysBetween < 1 ? 0 : numberOfDaysBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addDays(start, i + 1));
 			}
 		}
@@ -682,29 +700,24 @@ public final class DateUtil {
 	 * @return a String array with dates formatted with the given date format
 	 */
 	public static String[] getFormattedDaysBetween(final Date start, final Date end, final boolean inclusive,
-			final Format format) {
+	        final Format format) {
 		final int numberOfDaysBetween = getNumberOfDaysBetween(start, end, false);
 
-		if (numberOfDaysBetween < 0)
-		{
+		if (numberOfDaysBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfDaysBetween == 1 ? 2 : numberOfDaysBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addDays(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfDaysBetween < 1 ? 0 : numberOfDaysBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addDays(start, i + 1));
 			}
 		}
@@ -749,26 +762,21 @@ public final class DateUtil {
 	public final static Calendar[] getWeeksBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
-		if (numberOfWeeksBetween < 0)
-		{
+		if (numberOfWeeksBetween < 0) {
 			return null;
 		}
 
 		Calendar[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Calendar[numberOfWeeksBetween == 1 ? 2 : numberOfWeeksBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addWeeks(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Calendar[numberOfWeeksBetween <= 0 ? 0 : numberOfWeeksBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addWeeks(start, i + 1);
 			}
 		}
@@ -779,26 +787,21 @@ public final class DateUtil {
 	public final static Date[] getWeeksBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
-		if (numberOfWeeksBetween < 0)
-		{
+		if (numberOfWeeksBetween < 0) {
 			return null;
 		}
 
 		Date[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Date[numberOfWeeksBetween == 1 ? 2 : numberOfWeeksBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addWeeks(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Date[numberOfWeeksBetween <= 0 ? 0 : numberOfWeeksBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addWeeks(start, i + 1);
 			}
 		}
@@ -807,29 +810,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedWeeksBetween(final Calendar start, final Calendar end,
-			final boolean inclusive, final Format format) {
+	        final boolean inclusive, final Format format) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
-		if (numberOfWeeksBetween < 0)
-		{
+		if (numberOfWeeksBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfWeeksBetween == 1 ? 2 : numberOfWeeksBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addWeeks(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfWeeksBetween <= 0 ? 0 : numberOfWeeksBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addWeeks(start, i + 1));
 			}
 		}
@@ -838,29 +836,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedWeeksBetween(final Date start, final Date end, final boolean inclusive,
-			final Format format) {
+	        final Format format) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
-		if (numberOfWeeksBetween < 0)
-		{
+		if (numberOfWeeksBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfWeeksBetween == 1 ? 2 : numberOfWeeksBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addWeeks(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfWeeksBetween <= 0 ? 0 : numberOfWeeksBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addWeeks(start, i + 1));
 			}
 		}
@@ -911,26 +904,21 @@ public final class DateUtil {
 	public final static Calendar[] getMonthsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
-		if (numberOfMonthsBetween < 0)
-		{
+		if (numberOfMonthsBetween < 0) {
 			return null;
 		}
 
 		Calendar[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Calendar[numberOfMonthsBetween == 1 ? 2 : numberOfMonthsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addMonths(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Calendar[numberOfMonthsBetween <= 0 ? 0 : numberOfMonthsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addMonths(start, i + 1);
 			}
 		}
@@ -941,26 +929,21 @@ public final class DateUtil {
 	public final static Date[] getMonthsBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
-		if (numberOfMonthsBetween < 0)
-		{
+		if (numberOfMonthsBetween < 0) {
 			return null;
 		}
 
 		Date[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Date[numberOfMonthsBetween == 1 ? 2 : numberOfMonthsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addMonths(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Date[numberOfMonthsBetween <= 0 ? 0 : numberOfMonthsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addMonths(start, i + 1);
 			}
 		}
@@ -969,29 +952,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedMonthsBetween(final Calendar start, final Calendar end,
-			final boolean inclusive, final Format format) {
+	        final boolean inclusive, final Format format) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
-		if (numberOfMonthsBetween < 0)
-		{
+		if (numberOfMonthsBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfMonthsBetween == 1 ? 2 : numberOfMonthsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addMonths(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfMonthsBetween <= 0 ? 0 : numberOfMonthsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addMonths(start, i + 1));
 			}
 		}
@@ -1000,29 +978,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedMonthsBetween(final Date start, final Date end, final boolean inclusive,
-			final Format format) {
+	        final Format format) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
-		if (numberOfMonthsBetween < 0)
-		{
+		if (numberOfMonthsBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfMonthsBetween == 1 ? 2 : numberOfMonthsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addMonths(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfMonthsBetween <= 0 ? 0 : numberOfMonthsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addMonths(start, i + 1));
 			}
 		}
@@ -1047,26 +1020,21 @@ public final class DateUtil {
 	public final static Calendar[] getYearsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
-		if (numberOfYearsBetween < 0)
-		{
+		if (numberOfYearsBetween < 0) {
 			return null;
 		}
 
 		Calendar[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Calendar[numberOfYearsBetween == 1 ? 2 : numberOfYearsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addYears(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Calendar[numberOfYearsBetween <= 0 ? 0 : numberOfYearsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addYears(start, i + 1);
 			}
 		}
@@ -1077,26 +1045,21 @@ public final class DateUtil {
 	public final static Date[] getYearsBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
-		if (numberOfYearsBetween < 0)
-		{
+		if (numberOfYearsBetween < 0) {
 			return null;
 		}
 
 		Date[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new Date[numberOfYearsBetween == 1 ? 2 : numberOfYearsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addYears(start, i);
 			}
 		}
-		else
-		{
+		else {
 			dates = new Date[numberOfYearsBetween <= 0 ? 0 : numberOfYearsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = addYears(start, i + 1);
 			}
 		}
@@ -1105,29 +1068,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedYearsBetween(final Calendar start, final Calendar end,
-			final boolean inclusive, final Format format) {
+	        final boolean inclusive, final Format format) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
-		if (numberOfYearsBetween < 0)
-		{
+		if (numberOfYearsBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfYearsBetween == 1 ? 2 : numberOfYearsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addYears(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfYearsBetween <= 0 ? 0 : numberOfYearsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addYears(start, i + 1));
 			}
 		}
@@ -1136,29 +1094,24 @@ public final class DateUtil {
 	}
 
 	public final static String[] getFormattedYearsBetween(final Date start, final Date end, final boolean inclusive,
-			final Format format) {
+	        final Format format) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
-		if (numberOfYearsBetween < 0)
-		{
+		if (numberOfYearsBetween < 0) {
 			return null;
 		}
 
 		String[] dates = null;
 
-		if (inclusive)
-		{
+		if (inclusive) {
 			dates = new String[numberOfYearsBetween == 1 ? 2 : numberOfYearsBetween + 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addYears(start, i));
 			}
 		}
-		else
-		{
+		else {
 			dates = new String[numberOfYearsBetween <= 0 ? 0 : numberOfYearsBetween - 1];
-			for (int i = 0; i < dates.length; i++)
-			{
+			for (int i = 0; i < dates.length; i++) {
 				dates[i] = format.format(addYears(start, i + 1));
 			}
 		}
@@ -1194,15 +1147,14 @@ public final class DateUtil {
 		date = zeroOutTime(date);
 		int myQuarter = 0;
 		Date endOfQuarter = zeroOutTime(startOfFiscalYear);
-		do
-		{
+		do {
 			++myQuarter;
 			endOfQuarter = addMonths(endOfQuarter, 3);
-			if (date.compareTo(addDays(endOfQuarter, -1)) <= 0)
-			{
+			if (date.compareTo(addDays(endOfQuarter, -1)) <= 0) {
 				return myQuarter;
 			}
-		} while (true);
+		}
+		while (true);
 	}
 
 	public final static Calendar[] getQuarterStartDates(final Calendar startOfFiscalYear) {
@@ -1254,15 +1206,15 @@ public final class DateUtil {
 	}
 
 	public static final int getOffsetInHoursBetweenTimeZones(final Date date, final TimeZone timeZone1,
-			final TimeZone timeZone2) {
-		return (int) (Math.round(timeZone1.getOffset(date.getTime()) / Constants.ONE_HOUR) - (timeZone2.getOffset(date
-				.getTime()) / Constants.ONE_HOUR));
+	        final TimeZone timeZone2) {
+		return (int) (Math.round(timeZone1.getOffset(date.getTime()) / Constants.ONE_HOUR)
+		        - (timeZone2.getOffset(date.getTime()) / Constants.ONE_HOUR));
 	}
 
 	public static final int getOffsetInHoursBetweenTimeZones(final Date date, final String timeZone1,
-			final String timeZone2) {
-		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(date.getTime()) / Constants.ONE_HOUR) - (TimeZone
-				.getTimeZone(timeZone2).getOffset(date.getTime()) / Constants.ONE_HOUR));
+	        final String timeZone2) {
+		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(date.getTime()) / Constants.ONE_HOUR)
+		        - (TimeZone.getTimeZone(timeZone2).getOffset(date.getTime()) / Constants.ONE_HOUR));
 	}
 
 	/**
@@ -1273,9 +1225,9 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final Date timeZone1Date, final TimeZone timeZone1,
-			final Date timeZone2Date, final TimeZone timeZone2) {
-		return (int) (Math.round(timeZone1.getOffset(timeZone1Date.getTime()) / Constants.ONE_HOUR) - (timeZone2
-				.getOffset(timeZone2Date.getTime()) / Constants.ONE_HOUR));
+	        final Date timeZone2Date, final TimeZone timeZone2) {
+		return (int) (Math.round(timeZone1.getOffset(timeZone1Date.getTime()) / Constants.ONE_HOUR)
+		        - (timeZone2.getOffset(timeZone2Date.getTime()) / Constants.ONE_HOUR));
 	}
 
 	/**
@@ -1285,9 +1237,9 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final Date timeZone1Date, final String timeZone1,
-			final Date timeZone2Date, final String timeZone2) {
+	        final Date timeZone2Date, final String timeZone2) {
 		return getOffsetInHoursBetweenTimeZones(timeZone1Date, TimeZone.getTimeZone(timeZone1), timeZone2Date,
-				TimeZone.getTimeZone(timeZone2));
+		        TimeZone.getTimeZone(timeZone2));
 	}
 
 	/**
@@ -1299,8 +1251,8 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final String timeZone1, final String timeZone2) {
-		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(new Date().getTime()) / Constants.ONE_HOUR) - (TimeZone
-				.getTimeZone(timeZone2).getOffset(new Date().getTime()) / Constants.ONE_HOUR));
+		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(new Date().getTime()) / Constants.ONE_HOUR)
+		        - (TimeZone.getTimeZone(timeZone2).getOffset(new Date().getTime()) / Constants.ONE_HOUR));
 	}
 
 	/**
@@ -1312,8 +1264,8 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final TimeZone timeZone1, final String timeZone2) {
-		return (int) (Math.round(timeZone1.getOffset(new Date().getTime()) / Constants.ONE_HOUR) - (TimeZone
-				.getTimeZone(timeZone2).getOffset(new Date().getTime()) / Constants.ONE_HOUR));
+		return (int) (Math.round(timeZone1.getOffset(new Date().getTime()) / Constants.ONE_HOUR)
+		        - (TimeZone.getTimeZone(timeZone2).getOffset(new Date().getTime()) / Constants.ONE_HOUR));
 	}
 
 	/**
@@ -1325,8 +1277,8 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final String timeZone1, final TimeZone timeZone2) {
-		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(new Date().getTime()) / Constants.ONE_HOUR) - (timeZone2
-				.getOffset(new Date().getTime()) / Constants.ONE_HOUR));
+		return (int) (Math.round(TimeZone.getTimeZone(timeZone1).getOffset(new Date().getTime()) / Constants.ONE_HOUR)
+		        - (timeZone2.getOffset(new Date().getTime()) / Constants.ONE_HOUR));
 	}
 
 	/**
@@ -1338,8 +1290,8 @@ public final class DateUtil {
 	 */
 	@Deprecated
 	public static final int getOffsetInHoursBetweenTimeZones(final TimeZone timeZone1, final TimeZone timeZone2) {
-		return (int) (Math.round(timeZone1.getOffset(new Date().getTime()) / Constants.ONE_HOUR) - (timeZone2
-				.getOffset(new Date().getTime()) / Constants.ONE_HOUR));
+		return (int) (Math.round(timeZone1.getOffset(new Date().getTime()) / Constants.ONE_HOUR)
+		        - (timeZone2.getOffset(new Date().getTime()) / Constants.ONE_HOUR));
 	}
 
 	// -------------------------------------------------------------------------------------------
@@ -1411,8 +1363,7 @@ public final class DateUtil {
 	}
 
 	private static final Date add(final Date date, final int field, final int numberToAdd) {
-		if (date == null)
-		{
+		if (date == null) {
 			throw new IllegalArgumentException("Date is null");
 		}
 
@@ -1422,8 +1373,7 @@ public final class DateUtil {
 	}
 
 	private static final Calendar add(final Calendar c, final int field, final int numberToAdd) {
-		if (c == null)
-		{
+		if (c == null) {
 			throw new IllegalArgumentException("Calendar is null");
 		}
 		final Calendar cal = clone(c);
@@ -1440,13 +1390,11 @@ public final class DateUtil {
 		Calendar cal1 = null;
 		Calendar cal2 = null;
 
-		if (includeTimeInCalculation)
-		{
+		if (includeTimeInCalculation) {
 			cal1 = x1;
 			cal2 = x2;
 		}
-		else
-		{
+		else {
 			cal1 = Calendar.getInstance();
 			cal1.clear();
 			cal1.set(x1.get(Calendar.YEAR), x1.get(Calendar.MONTH), x1.get(Calendar.DAY_OF_MONTH));

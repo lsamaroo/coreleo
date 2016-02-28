@@ -117,7 +117,7 @@ $(function() {
 
     var destroyDialogOrPopup = function(id) {
         var item = null;
-        if (typeof id == 'string') {
+        if (typeof id === 'string') {
             var itemId = coreleo.util.formatId(id);
             item = $(itemId);
         } else {
@@ -133,7 +133,7 @@ $(function() {
 
     var closeDialogOrPopup = function(id) {
         var item = null;
-        if (typeof id == 'string') {
+        if (typeof id === 'string') {
             var itemId = coreleo.util.formatId(id);
             item = $(itemId);
         } else {
@@ -229,6 +229,7 @@ $(function() {
     coreleo.ui.dialog.open = open;
     coreleo.ui.dialog.close = close;
     coreleo.ui.dialog.init = init;
+    coreleo.ui.dialog.create = init;
     coreleo.ui.dialog.confirm = confirm;
     coreleo.ui.dialog.showLoadingDialog = showLoadingDialog;
     coreleo.ui.dialog.hideLoadingDialog = hideLoadingDialog;

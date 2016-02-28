@@ -1,12 +1,13 @@
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     beautify = require('gulp-jsbeautifier');
 
 
-var sourceDirectory = 'src/main/javascript';
+var sourceDirectory = 'javascript/src';
 var targetDirectory = 'bin';
 var targetOutputFileName = 'coreleo.js';
 var jsFileNames = ['Namespace.js', 'Logger.js', 'Util.js', 'PollerUtil.js', 'DialogUtil.js', 
@@ -20,8 +21,9 @@ for (var i = 0; i < jsFileNames.length; i++) {
 
 gulp.task('lint', function() {
   return gulp.src(jsFiles)
-    .pipe(jshint({"expr": "true"}))
-    .pipe(jshint.reporter('default'));
+	    .pipe(jshint({"expr": "true"}))
+	    .pipe(jshint.reporter(stylish))
+	    .pipe(jshint.reporter('fail'));
 });
 
 

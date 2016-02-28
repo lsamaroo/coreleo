@@ -36,12 +36,12 @@ $(function() {
         tabs.tabs("refresh");
     };
 
-    var addAjaxTab = function(tabContainerId, tabId, tabTitle, href, showCloseIcon) {
+    var addAjaxTab = function(tabContainerId, tabId, tabTitle, href, showCloseIcon, closeTabText) {
         var tabTemplate = "<li><a id='tab-anchor-{id}' href='{href}'>{tabTitle}</a>{closeIcon}</li>";
         var closeIconTemplate = "<span tabIndex='0' class='ui-icon ui-icon-close'>{closeText}</span>";
 
         if (showCloseIcon) {
-            closeIconTemplate = closeIconTemplate.replace("{closeText}", closeTabText + " " + tabTitle);
+            closeIconTemplate = closeIconTemplate.replace("{closeText}", closeTabText + ' ' + tabTitle);
             tabTemplate = tabTemplate.replace("{closeIcon}", closeIconTemplate);
         } else {
             tabTemplate = tabTemplate.replace("{closeIcon}", "");

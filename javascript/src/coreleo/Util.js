@@ -86,11 +86,11 @@ $(function() {
         i = Math.abs(i);
         i = parseInt((i + 0.005) * 100);
         i = i / 100;
-        s = i.toString();
+        var s = i.toString();
         if (s.indexOf('.') < 0) {
             s += '.00';
         }
-        if (s.indexOf('.') == (s.length - 2)) {
+        if (s.indexOf('.') === (s.length - 2)) {
             s += '0';
         }
         s = minus + s;
@@ -161,7 +161,7 @@ $(function() {
             return url;
         }
 
-        var sep = url.indexOf('?') == -1 ? '?' : '&';
+        var sep = url.indexOf('?') === -1 ? '?' : '&';
         return url + sep + encodeURIComponent(param) + '=' + encodeURIComponent(value);
     };
 
