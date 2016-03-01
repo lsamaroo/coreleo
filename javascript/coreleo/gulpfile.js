@@ -7,8 +7,8 @@ var gulp = require('gulp'),
     beautify = require('gulp-jsbeautifier');
 
 
-var sourceDirectory = 'javascript/coreleo/src';
-var targetDirectory = 'bin';
+var sourceDirectory = 'src';
+var targetDirectory = '../../bin';
 var targetOutputFileName = 'coreleo.js';
 var jsFileNames = ['Namespace.js', 'Logger.js', 'Util.js', 'PollerUtil.js', 'DialogUtil.js', 
                'MenuUtil.js', 'MobileUtil.js', 'TabUtil.js', 'IdleUtil.js'];

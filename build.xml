@@ -9,7 +9,9 @@
 	<property name="build.dir" value="bin" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.lib.dir" value="${build.dir}/lib" />
-	
+	<property name="coreleo.js.dir" value="javascript/coreleo" />
+	<property name="coreleo2.js.dir" value="javascript/coreleo2" />
+		
 	<property name="js.name" value="${jar.name}.js" />
 	<property name="js.src.dir" value="src/main/javascript/coreleo" />
 	
@@ -32,7 +34,7 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: build                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="build" depends="common-clean, ivy-resolve, common-setup, common-compile, common-jar, UI-npm-install, UI-gulp" description="Compile main source tree java files">
+	<target name="build" depends="common-clean, ivy-resolve, common-setup, common-compile, common-jar, coreleo-nmp-install, coreleo-gulp" description="Compile main source tree java files">
 		<tstamp>
 			<format property="build.startdate" pattern="EEE, MMM d yyyy" />
 			<format property="build.starttime" pattern="HH:mm:ss z" />
@@ -41,20 +43,15 @@
 		<echo message="Build started on ${build.startdate} at ${build.starttime}" level="info" />
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
-	      target: UI-npm-install                      
-	     - - - - - - - - - - - - - - - - - -->
-	<target name="UI-npm-install">
-	  <exec vmlauncher="false" executable="npm" dir="." failonerror="true" >
+
+	<target name="coreleo-nmp-install">
+	  <exec vmlauncher="false" executable="npm" dir="${coreleo.js.dir}" failonerror="true" >
 	  	<arg value="install"/>
 	  </exec>
 	</target>
 		
-	<!-- - - - - - - - - - - - - - - - - - 
-	      target: UI-gulp                      
-	     - - - - - - - - - - - - - - - - - -->
-	<target name="UI-gulp">
-	  <exec vmlauncher="false" executable="gulp" dir="." failonerror="true"></exec>
+	<target name="coreleo-gulp">
+	  <exec vmlauncher="false" executable="gulp" dir="${coreleo.js.dir}" failonerror="true"></exec>
 	</target>
 
 </project>
