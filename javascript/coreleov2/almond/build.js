@@ -1,6 +1,6 @@
 ({
     baseUrl: "js",
-    out: "build/built.js",
+    out: "../../../bin/coreleov2.js",
     name: "almond",
     optimize: "none",
     include: "main",

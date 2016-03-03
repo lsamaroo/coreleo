@@ -5,3 +5,4 @@
 /.project
 /target-ant
 /node_modules/
+/**/node_modules/
