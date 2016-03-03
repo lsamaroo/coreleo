@@ -1,5 +1,5 @@
 ({
-    baseUrl: "js",
+    baseUrl: "../src",
     out: "../../../bin/coreleov2.js",
     name: "almond",
     optimize: "none",
