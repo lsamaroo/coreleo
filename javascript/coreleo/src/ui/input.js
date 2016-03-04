@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('./$');
+    var $ = require('../$');
     var util = require('../util');
 
     return {

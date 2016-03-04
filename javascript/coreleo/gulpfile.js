@@ -1,12 +1,13 @@
 var gulp = require('gulp'),
     eslint = require('gulp-eslint'),
 	gulpSequence = require('gulp-sequence'),
-    beautify = require('gulp-jsbeautifier');
+    beautify = require('gulp-jsbeautifier'),
+    shell = require('gulp-shell');
 
 var sourceDirectory = 'src';
-var targetDirectory = 'dist';
-var targetFileName = 'coreleov2.js';
+
 var jsFiles = [ sourceDirectory + '/**/*.js' ];
+
 
 gulp.task('lint', function() {
   return gulp.src(jsFiles)
@@ -15,27 +16,25 @@ gulp.task('lint', function() {
         .pipe(eslint.failAfterError());
 });
 
+
 gulp.task('beautify', function() {
 	  gulp.src(jsFiles)
 	    .pipe(beautify())
 	    .pipe(gulp.dest(sourceDirectory))
 });
 
-gulp.task('package', function() {
-	gulp.src(jsFiles)
-    	.pipe(rjs({
-       		"baseUrl": ".",
-        	"name": "node_modules/almond/almond",
-		    "generateSourceMaps": true,
-		    "optimize": "uglify2",
-		    "preserveLicenseComments": false        	
-    		}))
-    	.pipe(gulp.dest(targetDirectory));	
-});
+/**
+ * I couldn't find a gulp tool for requirejs optimizer so instead 
+ * i'm using gulp shell to execute the optimizer via nodejs.
+ * 
+ */
+gulp.task('requirejs-optimizer', shell.task([
+    'node node_modules/requirejs/bin/r.js -o build_scripts/build.js optimize=none'
+]))
 
 
 gulp.task('build', function(cb) {
-	gulpSequence('lint', 'beautify', 'package')(cb);
+	gulpSequence('lint', 'beautify', 'requirejs-optimizer')(cb);
 });
 
 

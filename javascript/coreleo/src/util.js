@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('./$');
+    var $ = require('$');
     var _ = require('lodash');
     var handlebars = require('handlebars');
 
@@ -93,7 +93,9 @@ define(function(require) {
          * @deprecated
          * @alias for formatCurrency
          */
-        currencyFormatted: this.formatCurrency,
+        currencyFormatted: function(amount) {
+            return this.formatCurrency(amount);
+        },
 
 
         /**
@@ -174,7 +176,9 @@ define(function(require) {
          * @deprecated
          * @alias for idAsSelector
          */
-        formatId: this.idAsSelector,
+        formatId: function(id) {
+            return this.idAsSelector(id);
+        },
 
         classAsSelector: function(cssClass) {
             return this.startsWith(cssClass, '.') ? cssClass : '.' + cssClass;
@@ -184,7 +188,9 @@ define(function(require) {
          * @deprecated
          * @alias for classAsSelector
          */
-        formatClass: this.classAsSelector,
+        formatClass: function(cssClass) {
+            return this.classAsSelector(cssClass);
+        },
 
         contains: function(str, subString) {
             if (this.isEmpty(str)) {
@@ -252,7 +258,9 @@ define(function(require) {
          * @deprecated
          * @alias for redirectAsPost
          */
-        redirectPost: this.redirectAsPost,
+        redirectPost: function(location, args, target) {
+            this.redirectAsPost(location, args, target);
+        },
 
 
         hasWhiteSpace: function(s) {

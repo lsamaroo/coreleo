@@ -1,10 +1,10 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('./$');
-    var constants = require('./constants');
-    var mobile = require('./ui/mobile');
-    var input = require('./ui/input');
+    var $ = require('$');
+    var constants = require('constants');
+    var mobile = require('ui/mobile');
+    var input = require('ui/input');
 
     return {
         isMobileClient: function() {
