@@ -1,7 +1,7 @@
 {
   "name": "coreleo",
   "title": "coreleo javascript utilities",
-  "description": "A bunch of util function extending off of lodash and jquery",
+  "description": "A bunch of utility function extending off of lodash and jquery",
   "version": "0.0.1",
   "main": "main.js",
   "directories": {

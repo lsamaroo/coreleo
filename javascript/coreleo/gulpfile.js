@@ -11,7 +11,9 @@ var jsFiles = [ sourceDirectory + '/**/*.js' ];
 
 gulp.task('lint', function() {
   return gulp.src(jsFiles)
-	    .pipe(eslint())
+	    .pipe(eslint({
+	    	fix: true
+	    }))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });

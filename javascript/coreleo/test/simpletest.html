@@ -2,18 +2,18 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8"/>
-    <script>
-      console.log("outside")
-    </script>
-    
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>    
     <script type="text/javascript" src="../node_modules/lodash/lodash.js"></script>   
     <script type="text/javascript" src="../node_modules/handlebars/dist/handlebars.js"></script>         
     <script type="text/javascript" src="../dist/coreleo.js"></script>
   </head>
   <body>
+  	<input type="text" id="testfield" value="I should be disabled"></input>
     <script>
-      	console.log( coreleo.util.properCase( "leon samaroo" ) );
+    	coreleo.ui.disableTextField( 'testfield' );
+      	var val = coreleo.$( '#testfield').val();
+      	coreleo.$( '#testfield').val( coreleo.util.toUpper( val ) );
+
     </script>
   </body>
 </html>

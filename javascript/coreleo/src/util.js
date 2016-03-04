@@ -3,37 +3,23 @@ define(function(require) {
 
     var $ = require('$');
     var _ = require('lodash');
-    var handlebars = require('handlebars');
-
+    var log = require('log');
+    var template = require('template/template');
 
     var util = {
-        HandlebarsTemplateCache: {
-            get: function(selector) {
-                if (!this.templates) {
-                    this.templates = {};
-                }
-
-                var template = this.templates[selector];
-                if (!template) {
-                    template = $(selector).html();
-                    // precompile the template
-                    template = handlebars.compile(template);
-                    this.templates[selector] = template;
-                }
-                return template;
-            }
-        },
 
         renderTemplateWithCaching: function(selector, data) {
-            var render = this.HandlebarsTemplateCache.get(selector);
-            return render(data);
+            return template.renderTemplateWithCaching(selector, data);
         },
 
-        renderTemplate: function(template, data) {
-            var render = handlebars.compile(template);
-            return render(data);
+
+        renderTemplate: function(templateString, data) {
+            return template.renderTemplate(templateString, data);
         },
 
+        deprecated: function() {
+            log.warn('This function is deprecated.  See documentation.');
+        },
 
         isEmpty: function(obj) {
             return _.isEmpty(obj);
@@ -50,19 +36,18 @@ define(function(require) {
             return _.startsWith(str, ch, position);
         },
 
-        formatPhone: function(phone) {
-            if (_.isEmpty(phone)) {
-                return '';
-            }
-            return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
-        },
-
-
         replaceCharAt: function(str, index, chr) {
             if (index > str.length - 1) {
                 return str;
             }
             return str.substr(0, index) + chr + str.substr(index + 1);
+        },
+
+        formatPhone: function(phone) {
+            if (_.isEmpty(phone)) {
+                return '';
+            }
+            return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
         },
 
 
@@ -87,14 +72,6 @@ define(function(require) {
             }
             s = minus + s;
             return s;
-        },
-
-        /**
-         * @deprecated
-         * @alias for formatCurrency
-         */
-        currencyFormatted: function(amount) {
-            return this.formatCurrency(amount);
         },
 
 
@@ -134,7 +111,7 @@ define(function(require) {
         },
 
         /**
-         * Pads the given string with zeros to fill the size specified
+         * Left pads the given string with zeros to fill the size specified
          */
         zeroFill: function(string, size) {
             if (this.isEmpty(string)) {
@@ -143,20 +120,19 @@ define(function(require) {
             return _.padStart(string, (size - string.length), '0');
         },
 
-        /**
-         * Adds a param and value to an existing url.
-         */
-        addParamToUrl: function(url, param, value) {
-            if (this.isEmpty(param)) {
-                return url;
+        isIdSelector: function(id) {
+            if (this.isEmpty(id)) {
+                return false;
             }
 
-            if (this.isEmpty(value)) {
-                return url;
-            }
+            return this.startsWith(id, '#');
+        },
 
-            var seperator = url.indexOf('?') === -1 ? '?' : '&';
-            return url + seperator + encodeURIComponent(param) + '=' + encodeURIComponent(value);
+        isClassSelector: function(cssClass) {
+            if (this.isEmpty(cssClass)) {
+                return false;
+            }
+            return this.startsWith(cssClass, '.');
         },
 
         idAsSelector: function(id) {
@@ -165,31 +141,22 @@ define(function(require) {
             }
 
             id = id.trim();
-            if (this.startsWith(id, '.')) {
+            if (this.isIdSelector(id) || this.isClassSelector(id)) {
                 return id;
             }
-            return this.startsWith(id, '#') ? id : '#' + id;
-        },
-
-
-        /**
-         * @deprecated
-         * @alias for idAsSelector
-         */
-        formatId: function(id) {
-            return this.idAsSelector(id);
+            return '#' + id;
         },
 
         classAsSelector: function(cssClass) {
-            return this.startsWith(cssClass, '.') ? cssClass : '.' + cssClass;
-        },
+            if (this.isEmpty(cssClass)) {
+                return '';
+            }
 
-        /**
-         * @deprecated
-         * @alias for classAsSelector
-         */
-        formatClass: function(cssClass) {
-            return this.classAsSelector(cssClass);
+            cssClass = cssClass.trim();
+            if (this.isIdSelector(cssClass) || this.isClassSelector(cssClass)) {
+                return cssClass;
+            }
+            return '.' + cssClass;
         },
 
         contains: function(str, subString) {
@@ -232,7 +199,7 @@ define(function(require) {
         },
 
 
-        redirectAsPost: function(location, args, target) {
+        redirectAsHttpPost: function(location, args, target) {
             if (!target) {
                 target = '_self';
             }
@@ -254,21 +221,12 @@ define(function(require) {
         },
 
 
-        /**
-         * @deprecated
-         * @alias for redirectAsPost
-         */
-        redirectPost: function(location, args, target) {
-            this.redirectAsPost(location, args, target);
-        },
-
-
         hasWhiteSpace: function(s) {
             return (/\s/g.test(s));
         },
 
 
-        properCase: function(str) {
+        toProperCase: function(str) {
             if (this.isEmpty(str)) {
                 return '';
             }
@@ -279,8 +237,25 @@ define(function(require) {
         },
 
 
-        getParameterFromUrl: function(urlString, paramName) {
-            return (urlString.split('' + paramName + '=')[1] || '').split('&')[0];
+        /**
+         * Adds a param and value to an existing url.
+         */
+        addParameterToUrl: function(url, name, value) {
+            if (this.isEmpty(name)) {
+                return url;
+            }
+
+            if (this.isEmpty(value)) {
+                return url;
+            }
+
+            var seperator = url.indexOf('?') === -1 ? '?' : '&';
+            return url + seperator + encodeURIComponent(name) + '=' + encodeURIComponent(value);
+        },
+
+
+        getParameterFromUrl: function(urlString, name) {
+            return (urlString.split('' + name + '=')[1] || '').split('&')[0];
         },
 
 
@@ -289,7 +264,68 @@ define(function(require) {
                 'key': key,
                 'value': value
             };
+        },
+
+
+        /** Deprecated API */
+
+
+        /**
+         * @deprecated
+         * @alias for addParameterToUrl
+         */
+        addParamToUrl: function(url, name, value) {
+            this.deprecated();
+            return this.addParameterToUrl(url, name, value);
+        },
+
+        /**
+         * @deprecated
+         * @alias for idAsSelector
+         */
+        formatId: function(id) {
+            this.deprecated();
+            return this.idAsSelector(id);
+        },
+
+
+        /**
+         * @deprecated
+         * @alias for classAsSelector
+         */
+        formatClass: function(cssClass) {
+            this.deprecated();
+            return this.classAsSelector(cssClass);
+        },
+
+        /**
+         * @deprecated
+         * @alias for formatCurrency
+         */
+        currencyFormatted: function(amount) {
+            this.deprecated();
+            return this.formatCurrency(amount);
+        },
+
+
+        /**
+         * @deprecated
+         * @alias for redirectAsPost
+         */
+        redirectPost: function(location, args, target) {
+            this.deprecated();
+            this.redirectAsHttpPost(location, args, target);
+        },
+
+        /**
+         * @deprecated
+         * @alias for redirectAsPost
+         */
+        properCase: function(str) {
+            this.deprecated();
+            return this.toProperCase(str);
         }
+
     };
 
     return _.assign({}, _, util);

@@ -7,17 +7,14 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('$');
-    var _ = require('lodash');
-    var handlebars = require('handlebars');
-
-    var util = require('util'),
-        ui = require('ui');
-
     //Return the module value.
     return {
         version: '0.0.1',
-        util: util,
-        ui: ui
+        $: require('$'),
+        log: require('log'),
+        constants: require('constants'),
+        util: require('util'),
+        ui: require('ui')
+
     };
 });

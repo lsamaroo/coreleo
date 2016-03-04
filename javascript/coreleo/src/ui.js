@@ -2,9 +2,8 @@ define(function(require) {
     'use strict';
 
     var $ = require('$');
-    var constants = require('constants');
     var mobile = require('ui/mobile');
-    var input = require('ui/input');
+    var form = require('ui/form');
 
     return {
         isMobileClient: function() {
@@ -16,24 +15,17 @@ define(function(require) {
             if (!time) {
                 time = constants.ONE_SECOND * 2;
             }
-            var itemId = this.idAsSelector(id);
-            $(itemId).prop('disabled', true);
-
-            setTimeout(function() {
-                $(itemId).prop('disabled', false);
-            }, time);
+            form.disable(id, time);
         },
 
-
-
         enableTextField: function(id) {
-            input.enableTextField(id);
+            form.enable(id);
             mobile.enableTextField(id);
         },
 
 
         disableTextField: function(id) {
-            input.disableTextField(id);
+            form.disable(id);
             mobile.disableTextField(id);
         }
     };

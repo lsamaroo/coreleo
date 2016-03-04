@@ -454,16 +454,42 @@ define('$',['require','jquery'],function(require) {
     return require('jquery');
 });
 
-define('util',['require','$','lodash','handlebars'],function(require) {
+define('log',['require'],function(require) {
+    'use strict';
+
+    if (!(window.console && console.log)) {
+        return {
+            log: function() {},
+            debug: function() {},
+            info: function() {},
+            warn: function() {},
+            error: function() {}
+        };
+    }
+    else {
+        return window.console;
+    }
+
+});
+
+define('constants',['require'],function(require) {
+    'use strict';
+
+    return {
+        ONE_SECOND: 1000,
+        ONE_MINUTE: 60000
+    };
+
+});
+
+define('template/template',['require','$','handlebars'],function(require) {
     'use strict';
 
     var $ = require('$');
-    var _ = require('lodash');
     var handlebars = require('handlebars');
 
-
-    var util = {
-        HandlebarsTemplateCache: {
+    return {
+        cache: {
             get: function(selector) {
                 if (!this.templates) {
                     this.templates = {};
@@ -471,25 +497,63 @@ define('util',['require','$','lodash','handlebars'],function(require) {
 
                 var template = this.templates[selector];
                 if (!template) {
-                    template = $(selector).html();
                     // precompile the template
-                    template = handlebars.compile(template);
+                    template = handlebars.compile($(selector).html());
                     this.templates[selector] = template;
                 }
                 return template;
             }
         },
 
+        /**
+         * @param {string} selector - the selector/id to the template html
+         * @param {object} data - the data values to use for the template
+         * 
+         * This function will find the template using the given selector,
+         * compile it with handlebars and cache it for future use.
+         * 
+         * @return the rendered template and data string
+         * 
+         */
         renderTemplateWithCaching: function(selector, data) {
-            var render = this.HandlebarsTemplateCache.get(selector);
+            var render = this.cache.get(selector);
             return render(data);
         },
 
-        renderTemplate: function(template, data) {
-            var render = handlebars.compile(template);
+        /**
+         * @param {string} templateString - the template to render
+         * @param {object} data - the data values to use for the template
+         */
+        renderTemplate: function(templateString, data) {
+            var render = handlebars.compile(templateString);
             return render(data);
+        }
+
+    };
+});
+
+define('util',['require','$','lodash','log','template/template'],function(require) {
+    'use strict';
+
+    var $ = require('$');
+    var _ = require('lodash');
+    var log = require('log');
+    var template = require('template/template');
+
+    var util = {
+
+        renderTemplateWithCaching: function(selector, data) {
+            return template.renderTemplateWithCaching(selector, data);
         },
 
+
+        renderTemplate: function(templateString, data) {
+            return template.renderTemplate(templateString, data);
+        },
+
+        deprecated: function() {
+            log.warn('This function is deprecated.  See documentation.');
+        },
 
         isEmpty: function(obj) {
             return _.isEmpty(obj);
@@ -506,19 +570,18 @@ define('util',['require','$','lodash','handlebars'],function(require) {
             return _.startsWith(str, ch, position);
         },
 
-        formatPhone: function(phone) {
-            if (_.isEmpty(phone)) {
-                return '';
-            }
-            return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
-        },
-
-
         replaceCharAt: function(str, index, chr) {
             if (index > str.length - 1) {
                 return str;
             }
             return str.substr(0, index) + chr + str.substr(index + 1);
+        },
+
+        formatPhone: function(phone) {
+            if (_.isEmpty(phone)) {
+                return '';
+            }
+            return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
         },
 
 
@@ -543,14 +606,6 @@ define('util',['require','$','lodash','handlebars'],function(require) {
             }
             s = minus + s;
             return s;
-        },
-
-        /**
-         * @deprecated
-         * @alias for formatCurrency
-         */
-        currencyFormatted: function(amount) {
-            return this.formatCurrency(amount);
         },
 
 
@@ -590,7 +645,7 @@ define('util',['require','$','lodash','handlebars'],function(require) {
         },
 
         /**
-         * Pads the given string with zeros to fill the size specified
+         * Left pads the given string with zeros to fill the size specified
          */
         zeroFill: function(string, size) {
             if (this.isEmpty(string)) {
@@ -599,20 +654,19 @@ define('util',['require','$','lodash','handlebars'],function(require) {
             return _.padStart(string, (size - string.length), '0');
         },
 
-        /**
-         * Adds a param and value to an existing url.
-         */
-        addParamToUrl: function(url, param, value) {
-            if (this.isEmpty(param)) {
-                return url;
+        isIdSelector: function(id) {
+            if (this.isEmpty(id)) {
+                return false;
             }
 
-            if (this.isEmpty(value)) {
-                return url;
-            }
+            return this.startsWith(id, '#');
+        },
 
-            var seperator = url.indexOf('?') === -1 ? '?' : '&';
-            return url + seperator + encodeURIComponent(param) + '=' + encodeURIComponent(value);
+        isClassSelector: function(cssClass) {
+            if (this.isEmpty(cssClass)) {
+                return false;
+            }
+            return this.startsWith(cssClass, '.');
         },
 
         idAsSelector: function(id) {
@@ -621,31 +675,22 @@ define('util',['require','$','lodash','handlebars'],function(require) {
             }
 
             id = id.trim();
-            if (this.startsWith(id, '.')) {
+            if (this.isIdSelector(id) || this.isClassSelector(id)) {
                 return id;
             }
-            return this.startsWith(id, '#') ? id : '#' + id;
-        },
-
-
-        /**
-         * @deprecated
-         * @alias for idAsSelector
-         */
-        formatId: function(id) {
-            return this.idAsSelector(id);
+            return '#' + id;
         },
 
         classAsSelector: function(cssClass) {
-            return this.startsWith(cssClass, '.') ? cssClass : '.' + cssClass;
-        },
+            if (this.isEmpty(cssClass)) {
+                return '';
+            }
 
-        /**
-         * @deprecated
-         * @alias for classAsSelector
-         */
-        formatClass: function(cssClass) {
-            return this.classAsSelector(cssClass);
+            cssClass = cssClass.trim();
+            if (this.isIdSelector(cssClass) || this.isClassSelector(cssClass)) {
+                return cssClass;
+            }
+            return '.' + cssClass;
         },
 
         contains: function(str, subString) {
@@ -688,7 +733,7 @@ define('util',['require','$','lodash','handlebars'],function(require) {
         },
 
 
-        redirectAsPost: function(location, args, target) {
+        redirectAsHttpPost: function(location, args, target) {
             if (!target) {
                 target = '_self';
             }
@@ -710,21 +755,12 @@ define('util',['require','$','lodash','handlebars'],function(require) {
         },
 
 
-        /**
-         * @deprecated
-         * @alias for redirectAsPost
-         */
-        redirectPost: function(location, args, target) {
-            this.redirectAsPost(location, args, target);
-        },
-
-
         hasWhiteSpace: function(s) {
             return (/\s/g.test(s));
         },
 
 
-        properCase: function(str) {
+        toProperCase: function(str) {
             if (this.isEmpty(str)) {
                 return '';
             }
@@ -735,8 +771,25 @@ define('util',['require','$','lodash','handlebars'],function(require) {
         },
 
 
-        getParameterFromUrl: function(urlString, paramName) {
-            return (urlString.split('' + paramName + '=')[1] || '').split('&')[0];
+        /**
+         * Adds a param and value to an existing url.
+         */
+        addParameterToUrl: function(url, name, value) {
+            if (this.isEmpty(name)) {
+                return url;
+            }
+
+            if (this.isEmpty(value)) {
+                return url;
+            }
+
+            var seperator = url.indexOf('?') === -1 ? '?' : '&';
+            return url + seperator + encodeURIComponent(name) + '=' + encodeURIComponent(value);
+        },
+
+
+        getParameterFromUrl: function(urlString, name) {
+            return (urlString.split('' + name + '=')[1] || '').split('&')[0];
         },
 
 
@@ -745,27 +798,78 @@ define('util',['require','$','lodash','handlebars'],function(require) {
                 'key': key,
                 'value': value
             };
+        },
+
+
+        /** Deprecated API */
+
+
+        /**
+         * @deprecated
+         * @alias for addParameterToUrl
+         */
+        addParamToUrl: function(url, name, value) {
+            this.deprecated();
+            return this.addParameterToUrl(url, name, value);
+        },
+
+        /**
+         * @deprecated
+         * @alias for idAsSelector
+         */
+        formatId: function(id) {
+            this.deprecated();
+            return this.idAsSelector(id);
+        },
+
+
+        /**
+         * @deprecated
+         * @alias for classAsSelector
+         */
+        formatClass: function(cssClass) {
+            this.deprecated();
+            return this.classAsSelector(cssClass);
+        },
+
+        /**
+         * @deprecated
+         * @alias for formatCurrency
+         */
+        currencyFormatted: function(amount) {
+            this.deprecated();
+            return this.formatCurrency(amount);
+        },
+
+
+        /**
+         * @deprecated
+         * @alias for redirectAsPost
+         */
+        redirectPost: function(location, args, target) {
+            this.deprecated();
+            this.redirectAsHttpPost(location, args, target);
+        },
+
+        /**
+         * @deprecated
+         * @alias for redirectAsPost
+         */
+        properCase: function(str) {
+            this.deprecated();
+            return this.toProperCase(str);
         }
+
     };
 
     return _.assign({}, _, util);
 });
 
-define('constants',['require'],function(require) {
+define('ui/mobile',['require','$','util'],function(require) {
     'use strict';
 
-    return {
-        ONE_SECOND: 1000,
-        ONE_MINUTE: 60000
-    };
-
-});
-
-define('ui/mobile',['require','../$','../util'],function(require) {
-    'use strict';
-
-    var $ = require('../$');
-    var util = require('../util');
+    var $ = require('$');
+    var util = require('util');
 
     return {
         refreshSelect: function(id) {
@@ -810,32 +914,53 @@ define('ui/mobile',['require','../$','../util'],function(require) {
     };
 });
 
-define('ui/input',['require','../$','../util'],function(require) {
-    'use strict';
-
-    var $ = require('../$');
-    var util = require('../util');
-
-    return {
-        enableTextField: function(id) {
-            var item = $(util.idAsSelector(id));
-            item.attr('disabled', false);
-        },
-
-        disableTextField: function(id) {
-            var item = $(util.idAsSelector(id));
-            item.attr('disabled', true);
-        }
-    };
-});
-
-define('ui',['require','$','constants','ui/mobile','ui/input'],function(require) {
+define('ui/form',['require','$','util'],function(require) {
     'use strict';
 
     var $ = require('$');
-    var constants = require('constants');
+    var util = require('util');
+
+    return {
+
+        /**
+         * @param {string} id - the id or selector of the element to disable
+         */
+        enable: function(id) {
+            var item = $(util.idAsSelector(id));
+            item.prop('disabled', false);
+        },
+
+        /**
+         * 
+         * Disable the element and optionally re-enables it after a specific number of milliseconds.
+         * 
+         * @param {string} id - the id or selector of the element to disable
+         * @param {int} [milliseconds] - an optional time in milliseconds before re-enabling it 
+         * before 
+         * 
+         */
+        disable: function(id, milliseconds) {
+            var item = $(util.idAsSelector(id));
+            item.prop('disabled', true);
+
+            if (milliseconds) {
+                var self = this;
+                setTimeout(function() {
+                    self.enable(id);
+                }, milliseconds);
+            }
+        }
+    };
+
+
+});
+
+define('ui',['require','$','ui/mobile','ui/form'],function(require) {
+    'use strict';
+
+    var $ = require('$');
     var mobile = require('ui/mobile');
-    var input = require('ui/input');
+    var form = require('ui/form');
 
     return {
         isMobileClient: function() {
@@ -847,24 +972,17 @@ define('ui',['require','$','constants','ui/mobile','ui/input'],function(require)
             if (!time) {
                 time = constants.ONE_SECOND * 2;
             }
-            var itemId = this.idAsSelector(id);
-            $(itemId).prop('disabled', true);
-
-            setTimeout(function() {
-                $(itemId).prop('disabled', false);
-            }, time);
+            form.disable(id, time);
         },
 
-
-
         enableTextField: function(id) {
-            input.enableTextField(id);
+            form.enable(id);
             mobile.enableTextField(id);
         },
 
 
         disableTextField: function(id) {
-            input.disableTextField(id);
+            form.disable(id);
             mobile.disableTextField(id);
         }
     };
@@ -878,21 +996,18 @@ define('ui',['require','$','constants','ui/mobile','ui/input'],function(require)
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('coreleo',['require','$','lodash','handlebars','util','ui'],function(require) {
+define('coreleo',['require','$','log','constants','util','ui'],function(require) {
     'use strict';
-
-    var $ = require('$');
-    var _ = require('lodash');
-    var handlebars = require('handlebars');
-
-    var util = require('util'),
-        ui = require('ui');
 
     //Return the module value.
     return {
         version: '0.0.1',
-        util: util,
-        ui: ui
+        $: require('$'),
+        log: require('log'),
+        constants: require('constants'),
+        util: require('util'),
+        ui: require('ui')
+
     };
 });
 

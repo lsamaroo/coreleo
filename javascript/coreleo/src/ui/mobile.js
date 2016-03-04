@@ -1,8 +1,8 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('../$');
-    var util = require('../util');
+    var $ = require('$');
+    var util = require('util');
 
     return {
         refreshSelect: function(id) {
