@@ -1,0 +1,20 @@
+# README #
+
+
+### Utility library for java and javascript ###
+
+* Quick summary
+* Version 0.0.1
+
+
+### How do I get set up? ###
+## Java ##
+* Run ant build to create the java jar.
+
+## javascript ##
+* Run npm gulp to create the optimized js file.
+
+
+### Who do I talk to? ###
+
+* orrinsamaroo@gmail.com
