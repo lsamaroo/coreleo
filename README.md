@@ -3,15 +3,14 @@
 
 ### Utility library for java and javascript ###
 
-* Quick summary
 * Version 0.0.1
 
 
 ### How do I get set up? ###
-## Java ##
+#### Java ####
 * Run ant build to create the java jar.
 
-## javascript ##
+#### Javascript ####
 * Run npm gulp to create the optimized js file.
 
 
