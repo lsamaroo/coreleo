@@ -3,10 +3,9 @@
     "paths": {
     	"jquery": "../node_modules/jquery/dist/jquery",
     	"lodash": "../node_modules/lodash/lodash",
-    	"handlebars": "../node_modules/handlebars/dist/handlebars",
-        /* "coreleo": "../src/coreleo" */
+    	"handlebars": "../node_modules/handlebars/dist/handlebars"
     },
-    "include": ["../node_modules/almond/almond", "coreleo"],
+    "include": ["../node_modules/almond/almond", "main"],
     "exclude": ["jquery", "lodash", "handlebars"],
     "out": "../dist/coreleo.js",
     "wrap": {

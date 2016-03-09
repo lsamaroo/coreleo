@@ -1,19 +1,19 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD.
-        define(['jquery', 'lodash'], factory);
+        define(['jquery', 'lodash', 'handlebars'], factory);
     } 
  	else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
-        module.exports = factory(require('jquery'), require('lodash'));
+        module.exports = factory(require('jquery'), require('lodash'), require('handlebars'));
     }    
     else {
         // Browser globals
-        root.coreleo = factory(root.$, root._);
+        root.coreleo = factory(root.$, root._, root.Handlebars);
     }
-}(this, function ($, _) {
+}(this, function ($, _, Handlebars) {
 
 
 /**
@@ -996,7 +996,7 @@ define('ui',['require','$','ui/mobile','ui/form'],function(require) {
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('coreleo',['require','$','log','constants','util','ui'],function(require) {
+define('main',['require','$','log','constants','util','ui'],function(require) {
     'use strict';
 
     //Return the module value.
