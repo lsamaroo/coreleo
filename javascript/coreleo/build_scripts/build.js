@@ -7,7 +7,6 @@
     },
     "include": ["../node_modules/almond/almond", "main"],
     "exclude": ["jquery", "lodash", "handlebars"],
-    "out": "../dist/coreleo.js",
     "wrap": {
         "startFile": "wrap/start.js",
         "endFile": "wrap/end.js"
