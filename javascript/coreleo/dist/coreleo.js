@@ -14,8 +14,6 @@
         root.coreleo = factory(root.$, root._, root.Handlebars);
     }
 }(this, function ($, _, Handlebars) {
-
-
 /**
  * @license almond 0.3.1 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
@@ -1027,5 +1025,5 @@ define('main',['require','$','log','constants','util','ui'],function(require) {
     //Use almond's special top-level, synchronous require to trigger factory
     //functions, get the final module value, and export it as the public
     //value.
-    return require('coreleo');
+    return require('main');
 }));

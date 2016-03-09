@@ -14,5 +14,3 @@
         root.coreleo = factory(root.$, root._, root.Handlebars);
     }
 }(this, function ($, _, Handlebars) {
-
-
