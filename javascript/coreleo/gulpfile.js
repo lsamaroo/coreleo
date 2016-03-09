@@ -6,6 +6,7 @@ var gulp = require('gulp'),
 
 var srcDir = 'src';
 var destDir = 'dist';
+var docDir = 'doc';
 var destFilename = 'coreleo.js';
 var destMinFilename = 'coreleo.min.js';
 var jsFiles = [ srcDir + '/**/*.js' ];
@@ -35,11 +36,16 @@ gulp.task('beautify', function() {
 gulp.task('requirejs-optimizer', shell.task([
     'node node_modules/requirejs/bin/r.js -o build_scripts/build.js optimize=none out=' + destDir + '/' + destFilename,
     'node node_modules/requirejs/bin/r.js -o build_scripts/build.js preserveLicenseComments=false out=' + destDir + '/' + destMinFilename,
-]))
+]));
+
+
+gulp.task('jsdoc', shell.task([
+    'node node_modules/jsdoc/jsdoc.js ' + srcDir + ' -r -c jsdoc-conf.json -d ' +   docDir
+]));
 
 
 gulp.task('build', function(cb) {
-	gulpSequence('lint', 'beautify', 'requirejs-optimizer')(cb);
+	gulpSequence('lint', 'beautify', 'requirejs-optimizer', 'jsdoc')(cb);
 });
 
 

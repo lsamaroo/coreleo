@@ -5,13 +5,14 @@
 	<property name="jdk.version" value="1.7" />
 	<property name="src.dir" value="java/src/main/java" />
 	<property name="lib.dir" value="java/lib" />
+	<property name="doc.dir" value="java/doc" />
 	<property name="resources.dir" value="java/resources" />
 	<property name="build.dir" value="bin" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.lib.dir" value="${build.dir}/lib" />
 	<property name="coreleo.js.dir" value="javascript/coreleo" />
-	<property name="coreleo2.js.dir" value="javascript/coreleo2" />
-		
+	
+
 	<property name="js.name" value="${jar.name}.js" />
 	<property name="js.src.dir" value="src/main/javascript/coreleo" />
 	
@@ -30,6 +31,9 @@
 	<import file="ivy-build.xml"/>
 	
 	    	
+	 <target name="doc" description="generate documentation (requires javadoc.exe in env)">
+	    <javadoc sourcepath="${src.dir}" destdir="${doc.dir}"/>
+	  </target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
           target: build                      
@@ -45,7 +49,7 @@
 
 
 	<target name="coreleo-nmp-install">
-	  <exec vmlauncher="false" executable="npm" dir="${coreleo.js.dir}" failonerror="true" >
+	  <exec vmlauncher="false"  executable="npm" dir="${coreleo.js.dir}" failonerror="true" >
 	  	<arg value="install"/>
 	  </exec>
 	</target>

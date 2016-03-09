@@ -770,6 +770,15 @@ define('util',['require','$','lodash','log','template/template'],function(requir
 
 
         /**
+         * An alias for toProperCase
+         */
+        properCase: function(str) {
+            this.deprecated();
+            return this.toProperCase(str);
+        },
+
+
+        /**
          * Adds a param and value to an existing url.
          */
         addParameterToUrl: function(url, name, value) {
@@ -796,67 +805,8 @@ define('util',['require','$','lodash','log','template/template'],function(requir
                 'key': key,
                 'value': value
             };
-        },
-
-
-        /** Deprecated API */
-
-
-        /**
-         * @deprecated
-         * @alias for addParameterToUrl
-         */
-        addParamToUrl: function(url, name, value) {
-            this.deprecated();
-            return this.addParameterToUrl(url, name, value);
-        },
-
-        /**
-         * @deprecated
-         * @alias for idAsSelector
-         */
-        formatId: function(id) {
-            this.deprecated();
-            return this.idAsSelector(id);
-        },
-
-
-        /**
-         * @deprecated
-         * @alias for classAsSelector
-         */
-        formatClass: function(cssClass) {
-            this.deprecated();
-            return this.classAsSelector(cssClass);
-        },
-
-        /**
-         * @deprecated
-         * @alias for formatCurrency
-         */
-        currencyFormatted: function(amount) {
-            this.deprecated();
-            return this.formatCurrency(amount);
-        },
-
-
-        /**
-         * @deprecated
-         * @alias for redirectAsPost
-         */
-        redirectPost: function(location, args, target) {
-            this.deprecated();
-            this.redirectAsHttpPost(location, args, target);
-        },
-
-        /**
-         * @deprecated
-         * @alias for redirectAsPost
-         */
-        properCase: function(str) {
-            this.deprecated();
-            return this.toProperCase(str);
         }
+
 
     };
 
