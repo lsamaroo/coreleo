@@ -74,7 +74,7 @@ public final class WebUtil {
 		for (final Iterator i = parameterMap.keySet().iterator(); i.hasNext();) {
 			final String key = String.valueOf(i.next());
 			if (key.startsWith(prefix)) {
-				final Object value = MapUtil.getFirstValue(parameterMap, key);
+				final Object value = MapUtil.getValue(parameterMap, key);
 
 				LogUtil.debug("WebUtil:stripPrefixedRequestParameter - key=" + key.substring(prefix.length(), key.length()));
 				properties.put(key.substring(prefix.length(), key.length()), value);
