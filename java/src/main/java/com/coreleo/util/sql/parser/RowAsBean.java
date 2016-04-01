@@ -1,5 +1,6 @@
 package com.coreleo.util.sql.parser;
 
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -13,11 +14,11 @@ import com.coreleo.util.sql.DBUtil;
 import com.coreleo.util.sql.SqlUtil;
 
 /**
- * 
+ *
  * By default will convert the underscore naming convention to java camel case
  * in order to map properties correctly to the bean. E.g. converts the column
  * name "last_name" to "lastName" in order to find the method "setLastName".
- * 
+ *
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class RowAsBean implements RowParser {
@@ -25,6 +26,7 @@ public class RowAsBean implements RowParser {
 	private Class clazz;
 	private Object bean;
 	private TimeZone timeZone;
+	private boolean convertClobToString = true;
 
 	/**
 	 * Will create new intances of this clazz and poplulate with row values.
@@ -47,11 +49,11 @@ public class RowAsBean implements RowParser {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param underScoreToCamelCase
 	 *            - default is true E.g. converts the column name last_name to
 	 *            lastName.
-	 * 
+	 *
 	 */
 	public RowAsBean(final Class clazz, final boolean underscoreToCamelCase) {
 		this(clazz);
@@ -60,7 +62,7 @@ public class RowAsBean implements RowParser {
 
 	/**
 	 * Will create new intances of this clazz and poplulate with row values.
-	 * 
+	 *
 	 * @param timeZone
 	 *            - the timezone to use when getting timestamps from the
 	 *            database.
@@ -76,7 +78,7 @@ public class RowAsBean implements RowParser {
 	 * Will populate the passed in bean object with the values in the row. Be
 	 * careful as a result set with multiple rows will cause the bean instance
 	 * to have its properties overwritten with the values of the last row.
-	 * 
+	 *
 	 * @param timeZone
 	 *            - the timezone to use when getting timestamps from the
 	 *            database.
@@ -89,11 +91,11 @@ public class RowAsBean implements RowParser {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param underScoreToCamelCase
 	 *            - default is true E.g. converts the column name last_name to
 	 *            lastName.
-	 * 
+	 *
 	 * @param timeZone
 	 *            - the timezone to use when getting timestamps from the
 	 *            database.
@@ -110,8 +112,16 @@ public class RowAsBean implements RowParser {
 		final int columnCount = metaData.getColumnCount();
 		final Map rowAsMap = new HashMap();
 		for (int i = 1; i <= columnCount; i++) {
-			final String key = underscoreToCamelCase ? SqlUtil.underScoreToCamelCase(metaData.getColumnLabel(i)) : metaData.getColumnName(i);
-			rowAsMap.put(key, DBUtil.getObject(metaData, rs, i, timeZone));
+			final String key = underscoreToCamelCase ? SqlUtil.underScoreToCamelCase(metaData.getColumnLabel(i))
+			        : metaData.getColumnName(i);
+
+			final Object value = DBUtil.getObject(metaData, rs, i, timeZone);
+			if (value instanceof Clob && convertClobToString) {
+				rowAsMap.put(key, DBUtil.clobToString(value));
+			}
+			else {
+				rowAsMap.put(key, value);
+			}
 		}
 
 		if (clazz != null) {
@@ -121,6 +131,25 @@ public class RowAsBean implements RowParser {
 			return BeanUtil.populateBean(bean, rowAsMap);
 		}
 
+	}
+
+	/**
+	 *
+	 * @return true if the sql Clob should be converted to a String when
+	 *         populating the bean
+	 */
+	public boolean isConvertClobToString() {
+		return convertClobToString;
+	}
+
+	/**
+	 *
+	 * @param convertClobToString
+	 *            set to true if you want the Clob to be converted to a String
+	 *            object before setting the value to the Bean. Default to true.
+	 */
+	public void setConvertClobToString(final boolean convertClobToString) {
+		this.convertClobToString = convertClobToString;
 	}
 
 }
