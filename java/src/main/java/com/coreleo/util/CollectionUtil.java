@@ -281,7 +281,7 @@ public final class CollectionUtil {
 		return new ArrayList(c);
 	}
 
-	public static final List toList(final Object... x) {
+	public static final List<Object> toList(final Object... x) {
 		if (x == null) {
 			return null;
 		}
