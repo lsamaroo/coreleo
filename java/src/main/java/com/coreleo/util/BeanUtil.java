@@ -54,8 +54,8 @@ public class BeanUtil {
 		}
 
 		for (final Map.Entry<String, Object> entry : data.entrySet()) {
-			final String key = StringUtil.capitalize(
-			        convertUnderscoreKeysToCamelCase ? StringUtil.underScoreToCamelCase(entry.getKey()) : entry.getKey());
+			final String key = StringUtil.capitalize(convertUnderscoreKeysToCamelCase
+			        ? StringUtil.underScoreToCamelCase(entry.getKey()) : entry.getKey());
 			final Object value = entry.getValue();
 
 			try {
@@ -86,4 +86,5 @@ public class BeanUtil {
 		final Object bean = ReflectionUtil.newInstance(clazz);
 		return populateBean(bean, data, false);
 	}
+
 }

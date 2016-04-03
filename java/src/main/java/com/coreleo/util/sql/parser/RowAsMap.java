@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import com.coreleo.util.StringUtil;
 import com.coreleo.util.sql.DBUtil;
 
-public class RowAsMap implements RowParser {
+public class RowAsMap implements RowParser<Map<String, Object>> {
 	private boolean keysToLowercase;
 	private TimeZone timeZone;
 	private boolean underscoreColumnNamesToCamelCase;
@@ -63,7 +63,7 @@ public class RowAsMap implements RowParser {
 	 *         used as the key
 	 */
 	@Override
-	public Object parse(final Connection con, final ResultSet rs, final int rowNum) throws SQLException {
+	public Map<String, Object> parse(final Connection con, final ResultSet rs, final int rowNum) throws SQLException {
 		final ResultSetMetaData metaData = rs.getMetaData();
 		final int columnCount = metaData.getColumnCount();
 		final Map<String, Object> rowAsMap = new HashMap<>();

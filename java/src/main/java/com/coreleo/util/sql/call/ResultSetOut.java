@@ -8,20 +8,21 @@ import com.coreleo.util.sql.DBUtil;
 import com.coreleo.util.sql.parser.ResultSetParser;
 
 public class ResultSetOut extends SimpleOut {
-	ResultSetParser parser;
-	
-	public ResultSetOut( int type, ResultSetParser parser ){
-		super( type );
+	ResultSetParser<?> parser;
+
+	public ResultSetOut(final int type, final ResultSetParser<?> parser) {
+		super(type);
 		this.parser = parser;
 	}
-	
-	public void setValue( CallableStatement cstmt ) throws SQLException{
+
+	@Override
+	public void setValue(final CallableStatement cstmt) throws SQLException {
 		ResultSet rs = null;
-		try{
-			rs = (ResultSet) cstmt.getObject( super.index );
-			value = parser.parse(cstmt.getConnection(),  rs);
+		try {
+			rs = (ResultSet) cstmt.getObject(super.index);
+			value = parser.parse(cstmt.getConnection(), rs);
 		}
-		finally{
+		finally {
 			DBUtil.close(rs);
 		}
 	}

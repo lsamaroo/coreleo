@@ -19,10 +19,10 @@ import com.coreleo.util.BeanUtil;
  * It will also convert CLOB to String objects by default
  *
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class RowAsBean implements RowParser {
-	private final Class clazz;
-	private final Object bean;
+
+public class RowAsBean<T> implements RowParser<T> {
+	private final Class<?> clazz;
+	private final T bean;
 
 	private boolean underscoreColumnNamesToCamelCase = true;
 	private boolean clobValuesToString = true;
@@ -32,7 +32,7 @@ public class RowAsBean implements RowParser {
 	 * Will create new instances of this class and populate with the values in
 	 * the row.
 	 */
-	public RowAsBean(final Class clazz) {
+	public RowAsBean(final Class<?> clazz) {
 		super();
 		this.clazz = clazz;
 		this.bean = null;
@@ -43,7 +43,7 @@ public class RowAsBean implements RowParser {
 	 * careful as a result set with multiple rows will cause the bean instance
 	 * to have its properties overwritten with the values of the last row.
 	 */
-	public RowAsBean(final Object bean) {
+	public RowAsBean(final T bean) {
 		super();
 		this.bean = bean;
 		this.clazz = null;
@@ -56,7 +56,7 @@ public class RowAsBean implements RowParser {
 	 *            "lastName".
 	 *
 	 */
-	public RowAsBean(final Class clazz, final boolean underscoreToCamelCase) {
+	public RowAsBean(final Class<?> clazz, final boolean underscoreToCamelCase) {
 		this(clazz);
 		this.underscoreColumnNamesToCamelCase = underscoreToCamelCase;
 	}
@@ -69,7 +69,7 @@ public class RowAsBean implements RowParser {
 	 *            the time zone to use when getting time stamps from the
 	 *            database.
 	 */
-	public RowAsBean(final Class clazz, final TimeZone timeZone) {
+	public RowAsBean(final Class<?> clazz, final TimeZone timeZone) {
 		this(clazz);
 		this.timeZone = timeZone;
 	}
@@ -83,7 +83,7 @@ public class RowAsBean implements RowParser {
 	 *            the time zone to use when getting time stamps from the
 	 *            database.
 	 */
-	public RowAsBean(final Object bean, final TimeZone timeZone) {
+	public RowAsBean(final T bean, final TimeZone timeZone) {
 		this(bean);
 		this.timeZone = timeZone;
 	}
@@ -99,7 +99,7 @@ public class RowAsBean implements RowParser {
 	 *            "lastName".
 	 *
 	 */
-	public RowAsBean(final Class clazz, final TimeZone timeZone, final boolean underscoreToCamelCase) {
+	public RowAsBean(final Class<?> clazz, final TimeZone timeZone, final boolean underscoreToCamelCase) {
 		this(clazz);
 		this.underscoreColumnNamesToCamelCase = underscoreToCamelCase;
 		this.timeZone = timeZone;
@@ -109,20 +109,21 @@ public class RowAsBean implements RowParser {
 	 * @return Depending on which constructor was used, either a new populated
 	 *         Bean object or the existing bean object with populated values.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object parse(final Connection con, final ResultSet rs, final int rowNum) throws SQLException {
+	public T parse(final Connection con, final ResultSet rs, final int rowNum) throws SQLException {
 		final RowAsMap parser = new RowAsMap();
 		parser.setClobValuesToString(clobValuesToString);
 		parser.setUnderscoreColumnNamesToCamelCase(underscoreColumnNamesToCamelCase);
 		parser.setTimeZone(timeZone);
 
-		final Map<String, Object> row = (Map<String, Object>) parser.parse(con, rs, rowNum);
+		final Map<String, Object> row = parser.parse(con, rs, rowNum);
 
 		if (clazz != null) {
-			return BeanUtil.populateBean(clazz, row);
+			return (T) BeanUtil.populateBean(clazz, row);
 		}
 		else {
-			return BeanUtil.populateBean(bean, row);
+			return (T) BeanUtil.populateBean(bean, row);
 		}
 	}
 

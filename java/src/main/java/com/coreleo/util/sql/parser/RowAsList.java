@@ -1,39 +1,40 @@
 /**
- * 
+ *
  */
 package com.coreleo.util.sql.parser;
 
-import java.util.*;
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Leon Samaroo
  *
  */
-public class RowAsList implements RowParser {
-
+public class RowAsList implements RowParser<List<Object>> {
 
 	public RowAsList() {
 		super();
 	}
-	
-	
+
 	/**
-	 * @return - an List containing the values of the row in the ResultsSet.  Values are filled in via the getObject(x) method. 
+	 * @return - an List containing the values of the row in the ResultsSet.
+	 *         Values are filled in via the getObject(x) method.
 	 */
-	public Object parse(Connection con, ResultSet rs, int rowNum) throws SQLException {
-		ResultSetMetaData meta = rs.getMetaData();
-        int cols = meta.getColumnCount();
-        List<Object> list = new ArrayList<Object>(cols);
+	@Override
+	public List<Object> parse(final Connection con, final ResultSet rs, final int rowNum) throws SQLException {
+		final ResultSetMetaData meta = rs.getMetaData();
+		final int cols = meta.getColumnCount();
+		final List<Object> list = new ArrayList<Object>(cols);
 
-        for (int i = 0; i < cols; i++) {
-            list.add( rs.getObject(i + 1) );
-        }
+		for (int i = 0; i < cols; i++) {
+			list.add(rs.getObject(i + 1));
+		}
 
-        return list;
+		return list;
 	}
-	
-
 
 }

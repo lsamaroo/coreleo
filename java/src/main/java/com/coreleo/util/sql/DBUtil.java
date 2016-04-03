@@ -41,7 +41,7 @@ import com.coreleo.util.date.DateAndTimeZone;
 import com.coreleo.util.date.DateUtil;
 import com.coreleo.util.sql.call.NullParameter;
 import com.coreleo.util.sql.call.OutParameter;
-import com.coreleo.util.sql.parser.ColumnFromFirstRowParser;
+import com.coreleo.util.sql.parser.ColumnValueFromFirstRowParser;
 import com.coreleo.util.sql.parser.FirstRowOnlyParser;
 import com.coreleo.util.sql.parser.LinkedHashMapParser;
 import com.coreleo.util.sql.parser.ListParser;
@@ -54,7 +54,7 @@ import com.coreleo.util.sql.parser.RowParser;
  *
  * @author Leon Samaroo
  *
- * <br/>
+ *         <br/>
  *         Convenience functions for dealing with jdbc.
  *
  */
@@ -439,10 +439,10 @@ public final class DBUtil {
 	 * @return A list of rows. Each row values are stored in an array.
 	 * @throws SimpleSqlException
 	 */
-	public static List<?> queryForListOfArrays(final Object connectionSource, final String sql)
+	public static List<Object[]> queryForListOfArrays(final Object connectionSource, final String sql)
 	        throws SimpleSqlException {
-		return (List<?>) query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT,
-		        connectionSource, sql, new ListParser(new RowAsArray()), (Object[]) null);
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new ListParser<Object[]>(new RowAsArray()), (Object[]) null);
 	}
 
 	/**
@@ -450,20 +450,20 @@ public final class DBUtil {
 	 * @return A list of rows. Each row values are stored in an array.
 	 * @throws SimpleSqlException
 	 */
-	public static List<?> queryForListOfArrays(final Object connectionSource, final String sql, final Object... params)
-	        throws SimpleSqlException {
-		return (List<?>) query(connectionSource, sql, new ListParser(new RowAsArray()), params);
-	}
-
-	public static List<?> queryForList(final Object connectionSource, final String sql, final RowParser rowParser,
+	public static List<Object[]> queryForListOfArrays(final Object connectionSource, final String sql,
 	        final Object... params) throws SimpleSqlException {
-		return (List<?>) query(connectionSource, sql, new ListParser(rowParser), params);
+		return query(connectionSource, sql, new ListParser<>(new RowAsArray()), params);
 	}
 
-	public static List<?> queryForList(final Object connectionSource, final String sql, final RowParser rowParser)
-	        throws SimpleSqlException {
-		return (List<?>) query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT,
-		        connectionSource, sql, new ListParser(rowParser), (Object[]) null);
+	public static <T> List<T> queryForList(final Object connectionSource, final String sql,
+	        final RowParser<T> rowParser, final Object... params) throws SimpleSqlException {
+		return query(connectionSource, sql, new ListParser<>(rowParser), params);
+	}
+
+	public static <T> List<T> queryForList(final Object connectionSource, final String sql,
+	        final RowParser<T> rowParser) throws SimpleSqlException {
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new ListParser<>(rowParser), (Object[]) null);
 	}
 
 	/**
@@ -475,9 +475,9 @@ public final class DBUtil {
 	 *         name is the key. The column value is the value of the map.
 	 * @throws SimpleSqlException
 	 */
-	public static List<?> queryForListOfMaps(final Object connectionSource, final boolean useLowerCaseKeyNames,
-	        final String sql, final Object... params) throws SimpleSqlException {
-		return (List<?>) query(connectionSource, sql, new ListParser(new RowAsMap(useLowerCaseKeyNames)), params);
+	public static List<Map<String, Object>> queryForListOfMaps(final Object connectionSource,
+	        final boolean useLowerCaseKeyNames, final String sql, final Object... params) throws SimpleSqlException {
+		return query(connectionSource, sql, new ListParser<>(new RowAsMap(useLowerCaseKeyNames)), params);
 	}
 
 	/**
@@ -488,9 +488,9 @@ public final class DBUtil {
 	 * @throws SimpleSqlException
 	 */
 	public static Map<?, ?> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser rowParser, final String nameOfColumnToUseAsKey) throws SimpleSqlException {
-		return (Map<?, ?>) query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT,
-		        connectionSource, sql, new LinkedHashMapParser(rowParser, nameOfColumnToUseAsKey), (Object[]) null);
+	        final RowParser<?> rowParser, final String nameOfColumnToUseAsKey) throws SimpleSqlException {
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new LinkedHashMapParser(rowParser, nameOfColumnToUseAsKey), (Object[]) null);
 	}
 
 	/**
@@ -501,29 +501,27 @@ public final class DBUtil {
 	 * @throws SimpleSqlException
 	 */
 	public static Map<?, ?> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser rowParser, final int indexOfColumnToUseAsKey) throws SimpleSqlException {
-		return (Map<?, ?>) query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT,
-		        connectionSource, sql, new LinkedHashMapParser(rowParser, indexOfColumnToUseAsKey), (Object[]) null);
+	        final RowParser<?> rowParser, final int indexOfColumnToUseAsKey) throws SimpleSqlException {
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new LinkedHashMapParser(rowParser, indexOfColumnToUseAsKey), (Object[]) null);
 	}
 
 	public static Map<?, ?> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser rowParser, final RowParser keyParser) throws SimpleSqlException {
-		return (Map<?, ?>) query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT,
-		        connectionSource, sql, new LinkedHashMapParser(rowParser, keyParser), (Object[]) null);
+	        final RowParser<?> rowParser, final RowParser<?> keyParser) throws SimpleSqlException {
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new LinkedHashMapParser(rowParser, keyParser), (Object[]) null);
 	}
 
 	public static Map<?, ?> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser rowParser, final String nameOfColumnToUseAsKey, final Object... params)
+	        final RowParser<?> rowParser, final String nameOfColumnToUseAsKey, final Object... params)
 	        throws SimpleSqlException {
-		return (Map<?, ?>) query(connectionSource, sql, new LinkedHashMapParser(rowParser, nameOfColumnToUseAsKey),
-		        params);
+		return query(connectionSource, sql, new LinkedHashMapParser(rowParser, nameOfColumnToUseAsKey), params);
 	}
 
 	public static Map<?, ?> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser rowParser, final int indexOfColumnToUseAsKey, final Object... params)
+	        final RowParser<?> rowParser, final int indexOfColumnToUseAsKey, final Object... params)
 	        throws SimpleSqlException {
-		return (Map<?, ?>) query(connectionSource, sql, new LinkedHashMapParser(rowParser, indexOfColumnToUseAsKey),
-		        params);
+		return query(connectionSource, sql, new LinkedHashMapParser(rowParser, indexOfColumnToUseAsKey), params);
 	}
 
 	/**
@@ -539,10 +537,10 @@ public final class DBUtil {
 	 *         The column value is the value of the map.
 	 * @throws SimpleSqlException
 	 */
-	public static Object queryForFirstRowAsMap(final Object connectionSource, final String sql,
-			final boolean useLowerCaseKeyNames) throws SimpleSqlException {
+	public static Map<String, Object> queryForFirstRowAsMap(final Object connectionSource, final String sql,
+	        final boolean useLowerCaseKeyNames) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new FirstRowOnlyParser(new RowAsMap(useLowerCaseKeyNames)), (Object[]) null);
+		        new FirstRowOnlyParser<>(new RowAsMap(useLowerCaseKeyNames)), (Object[]) null);
 	}
 
 	/**
@@ -560,10 +558,10 @@ public final class DBUtil {
 	 *         The column value is the value of the map.
 	 * @throws SimpleSqlException
 	 */
-	public static Object queryForFirstRowAsMap(final Object connectionSource, final String sql,
+	public static Map<String, Object> queryForFirstRowAsMap(final Object connectionSource, final String sql,
 	        final boolean useLowerCaseKeyNames, final Object... params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new FirstRowOnlyParser(new RowAsMap(useLowerCaseKeyNames)), params);
+		        new FirstRowOnlyParser<>(new RowAsMap(useLowerCaseKeyNames)), params);
 	}
 
 	/**
@@ -572,10 +570,10 @@ public final class DBUtil {
 	 *         provided.
 	 * @throws SimpleSqlException
 	 */
-	public static Object queryForFirstRow(final Object connectionSource, final String sql, final RowParser rowParser)
+	public static <T> T queryForFirstRow(final Object connectionSource, final String sql, final RowParser<T> rowParser)
 	        throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new FirstRowOnlyParser(rowParser), (Object[]) null);
+		        new FirstRowOnlyParser<>(rowParser), (Object[]) null);
 	}
 
 	/**
@@ -583,10 +581,10 @@ public final class DBUtil {
 	 *         provided.
 	 * @throws SimpleSqlException
 	 */
-	public static Object queryForFirstRow(final Object connectionSource, final String sql, final RowParser rowParser,
+	public static <T> T queryForFirstRow(final Object connectionSource, final String sql, final RowParser<T> rowParser,
 	        final Object... params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new FirstRowOnlyParser(rowParser), params);
+		        new FirstRowOnlyParser<>(rowParser), params);
 	}
 
 	/**
@@ -597,7 +595,7 @@ public final class DBUtil {
 	public static Object queryForColumnValue(final Object connectionSource, final String sql, final String columnName,
 	        final Object... params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new ColumnFromFirstRowParser(columnName), params);
+		        new ColumnValueFromFirstRowParser(columnName), params);
 	}
 
 	/**
@@ -608,7 +606,7 @@ public final class DBUtil {
 	public static Object queryForColumnValue(final Object connectionSource, final String sql, final int columnIndex,
 	        final Object... params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new ColumnFromFirstRowParser(columnIndex), params);
+		        new ColumnValueFromFirstRowParser(columnIndex), params);
 	}
 
 	/**
@@ -619,7 +617,7 @@ public final class DBUtil {
 	public static Object queryForColumnValue(final Object connectionSource, final String sql, final int columnIndex)
 	        throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new ColumnFromFirstRowParser(columnIndex), (Object[]) null);
+		        new ColumnValueFromFirstRowParser(columnIndex), (Object[]) null);
 	}
 
 	/**
@@ -630,19 +628,8 @@ public final class DBUtil {
 	public static Object queryForColumnValue(final Object connectionSource, final String sql, final String columnName)
 	        throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new ColumnFromFirstRowParser(columnName), (Object[]) null);
+		        new ColumnValueFromFirstRowParser(columnName), (Object[]) null);
 	}
-
-	// /**
-	// * Can be used for queries that do not need to return a result set. E.g.
-	// * insert/update
-	// */
-	// public static void query(final Object connectionSource, final String sql)
-	// throws SimpleSqlException {
-	// query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY,
-	// QUERY_TIMEOUT, connectionSource, sql, null,
-	// (Object[]) null);
-	// }
 
 	/**
 	 *
@@ -657,26 +644,26 @@ public final class DBUtil {
 	 * @return the value parsed using the result set parser
 	 * @throws SimpleSqlException
 	 */
-	public static Object query(final Object connectionSource, final String sql, final ResultSetParser resultSetParser,
+	public static <T> T query(final Object connectionSource, final String sql, final ResultSetParser<T> resultSetParser,
 	        final Object... params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
 		        resultSetParser, params);
 	}
 
-	public static Object query(final Object connectionSource, final String sql, final ResultSetParser resultSetParser,
+	public static <T> T query(final Object connectionSource, final String sql, final ResultSetParser<T> resultSetParser,
 	        final List<Object> params) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
 		        resultSetParser, ArrayUtil.toObjectArray(params));
 	}
 
-	public static Object query(final Object connectionSource, final String sql, final ResultSetParser resultSetParser,
+	public static <T> T query(final Object connectionSource, final String sql, final ResultSetParser<T> resultSetParser,
 	        final int resultSetType, final int resultSetConcurrency) throws SimpleSqlException {
 		return query(resultSetType, resultSetConcurrency, QUERY_TIMEOUT, connectionSource, sql, resultSetParser,
 		        (Object[]) null);
 	}
 
-	private static final Object query(final int resultSetType, final int resultSetConcurrency, final int queryTimeOut,
-	        final Object connectionSource, final String sql, final ResultSetParser resultSetParser,
+	private static final <T> T query(final int resultSetType, final int resultSetConcurrency, final int queryTimeOut,
+	        final Object connectionSource, final String sql, final ResultSetParser<T> resultSetParser,
 	        final Object... params) throws SimpleSqlException {
 		final String log = getLogString("query", resultSetType, resultSetConcurrency, queryTimeOut, sql, params);
 		LogUtil.trace(log);
@@ -893,8 +880,8 @@ public final class DBUtil {
 				// last ditch attempt to set the value
 				// convert to a string and try setting
 				pstmt.setObject(index, StringUtil.toString(x));
-				LogUtil.warn(DBUtil.class, "Unable to find correct type of " + x
-				        + " converting to a string and setting.");
+				LogUtil.warn(DBUtil.class,
+				        "Unable to find correct type of " + x + " converting to a string and setting.");
 				return;
 			}
 			throw sqle;
