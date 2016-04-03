@@ -1,7 +1,5 @@
 package com.coreleo.util.sql;
 
-import org.apache.commons.lang.WordUtils;
-
 import com.coreleo.util.Constants;
 
 public final class SqlUtil {
@@ -17,7 +15,4 @@ public final class SqlUtil {
 		return sb.toString();
 	}
 
-	public static String underScoreToCamelCase(final String s) {
-		return WordUtils.capitalizeFully(s, new char[] { '_' }).replaceAll("_", "");
-	}
 }

@@ -12,6 +12,8 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.WordUtils;
+
 /**
  * @author Leon Samaroo
  *
@@ -49,6 +51,16 @@ public final class StringUtil {
 
 	private StringUtil() {
 		super();
+	}
+
+	/**
+	 *
+	 * @param s
+	 *            the string with underscore used as seperator
+	 * @return a new string in camel case format
+	 */
+	public static String underScoreToCamelCase(final String s) {
+		return WordUtils.capitalizeFully(s, new char[] { '_' }).replaceAll("_", "");
 	}
 
 	/**
