@@ -55,7 +55,7 @@ public class BeanUtil {
 
 		for (final Map.Entry<String, Object> entry : data.entrySet()) {
 			final String key = StringUtil.capitalize(convertUnderscoreKeysToCamelCase
-			        ? StringUtil.underScoreToCamelCase(entry.getKey()) : entry.getKey());
+			        ? StringUtil.underScoreToCamelCase(entry.getKey(), true) : entry.getKey());
 			final Object value = entry.getValue();
 
 			try {

@@ -56,11 +56,16 @@ public final class StringUtil {
 	/**
 	 *
 	 * @param s
-	 *            the string with underscore used as seperator
-	 * @return a new string in camel case format
+	 *            the string with underscore used as separator
+	 * @param useLowerCamelCase
+	 *            true to use the camel case where the first letter is
+	 *            lowercase.
+	 * @return a new string in camel case format. e.g. "this_is_an_example"
+	 *         would become "thisIsAnExample".
 	 */
-	public static String underScoreToCamelCase(final String s) {
-		return WordUtils.capitalizeFully(s, new char[] { '_' }).replaceAll("_", "");
+	public static String underScoreToCamelCase(final String s, final boolean useLowerCamelCase) {
+		final String temp = WordUtils.capitalizeFully(s, new char[] { '_' }).replaceAll("_", "");
+		return useLowerCamelCase ? toLowerCaseCharAt(temp, 0) : temp;
 	}
 
 	/**

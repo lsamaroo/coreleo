@@ -74,7 +74,7 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 			}
 
 			if (underscoreColumnNamesToCamelCase) {
-				key = StringUtil.underScoreToCamelCase(key);
+				key = StringUtil.underScoreToCamelCase(key, true);
 			}
 
 			final Object value = DBUtil.getObject(metaData, rs, i, timeZone);
