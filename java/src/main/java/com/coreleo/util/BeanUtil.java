@@ -39,11 +39,11 @@ public class BeanUtil {
 		return map;
 	}
 
-	public static Object populateBean(final Object bean, final Map<String, Object> data) {
+	public static <T> T populateBean(final T bean, final Map<String, Object> data) {
 		return populateBean(bean, data, false);
 	}
 
-	public static Object populateBean(final Object bean, final Map<String, Object> data,
+	public static <T> T populateBean(final T bean, final Map<String, Object> data,
 	        final boolean convertUnderscoreKeysToCamelCase) {
 		if (bean == null) {
 			return null;
@@ -73,17 +73,18 @@ public class BeanUtil {
 			}
 
 		}
-
 		return bean;
 	}
 
-	public static Object populateBean(final String qualifiedClassName, final Map<String, Object> data) {
-		final Object bean = ReflectionUtil.newInstance(qualifiedClassName);
+	@SuppressWarnings("unchecked")
+	public static <T> T populateBean(final String qualifiedClassName, final Map<String, Object> data) {
+		final T bean = (T) ReflectionUtil.newInstance(qualifiedClassName);
 		return populateBean(bean, data, false);
 	}
 
-	public static Object populateBean(final Class<?> clazz, final Map<String, Object> data) {
-		final Object bean = ReflectionUtil.newInstance(clazz);
+	@SuppressWarnings("unchecked")
+	public static <T> T populateBean(final Class<T> clazz, final Map<String, Object> data) {
+		final T bean = (T) ReflectionUtil.newInstance(clazz);
 		return populateBean(bean, data, false);
 	}
 

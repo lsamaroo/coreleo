@@ -488,10 +488,9 @@ public final class DBUtil {
 	 *         depends on the row parser passed in.
 	 * @throws SimpleSqlException
 	 */
-	public static <V> Map<?, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
 	        final RowParser<V> rowParser, final String nameOfColumnToUseAsKey) throws SimpleSqlException {
-		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new LinkedHashMapParser<>(new SingleValue(nameOfColumnToUseAsKey), rowParser), (Object[]) null);
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), rowParser);
 	}
 
 	/**
@@ -501,30 +500,34 @@ public final class DBUtil {
 	 *         specified in the argument.
 	 * @throws SimpleSqlException
 	 */
-	public static <V> Map<?, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
 	        final RowParser<V> rowParser, final int indexOfColumnToUseAsKey) throws SimpleSqlException {
-		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new LinkedHashMapParser<>(new SingleValue(indexOfColumnToUseAsKey), rowParser), (Object[]) null);
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(indexOfColumnToUseAsKey), rowParser);
 	}
 
-	public static <V> Map<?, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<V> rowParser, final RowParser<?> keyParser) throws SimpleSqlException {
+	public static <K, V> Map<K, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	        final RowParser<K> keyParser, final RowParser<V> rowParser) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
 		        new LinkedHashMapParser<>(keyParser, rowParser), (Object[]) null);
 	}
 
-	public static <V> Map<?, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
 	        final RowParser<V> rowParser, final String nameOfColumnToUseAsKey, final Object... params)
 	        throws SimpleSqlException {
-		return query(connectionSource, sql,
-		        new LinkedHashMapParser<>(new SingleValue(nameOfColumnToUseAsKey), rowParser), params);
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), rowParser, params);
 	}
 
-	public static <V> Map<?, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
 	        final RowParser<V> rowParser, final int indexOfColumnToUseAsKey, final Object... params)
 	        throws SimpleSqlException {
-		return query(connectionSource, sql,
-		        new LinkedHashMapParser<>(new SingleValue(indexOfColumnToUseAsKey), rowParser), params);
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(indexOfColumnToUseAsKey), rowParser, params);
+	}
+
+	public static <K, V> Map<K, V> queryForMapOfObjects(final Object connectionSource, final String sql,
+	        final RowParser<K> keyParser, final RowParser<V> rowParser, final Object... params)
+	        throws SimpleSqlException {
+		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
+		        new LinkedHashMapParser<>(keyParser, rowParser), params);
 	}
 
 	/**
