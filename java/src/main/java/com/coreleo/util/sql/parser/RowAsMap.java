@@ -12,8 +12,17 @@ import java.util.TimeZone;
 import com.coreleo.util.StringUtil;
 import com.coreleo.util.sql.DBUtil;
 
+/**
+ *
+ * This parser represents a row as a Map object. The column names are used as
+ * the keys and the column values are used as the values.
+ *
+ *
+ * @author lsamaroo
+ *
+ */
 public class RowAsMap implements RowParser<Map<String, Object>> {
-	private boolean keysToLowercase;
+	private boolean userLowerCaseKeys;
 	private TimeZone timeZone;
 	private boolean underscoreColumnNamesToCamelCase;
 	private boolean clobValuesToString;
@@ -35,12 +44,12 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 
 	/**
 	 *
-	 * @param keysToLowercase
+	 * @param userLowerCaseKeys
 	 *            convert the keys to all lower case, default is false
 	 */
-	public RowAsMap(final boolean keysToLowercase) {
+	public RowAsMap(final boolean userLowerCaseKeys) {
 		super();
-		this.keysToLowercase = keysToLowercase;
+		this.userLowerCaseKeys = userLowerCaseKeys;
 	}
 
 	/**
@@ -52,9 +61,9 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 	 *            set
 	 *
 	 */
-	public RowAsMap(final boolean keysToLowercase, final TimeZone timeZone) {
+	public RowAsMap(final boolean userLowerCaseKeys, final TimeZone timeZone) {
 		super();
-		this.keysToLowercase = keysToLowercase;
+		this.userLowerCaseKeys = userLowerCaseKeys;
 		this.timeZone = timeZone;
 	}
 
@@ -69,7 +78,7 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 		final Map<String, Object> rowAsMap = new HashMap<>();
 		for (int i = 1; i <= columnCount; i++) {
 			String key = metaData.getColumnLabel(i);
-			if (keysToLowercase) {
+			if (userLowerCaseKeys) {
 				key = StringUtil.toLowerCase(key);
 			}
 
@@ -88,18 +97,20 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 		return rowAsMap;
 	}
 
-	public boolean isKeysToLowercase() {
-		return keysToLowercase;
+	public boolean isUserLowerCaseKeys() {
+		return userLowerCaseKeys;
 	}
 
 	/**
 	 *
 	 * @param bool
 	 *            true to tell the parser to convert keys to lowercase while
-	 *            parsing
+	 *            parsing. If underscoreColumnNameToCamelCase is set to true as
+	 *            well and your column names have underscores then your keys
+	 *            will be in camel case regardless of this flag.
 	 */
-	public void setKeysToLowercase(final boolean bool) {
-		this.keysToLowercase = bool;
+	public void setUserLowerCaseKeys(final boolean bool) {
+		this.userLowerCaseKeys = bool;
 	}
 
 	public TimeZone getTimeZone() {
