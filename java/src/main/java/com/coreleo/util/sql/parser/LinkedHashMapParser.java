@@ -14,42 +14,14 @@ import java.util.LinkedHashMap;
  * @author Leon Samaroo
  *
  */
-public class LinkedHashMapParser implements ResultSetParser<LinkedHashMap<?, ?>> {
-	private final RowParser<?> rowParser;
-	private final RowParser<?> keyParser;
+public class LinkedHashMapParser<K, V> implements ResultSetParser<LinkedHashMap<K, V>> {
+	private final RowParser<K> keyParser;
+	private final RowParser<V> valueParser;
 
-	public LinkedHashMapParser(final RowParser<?> rowParser, final RowParser<?> keyParser) {
+	public LinkedHashMapParser(final RowParser<K> keyParser, final RowParser<V> valueParser) {
 		super();
-		this.rowParser = rowParser;
+		this.valueParser = valueParser;
 		this.keyParser = keyParser;
-	}
-
-	public LinkedHashMapParser(final RowParser<?> rowParser, final String nameOfColumnToUseAsKey) {
-		super();
-		this.rowParser = rowParser;
-		this.keyParser = new SingleValue(nameOfColumnToUseAsKey);
-	}
-
-	public LinkedHashMapParser(final RowParser<?> rowParser, final int indexOfColumnToUseAsKey) {
-		super();
-		this.rowParser = rowParser;
-		this.keyParser = new SingleValue(indexOfColumnToUseAsKey);
-	}
-
-	public LinkedHashMapParser(final RowParser<?> rowParser, final String nameOfColumnToUseAsKey,
-	        final boolean keyAsString) {
-		super();
-		this.rowParser = rowParser;
-		this.keyParser = keyAsString ? new SingleStringValue(nameOfColumnToUseAsKey)
-		        : new SingleValue(nameOfColumnToUseAsKey);
-	}
-
-	public LinkedHashMapParser(final RowParser<?> rowParser, final int indexOfColumnToUseAsKey,
-	        final boolean keyAsString) {
-		super();
-		this.rowParser = rowParser;
-		this.keyParser = keyAsString ? new SingleStringValue(indexOfColumnToUseAsKey)
-		        : new SingleValue(indexOfColumnToUseAsKey);
 	}
 
 	/**
@@ -61,13 +33,13 @@ public class LinkedHashMapParser implements ResultSetParser<LinkedHashMap<?, ?>>
 	 *
 	 */
 	@Override
-	public LinkedHashMap<?, ?> parse(final Connection con, final ResultSet rs) throws SQLException {
-		final LinkedHashMap<Object, Object> map = new LinkedHashMap<Object, Object>();
+	public LinkedHashMap<K, V> parse(final Connection con, final ResultSet rs) throws SQLException {
+		final LinkedHashMap<K, V> map = new LinkedHashMap<>();
 		int rowNum = 0;
 
 		while (rs.next()) {
-			final Object value = rowParser.parse(con, rs, rowNum);
-			final Object key = keyParser.parse(con, rs, rowNum);
+			final V value = valueParser.parse(con, rs, rowNum);
+			final K key = keyParser.parse(con, rs, rowNum);
 			map.put(key, value);
 			rowNum++;
 		}
