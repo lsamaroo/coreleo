@@ -31,7 +31,7 @@ $(function() {
 
         var tabs = $(coreleo.util.formatId(tabContainerId));
         var li = $(tabTemplate.replace("{id}", tabId).replace("{href}", tabId).replace("{tabTitle}", tabTitle));
-        tabs.find(".ui-tabs-nav").append(li);
+        tabs.find(".ui-tabs-nav").first().append(li);
         tabs.append("<div id='" + tabId + "'><p>" + tabContent + "</p></div>");
         tabs.tabs("refresh");
     };
@@ -49,7 +49,7 @@ $(function() {
 
         var tabs = $(coreleo.util.formatId(tabContainerId));
         var li = $(tabTemplate.replace("{id}", tabId).replace("{href}", href).replace("{tabTitle}", tabTitle));
-        tabs.find(".ui-tabs-nav").append(li);
+        tabs.find(".ui-tabs-nav").first().append(li);
         tabs.tabs("refresh");
     };
 

@@ -474,7 +474,6 @@ public final class DBUtil {
 	 *            the key name in the map.
 	 * @return A list of rows. A row is represented as a Map object. The column
 	 *         name is the key. The column value is the value of the map.
-	 * @throws SimpleSqlException
 	 */
 	public static List<Map<String, Object>> queryForListOfMaps(final Object connectionSource,
 	        final boolean useLowerCaseKeyNames, final String sql, final Object... params) throws SimpleSqlException {
@@ -483,42 +482,41 @@ public final class DBUtil {
 
 	/**
 	 *
-	 * @return each row as an object stored in a map. The key used is the value
-	 *         of the column specified in the argument. What that object is
-	 *         depends on the row parser passed in.
-	 * @throws SimpleSqlException
+	 * @return A map of row object. The type of row object depends on the value
+	 *         parser provided. The key used is the value of the column name
+	 *         specified in the argument.
 	 */
 	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<V> rowParser, final String nameOfColumnToUseAsKey) throws SimpleSqlException {
-		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), rowParser);
+	        final String nameOfColumnToUseAsKey, final RowParser<V> valueParser) throws SimpleSqlException {
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), valueParser);
 	}
 
 	/**
 	 *
-	 * @return A map of row object. The type of row object depends on the row
-	 *         parser provided. The key used is the value of the column
+	 * @return A map of row object. The type of row object depends on the value
+	 *         parser provided. The key used is the value of the column index
 	 *         specified in the argument.
-	 * @throws SimpleSqlException
 	 */
 	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<V> rowParser, final int indexOfColumnToUseAsKey) throws SimpleSqlException {
-		return queryForMapOfObjects(connectionSource, sql, new SingleValue(indexOfColumnToUseAsKey), rowParser);
+	        final int indexOfColumnToUseAsKey, final RowParser<V> valueParser) throws SimpleSqlException {
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(indexOfColumnToUseAsKey), valueParser);
 	}
 
 	public static <K, V> Map<K, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<K> keyParser, final RowParser<V> rowParser) throws SimpleSqlException {
+	        final RowParser<K> keyParser, final RowParser<V> valueParser) throws SimpleSqlException {
 		return query(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, QUERY_TIMEOUT, connectionSource, sql,
-		        new LinkedHashMapParser<>(keyParser, rowParser), (Object[]) null);
+		        new LinkedHashMapParser<>(keyParser, valueParser), (Object[]) null);
 	}
 
 	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<V> rowParser, final String nameOfColumnToUseAsKey, final Object... params)
+	        final String nameOfColumnToUseAsKey, final RowParser<V> valueParser, final Object... params)
 	        throws SimpleSqlException {
-		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), rowParser, params);
+		return queryForMapOfObjects(connectionSource, sql, new SingleValue(nameOfColumnToUseAsKey), valueParser,
+		        params);
 	}
 
 	public static <V> Map<Object, V> queryForMapOfObjects(final Object connectionSource, final String sql,
-	        final RowParser<V> rowParser, final int indexOfColumnToUseAsKey, final Object... params)
+	        final int indexOfColumnToUseAsKey, final RowParser<V> rowParser, final Object... params)
 	        throws SimpleSqlException {
 		return queryForMapOfObjects(connectionSource, sql, new SingleValue(indexOfColumnToUseAsKey), rowParser, params);
 	}
