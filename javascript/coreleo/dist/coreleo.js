@@ -470,16 +470,6 @@ define('log',['require'],function(require) {
 
 });
 
-define('constants',['require'],function(require) {
-    'use strict';
-
-    return {
-        ONE_SECOND: 1000,
-        ONE_MINUTE: 60000
-    };
-
-});
-
 define('template/template',['require','$','handlebars'],function(require) {
     'use strict';
 
@@ -938,14 +928,26 @@ define('ui',['require','$','ui/mobile','ui/form'],function(require) {
 
 });
 
+define('constants',['require'],function(require) {
+    'use strict';
+
+    return {
+        ONE_SECOND: 1000,
+        ONE_MINUTE: 60000
+    };
+
+});
+
 /*global define */
 
 /**
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('main',['require','$','log','constants','util','ui'],function(require) {
+define('main',['require','ui','$','log','constants','util'],function(require) {
     'use strict';
+
+    var ui = require('ui');
 
     //Return the module value.
     return {
@@ -954,8 +956,7 @@ define('main',['require','$','log','constants','util','ui'],function(require) {
         log: require('log'),
         constants: require('constants'),
         util: require('util'),
-        ui: require('ui')
-
+        ui: ui
     };
 });
 

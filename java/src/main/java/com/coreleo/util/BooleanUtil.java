@@ -13,7 +13,11 @@ public class BooleanUtil {
 		super();
 	}
 
-	public static final boolean isTrue(final String x) {
+	public static final boolean isFalse(final Object x) {
+		return toBoolean(x, false) == false;
+	}
+
+	public static final boolean isTrue(final Object x) {
 		return toBoolean(x, false) == true;
 	}
 
@@ -22,8 +26,7 @@ public class BooleanUtil {
 	}
 
 	public static final boolean isEqual(final Boolean x1, final Boolean x2) {
-		if ((x1 == null) || (x2 == null))
-		{
+		if ((x1 == null) || (x2 == null)) {
 			return false;
 		}
 
@@ -39,8 +42,7 @@ public class BooleanUtil {
 	}
 
 	public static final boolean toBoolean(final Boolean x) {
-		if (x == null)
-		{
+		if (x == null) {
 			throw new IllegalArgumentException("The object cannot not be null");
 		}
 
@@ -48,17 +50,14 @@ public class BooleanUtil {
 	}
 
 	public static final boolean toBoolean(final Object x, final boolean defaultValue) {
-		if (x == null)
-		{
+		if (x == null) {
 			return defaultValue;
 		}
 
-		try
-		{
+		try {
 			return toBoolean(x);
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return defaultValue;
 		}
 	}
@@ -69,54 +68,44 @@ public class BooleanUtil {
 	 *             if the default value is null.
 	 */
 	public static final boolean toBoolean(final Object x, final Boolean defaultValue) {
-		if (defaultValue == null)
-		{
+		if (defaultValue == null) {
 			throw new IllegalArgumentException("The default value cannot be null.");
 		}
 
-		if (x == null)
-		{
+		if (x == null) {
 			return defaultValue.booleanValue();
 		}
 
-		try
-		{
+		try {
 			return toBoolean(x);
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return defaultValue.booleanValue();
 		}
 	}
 
 	public static final Boolean toBooleanObject(final Object x, final boolean defaultValue) {
-		if (x == null)
-		{
+		if (x == null) {
 			return toBooleanObject(defaultValue);
 		}
 
-		try
-		{
+		try {
 			return toBooleanObject(x);
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return toBooleanObject(defaultValue);
 		}
 	}
 
 	public static final Boolean toBooleanObject(final Object x, final Boolean defaultValue) {
-		if (x == null)
-		{
+		if (x == null) {
 			return defaultValue;
 		}
 
-		try
-		{
+		try {
 			return toBooleanObject(x);
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			return defaultValue;
 		}
 	}
@@ -126,8 +115,7 @@ public class BooleanUtil {
 	}
 
 	public static final Boolean toBooleanObject(final Object x) {
-		if (x instanceof Boolean)
-		{
+		if (x instanceof Boolean) {
 			return (Boolean) x;
 		}
 
@@ -140,13 +128,11 @@ public class BooleanUtil {
 	 * @return true if parameter is (case-insensitive) true, t, 1, y, yes
 	 */
 	public static final boolean toBoolean(final Object x) {
-		if (x == null)
-		{
+		if (x == null) {
 			throw new IllegalArgumentException("The object must not be null");
 		}
 
-		if (x instanceof Boolean)
-		{
+		if (x instanceof Boolean) {
 			return ((Boolean) x).booleanValue();
 		}
 
@@ -163,14 +149,12 @@ public class BooleanUtil {
 	 */
 	@Deprecated
 	public static final Boolean toBooleanObjectIgnoreCaseYesNoYN(final Object yesNoYNString) {
-		if (yesNoYNString == null)
-		{
+		if (yesNoYNString == null) {
 			return Boolean.FALSE;
 		}
 
 		final String trimmedCaseInsensitiveString = yesNoYNString.toString().trim().toLowerCase();
-		if (trimmedCaseInsensitiveString.equals("yes") || trimmedCaseInsensitiveString.equals("y"))
-		{
+		if (trimmedCaseInsensitiveString.equals("yes") || trimmedCaseInsensitiveString.equals("y")) {
 			return Boolean.TRUE;
 		}
 
@@ -187,17 +171,14 @@ public class BooleanUtil {
 	}
 
 	public static final boolean isTrueFalseString(final String string) {
-		if (StringUtil.isEmpty(string))
-		{
+		if (StringUtil.isEmpty(string)) {
 			return false;
 		}
 
-		if (string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false"))
-		{
+		if (string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false")) {
 			return true;
 		}
-		else
-		{
+		else {
 			return false;
 		}
 	}
@@ -207,17 +188,14 @@ public class BooleanUtil {
 	 * @return the String "Yes" or "No" based on true and false respectively.
 	 */
 	public static final String toStringYesNo(final Boolean bool) {
-		if (bool == null)
-		{
+		if (bool == null) {
 			return "No";
 		}
 
-		if (bool.booleanValue())
-		{
+		if (bool.booleanValue()) {
 			return "Yes";
 		}
-		else
-		{
+		else {
 			return "No";
 		}
 	}
@@ -235,17 +213,14 @@ public class BooleanUtil {
 	 * @return the String "Y" or "N" based on true and false respectively.
 	 */
 	public static final String toStringYN(final Boolean bool) {
-		if (bool == null)
-		{
+		if (bool == null) {
 			return "N";
 		}
 
-		if (bool.booleanValue())
-		{
+		if (bool.booleanValue()) {
 			return "Y";
 		}
-		else
-		{
+		else {
 			return "N";
 		}
 	}

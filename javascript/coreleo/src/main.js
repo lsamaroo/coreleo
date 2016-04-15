@@ -7,6 +7,8 @@
 define(function(require) {
     'use strict';
 
+    var ui = require('ui');
+
     //Return the module value.
     return {
         version: '0.0.1',
@@ -14,7 +16,6 @@ define(function(require) {
         log: require('log'),
         constants: require('constants'),
         util: require('util'),
-        ui: require('ui')
-
+        ui: ui
     };
 });
