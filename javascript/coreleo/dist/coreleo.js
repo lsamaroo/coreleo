@@ -447,14 +447,23 @@ var requirejs, require, define;
 
 define("../node_modules/almond/almond", function(){});
 
+/** 
+ * The JQuery object
+ * @module $ 
+ */
 define('$',['require','jquery'],function(require) {
     'use strict';
     return require('jquery');
 });
 
+/** 
+ * A logger utility.
+ * @module log 
+ */
+
+/* eslint no-console:0 */
 define('log',['require'],function(require) {
     'use strict';
-
     if (!(window.console && console.log)) {
         return {
             log: function() {},
@@ -470,77 +479,21 @@ define('log',['require'],function(require) {
 
 });
 
-define('template/template',['require','$','handlebars'],function(require) {
-    'use strict';
-
-    var $ = require('$');
-    var handlebars = require('handlebars');
-
-    return {
-        cache: {
-            get: function(selector) {
-                if (!this.templates) {
-                    this.templates = {};
-                }
-
-                var template = this.templates[selector];
-                if (!template) {
-                    // precompile the template
-                    template = handlebars.compile($(selector).html());
-                    this.templates[selector] = template;
-                }
-                return template;
-            }
-        },
-
-        /**
-         * @param {string} selector - the selector/id to the template html
-         * @param {object} data - the data values to use for the template
-         * 
-         * This function will find the template using the given selector,
-         * compile it with handlebars and cache it for future use.
-         * 
-         * @return the rendered template and data string
-         * 
-         */
-        renderTemplateWithCaching: function(selector, data) {
-            var render = this.cache.get(selector);
-            return render(data);
-        },
-
-        /**
-         * @param {string} templateString - the template to render
-         * @param {object} data - the data values to use for the template
-         */
-        renderTemplate: function(templateString, data) {
-            var render = handlebars.compile(templateString);
-            return render(data);
-        }
-
-    };
-});
-
-define('util',['require','$','lodash','log','template/template'],function(require) {
+/** 
+ * Generic utilities for dealing with strings, objects, etc.
+ * @module util 
+ */
+define('util',['require','$','lodash','log'],function(require) {
     'use strict';
 
     var $ = require('$');
     var _ = require('lodash');
     var log = require('log');
-    var template = require('template/template');
 
     var util = {
 
-        renderTemplateWithCaching: function(selector, data) {
-            return template.renderTemplateWithCaching(selector, data);
-        },
-
-
-        renderTemplate: function(templateString, data) {
-            return template.renderTemplate(templateString, data);
-        },
-
         deprecated: function() {
-            log.warn('This function is deprecated.  See documentation.');
+            log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
         },
 
         isEmpty: function(obj) {
@@ -566,7 +519,7 @@ define('util',['require','$','lodash','log','template/template'],function(requir
         },
 
         formatPhone: function(phone) {
-            if (_.isEmpty(phone)) {
+            if (this.isEmpty(phone)) {
                 return '';
             }
             return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
@@ -599,6 +552,9 @@ define('util',['require','$','lodash','log','template/template'],function(requir
 
         /**
          * If the string is null it returns a empty string otherwise returns the string
+         * 
+         * @param {String} string the string to check
+         * @return {String} A empty string if the parameter was null or undefined otherwise the parameter
          */
         blankNull: function(string) {
             if (this.isEmpty(string)) {
@@ -634,6 +590,12 @@ define('util',['require','$','lodash','log','template/template'],function(requir
 
         /**
          * Left pads the given string with zeros to fill the size specified
+         * 
+         * @param {String} string the String to pad
+         * @param {Integer} size the number of zeros to pad
+         * 
+         * @return {String} the string with padded zeros
+         * 
          */
         zeroFill: function(string, size) {
             if (this.isEmpty(string)) {
@@ -748,7 +710,12 @@ define('util',['require','$','lodash','log','template/template'],function(requir
         },
 
 
-        toProperCase: function(str) {
+        /**
+         * Converts the provided string to proper case
+         * @param {String} str the string to convert
+         * @return {String} the string in proper case
+         */
+        properCase: function(str) {
             if (this.isEmpty(str)) {
                 return '';
             }
@@ -760,16 +727,13 @@ define('util',['require','$','lodash','log','template/template'],function(requir
 
 
         /**
-         * An alias for toProperCase
-         */
-        properCase: function(str) {
-            this.deprecated();
-            return this.toProperCase(str);
-        },
-
-
-        /**
-         * Adds a param and value to an existing url.
+         * Adds a parameter and value to an existing URL.
+         * 
+         * @param {String} url the URL to append to
+         * @param {String} name the name of the parameter
+         * @param {String} value the value of the parameter
+         * @return {String} the url with the given parameter appended
+         * 
          */
         addParameterToUrl: function(url, name, value) {
             if (this.isEmpty(name)) {
@@ -803,30 +767,64 @@ define('util',['require','$','lodash','log','template/template'],function(requir
     return _.assign({}, _, util);
 });
 
+/** 
+ * A class of Constants
+ * @module constants 
+ */
+define('constants',['require'],function(require) {
+    'use strict';
+
+    return {
+        ONE_SECOND: 1000,
+        ONE_MINUTE: 60000
+    };
+
+});
+
+/**
+ * This object contains functions dealing with JQuery mobile and is never exposed as a public API.
+ * Instead these functions are called in the various public UI API to handle JQuery mobile elements in
+ * the appropriate fashion behind the scenes. 
+ * 
+ */
 define('ui/mobile',['require','$','util'],function(require) {
     'use strict';
 
     var $ = require('$');
     var util = require('util');
 
+
     return {
+
+        /*
+         * Refreshes a JQuery mobile select item when options are changed.
+         * 
+         * @param {String} id the id of the select item
+         * 
+         */
         refreshSelect: function(id) {
             var item = $(util.idAsSelector(id));
-            if ($.mobile && item.selectmenu) {
+            if (this.isMobile() && item.selectmenu) {
                 item.selectmenu('refresh');
             }
         },
 
+        /*
+         * Initializes a table to be a JQuery table for mobile displays
+         * 
+         * @param {String} id the id of the select item
+         * 
+         */
         initTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if ($.mobile && item.table) {
+            if (this.isMobile() && item.table) {
                 item.table();
             }
         },
 
         refreshTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if ($.mobile && item.table) {
+            if (this.isMobile() && item.table) {
                 item.table('rebuild');
             }
         },
@@ -834,24 +832,28 @@ define('ui/mobile',['require','$','util'],function(require) {
 
         enableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if ($.mobile && item.textinput) {
+            if (this.isMobile() && item.textinput) {
                 item.textinput('enable');
             }
         },
 
         disableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if ($.mobile && item.textinput) {
+            if (this.isMobile() && item.textinput) {
                 item.textinput('disable');
             }
         },
 
-        isMobileClient: function() {
+        isMobile: function() {
             return $.mobile ? true : false;
         }
     };
 });
 
+/** 
+ * Utilities for handling form and form inputs.
+ * @module form 
+ */
 define('ui/form',['require','$','util'],function(require) {
     'use strict';
 
@@ -874,7 +876,7 @@ define('ui/form',['require','$','util'],function(require) {
          * 
          * @param {string} id - the id or selector of the element to disable
          * @param {int} [milliseconds] - an optional time in milliseconds before re-enabling it 
-         * before 
+         * before re-enabling it.
          * 
          */
         disable: function(id, milliseconds) {
@@ -893,18 +895,93 @@ define('ui/form',['require','$','util'],function(require) {
 
 });
 
-define('ui',['require','$','ui/mobile','ui/form'],function(require) {
+/** 
+ * Utilities for rendering handlebar templates.
+ * @module template 
+ */
+define('template/template',['require','$','handlebars'],function(require) {
     'use strict';
 
     var $ = require('$');
-    var mobile = require('ui/mobile');
-    var form = require('ui/form');
+    var handlebars = require('handlebars');
 
     return {
-        isMobileClient: function() {
-            return mobile.isMobileClient();
+        cache: {
+            get: function(selector) {
+                if (!this.templates) {
+                    this.templates = {};
+                }
+
+                var template = this.templates[selector];
+                if (!template) {
+                    // pre compile the template
+                    template = handlebars.compile($(selector).html());
+                    this.templates[selector] = template;
+                }
+                return template;
+            }
         },
 
+        /**
+         * This function will find the template using the given selector,
+         * compile it with handlebars and cache it for future use.
+         * 
+         * @param {String} selector - the selector/id to the template html
+         * @param {Object} data - the data values to use for the template
+         * @return {String} the rendered template and data string
+         * 
+         */
+        renderTemplateWithCaching: function(selector, data) {
+            var render = this.cache.get(selector);
+            return render(data);
+        },
+
+        /**
+         * Combines the template and data to create a rendered String
+         * @param {String} templateString - the template to render
+         * @param {Object} data - the data values to use for the template
+         * @return {String} the rendered template and data
+         */
+        renderTemplate: function(templateString, data) {
+            var render = handlebars.compile(templateString);
+            return render(data);
+        }
+
+    };
+});
+
+/** 
+ * Utilities for handling generic UI elements.
+ * @module ui 
+ */
+define('ui',['require','$','util','constants','ui/mobile','ui/form','template/template'],function(require) {
+    'use strict';
+
+
+    var $ = require('$');
+    var util = require('util');
+    var constants = require('constants');
+    var mobile = require('ui/mobile');
+    var form = require('ui/form');
+    var template = require('template/template');
+
+
+    var SPINNER_IMAGE_DATA_URL = 'data:image/gif;base64,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';
+
+
+    return {
+        renderTemplateWithCaching: function(selector, data) {
+            return template.renderTemplateWithCaching(selector, data);
+        },
+
+
+        renderTemplate: function(templateString, data) {
+            return template.renderTemplate(templateString, data);
+        },
+
+        isMobile: function() {
+            return mobile.isMobile();
+        },
 
         timeoutButton: function(id, time) {
             if (!time) {
@@ -913,13 +990,492 @@ define('ui',['require','$','ui/mobile','ui/form'],function(require) {
             form.disable(id, time);
         },
 
-        enableTextField: function(id) {
+
+        /**
+         * Displays a loading spinner in the element that matches the provided id.  
+         * By default it replaces the content of that element.
+         * 
+         * @param {String} id the id of the element.
+         * @param {boolean} [append=false] set to true to append the spinner to the element instead
+         * of replacing it's content.
+         *    
+         */
+        startSpinner: function(id, append) {
+            var el = $(util.idAsSelector(id));
+
+            if (util.isTrue(append)) {
+                el.append('<image id="coreleo-spinner-image" src="' + SPINNER_IMAGE_DATA_URL + '" />');
+            }
+            else {
+                el.empty();
+                el.html('<image id="coreleo-spinner-image" src="' + SPINNER_IMAGE_DATA_URL + '" />');
+            }
+        },
+
+
+        stopSpinner: function(id) {
+            var div = $(util.idAsSelector(id));
+            $('#coreleo-spinner-image', div).remove();
+        }
+
+    };
+
+
+});
+
+/** 
+ * Utilities for handling JQuery dialog and mobile pop-ups.
+ * @module dialog 
+ */
+define('ui/dialog',['require','$','ui','util'],function(require) {
+    'use strict';
+
+    var $ = require('$');
+    var ui = require('ui');
+    var util = require('util');
+
+    var CONFIRM_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false"';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'id="my-confirm-dialog" ';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'class="ui-dialog dialog confirm-dialog ui-corner-all" ';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'title="{title}">';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '{header}<div class="icon-content {iconClass}"/><div class="ui-dialog-content text-content">{text}</div>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<div class="dialog-footer">';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<button class="save" type="button">Ok</button>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<button class="cancel" type="button">Cancel</button>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '</div>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '</div>';
+
+    var CONFIRM_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header">{title}</div>';
+
+    var LOADING_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false" ';
+    LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + ' class="ui-dialog dialog loading-dialog ui-corner-all" ';
+    LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + 'id="my-loading-dialog" title="{title}">';
+    LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + '<div class="{loadingImageClass}"></div>{text}</div>';
+
+    var ALERT_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false" title="{title}"';
+    ALERT_DIALOG_TMPL = ALERT_DIALOG_TMPL + 'class="ui-dialog dialog alert-dialog ui-corner-all">{header}';
+    ALERT_DIALOG_TMPL = ALERT_DIALOG_TMPL + '<div class="icon-content {iconClass}"/><div class="text-content">{text}</div></div>';
+
+    var CLOSE_BUTTON_TMPL = '<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" ';
+    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + 'role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick">';
+    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + '</span><span class="ui-button-text">close</span></button>';
+
+    var ALERT_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header"><span class="ui-dialog-title">{title}</span>{close}</div>';
+
+    var LOADING_IMAGE = 'Loading, please wait...';
+
+    var showConfirmPopup = function(title, text, successFunction, iconClass) {
+        var template = CONFIRM_DIALOG_TMPL;
+        template = template.replace('{title}', title);
+        template = template.replace('{text}', text);
+        var header = CONFIRM_DIALOG_HEADER_TMPL.replace('{title}', title);
+        template = template.replace('{header}', header);
+        template = template.replace('{iconClass}', iconClass);
+
+        var item = $(template);
+        $('.save', item).click(function(eventObject) {
+            successFunction(item);
+            closeDialogOrPopup('#my-confirm-dialog');
+            destroyDialogOrPopup('#my-confirm-dialog');
+        });
+
+        $('.cancel', item).click(function(eventObject) {
+            closeDialogOrPopup('#my-confirm-dialog');
+            destroyDialogOrPopup('#my-confirm-dialog');
+        });
+
+        item.popup();
+        item.popup('open');
+    };
+
+
+    var showConfirmDialog = function(title, text, successFunction, iconClass) {
+        var template = CONFIRM_DIALOG_TMPL;
+        template = template.replace('{title}', title);
+        template = template.replace('{text}', text);
+        template = template.replace('{header}', '');
+        template = template.replace('{iconClass}', iconClass);
+
+        var item = $(template);
+        $('.save', item).click(function(eventObject) {
+            successFunction(item);
+            closeDialogOrPopup('#my-confirm-dialog');
+            destroyDialogOrPopup('#my-confirm-dialog');
+        });
+
+        $('.cancel', item).click(function(eventObject) {
+            closeDialogOrPopup('#my-confirm-dialog');
+            destroyDialogOrPopup('#my-confirm-dialog');
+        });
+
+        item.dialog({
+            autoOpen: false,
+            resizable: true,
+            modal: true
+        });
+
+        item.dialog('open');
+    };
+
+
+    var destroyDialogOrPopup = function(id) {
+        var item = null;
+        if (typeof id === 'string') {
+            var itemId = util.idAsSelector(id);
+            item = $(itemId);
+        }
+        else {
+            item = id;
+        }
+
+        if (item.popup) {
+            item.popup('destroy').remove();
+        }
+        else {
+            item.dialog('destroy').remove();
+        }
+    };
+
+    var closeDialogOrPopup = function(id) {
+        var item = null;
+        if (typeof id === 'string') {
+            var itemId = util.idAsSelector(id);
+            item = $(itemId);
+        }
+        else {
+            item = id;
+        }
+
+        if (item.popup) {
+            item.popup('close');
+        }
+        else {
+            item.dialog('close');
+        }
+    };
+
+    return {
+        open: function(id) {
+            var itemId = util.idAsSelector(id);
+            if ($(itemId).panel) {
+                $(itemId).panel('open');
+            }
+            else {
+                $(itemId).dialog('open');
+            }
+        },
+
+        close: function(id) {
+            var itemId = util.idAsSelector(id);
+            if ($(itemId).panel) {
+                $(itemId).panel('close');
+            }
+            else {
+                $(itemId).dialog('close');
+            }
+        },
+
+        init: function(id, width, height) {
+            if (!ui.isMobile()) {
+                $(util.idAsSelector(id)).dialog({
+                    autoOpen: false,
+                    height: height,
+                    width: width,
+                    modal: true
+                });
+            }
+        },
+
+        confirm: function(title, text, successFunction, iconClass) {
+            if (util.isEmpty(iconClass)) {
+                iconClass = '';
+            }
+
+            if (ui.isMobile()) {
+                showConfirmPopup(title, text, successFunction, iconClass);
+            }
+            else {
+                showConfirmDialog(title, text, successFunction, iconClass);
+            }
+        },
+
+
+
+        showLoadingDialog: function(title, text, loadingImageClass) {
+            if (util.isEmpty(text)) {
+                text = LOADING_IMAGE;
+            }
+
+            if (util.isEmpty(loadingImageClass)) {
+                loadingImageClass = 'loading-image';
+            }
+
+            var template = LOADING_DIALOG_TMPL;
+            template = template.replace('{loadingImageClass}', loadingImageClass);
+            template = template.replace('{title}', title);
+            template = template.replace('{text}', text);
+
+            var item = $(template);
+            if (ui.isMobile()) {
+                item.popup();
+                item.popup('open');
+            }
+            else {
+                item.dialog({
+                    autoOpen: false,
+                    closeOnEscape: false,
+                    modal: true,
+                    dialogClass: 'loading-dialog-contentpane',
+                    height: 70,
+                    open: function(event) {
+                        $('.loading-dialog-contentpane .ui-dialog-titlebar-close').hide();
+                        if (!title) {
+                            $('.loading-dialog-contentpane .ui-dialog-titlebar').hide();
+                        }
+                    }
+                });
+                item.dialog('open');
+            }
+        },
+
+
+        hideLoadingDialog: function() {
+            closeDialogOrPopup('#my-loading-dialog');
+            destroyDialogOrPopup('#my-loading-dialog');
+        },
+
+
+        alert: function(title, text, iconClass) {
+            if (util.isEmpty(iconClass)) {
+                iconClass = '';
+            }
+
+            var template = ALERT_DIALOG_TMPL;
+            template = template.replace('{title}', title);
+            template = template.replace('{text}', text);
+            template = template.replace('{iconClass}', iconClass);
+
+            if (ui.isMobile()) {
+                var header = ALERT_DIALOG_HEADER_TMPL.replace('{title}', title);
+                header = header.replace('{close}', CLOSE_BUTTON_TMPL);
+                template = template.replace('{header}', header);
+
+                var item = $(template);
+
+                $('.header', item).click(function(eventObject) {
+                    closeDialogOrPopup(item);
+                    destroyDialogOrPopup(item);
+                });
+
+                item.popup();
+                item.popup('open');
+            }
+            else {
+                template = template.replace('{header}', '');
+                template = template.replace('{close}', '');
+                $(template).dialog();
+            }
+        }
+
+    };
+
+
+});
+
+/** 
+ * Utilities for handling JQuery tabs.
+ * @module tabs 
+ */
+define('ui/tabs',['require','$','util'],function(require) {
+    'use strict';
+
+    var $ = require('$');
+    var util = require('util');
+
+    var tabCount = 1;
+
+    var incrementTabCount = function() {
+        tabCount++;
+    };
+
+    var decrementTabCount = function() {
+        tabCount--;
+    };
+
+    return /** @alias module:tabs */ {
+        maxTabs: 12,
+
+
+        isMaxNumTabsOpen: function() {
+            return tabCount >= this.maxTabs;
+        },
+
+
+
+        addTab: function(tabContainerId, tabId, tabTitle, tabContent, showCloseIcon, closeTabText) {
+            var tabTemplate = '<li><a id="tab-anchor-{id}" href="#{href}">{tabTitle}</a>{closeIcon}</li>';
+            var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
+
+            if (showCloseIcon) {
+                closeIconTemplate = closeIconTemplate.replace('{closeText}', closeTabText + ' ' + tabTitle);
+                tabTemplate = tabTemplate.replace('{closeIcon}', closeIconTemplate);
+            }
+            else {
+                tabTemplate = tabTemplate.replace('{closeIcon}', '');
+            }
+
+            var tabs = $(util.idAsSelector(tabContainerId));
+            var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', tabId).replace('{tabTitle}', tabTitle));
+            tabs.find('.ui-tabs-nav').first().append(li);
+            tabs.append('<div id="' + tabId + '"><p>' + tabContent + '</p></div>');
+            this.refresh(tabContainerId);
+            incrementTabCount();
+        },
+
+        addAjaxTab: function(tabContainerId, tabId, tabTitle, href, showCloseIcon, closeTabText) {
+            var tabTemplate = '<li><a id="tab-anchor-{id}" href="{href}">{tabTitle}</a>{closeIcon}</li>';
+            var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
+
+            if (showCloseIcon) {
+                closeIconTemplate = closeIconTemplate.replace('{closeText}', closeTabText + ' ' + tabTitle);
+                tabTemplate = tabTemplate.replace('{closeIcon}', closeIconTemplate);
+            }
+            else {
+                tabTemplate = tabTemplate.replace('{closeIcon}', '');
+            }
+
+            var tabs = $(util.idAsSelector(tabContainerId));
+            var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', href).replace('{tabTitle}', tabTitle));
+            tabs.find('.ui-tabs-nav').first().append(li);
+            this.refresh(tabContainerId);
+            incrementTabCount();
+        },
+
+        renameTab: function(tabContainerId, tabId, title) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabAnchor = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]');
+            tabAnchor.html(title);
+        },
+
+        refresh: function(tabContainerId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabs = $(tabContainerId).tabs();
+            tabs.tabs('refresh');
+        },
+
+        getTabIndexById: function(tabContainerId, tabId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabAnchor = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]');
+            if (tabAnchor.length === 0) {
+                return -1;
+            }
+
+            return tabAnchor.parent().index();
+        },
+
+        focusTab: function(tabContainerId, tabId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabAnchor = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]');
+            tabAnchor.focus();
+        },
+
+        selectTab: function(tabContainerId, tabId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabIndex = this.getTabIndexById(tabContainerId, tabId);
+            var tabs = $(tabContainerId).tabs();
+            tabs.tabs('option', 'active', tabIndex);
+        },
+
+        addCloseFunctionToCloseIcon: function(tabContainerId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var tabs = $(tabContainerId).tabs();
+
+            // close icon: removing the tab on click
+            tabs.delegate('span.ui-icon-close', 'click', function() {
+                var panelId = $(this).closest('li').remove().attr('aria-controls');
+                $(util.idAsSelector(panelId)).remove();
+                this.refresh(tabContainerId);
+                decrementTabCount();
+            });
+        },
+
+
+        closeTab: function(tabContainerId, tabId) {
+            var panelId = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]').closest('li').remove().attr('aria-controls');
+            $('#' + panelId).remove();
+            this.refresh(tabContainerId);
+            decrementTabCount();
+        },
+
+
+        getSelectedTabIndex: function(tabContainerId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            return $(tabContainerId).tabs('option', 'active');
+        },
+
+        getSelectedTabId: function(tabContainerId) {
+            tabContainerId = util.idAsSelector(tabContainerId);
+            var index = this.getSelectedTabIndex(tabContainerId);
+            var id = ($(tabContainerId + ' ul>li a').eq(index).attr('href'));
+            return util.startsWith(id, '#') ? id.substring(1, id.lenght) : id;
+        }
+
+    };
+
+
+});
+
+/** 
+ * Utilities for handling JQuery mobile and select2 select.
+ * @module select 
+ */
+define('ui/select',['require','ui/mobile'],function(require) {
+    'use strict';
+
+    var mobile = require('ui/mobile');
+
+    return {
+        /**
+         * Refreshes the select drop down after items have been added and removed.
+         * For mobile select items it assumes jquery mobile is being used.
+         * 
+         * @param {String} id the id of the select item
+         * 
+         */
+        refresh: function(id) {
+            mobile.refreshSelect();
+        }
+    };
+
+
+});
+
+/** 
+ * Utilities for handling text inputs.
+ * @module text 
+ */
+define('ui/text',['require','ui/form','ui/mobile'],function(require) {
+    'use strict';
+
+    var form = require('ui/form');
+    var mobile = require('ui/mobile');
+
+    return {
+
+        /**
+         * Enables a text input.
+         * @param {String} id the id of the text input 
+         */
+        enable: function(id) {
             form.enable(id);
             mobile.enableTextField(id);
         },
 
-
-        disableTextField: function(id) {
+        /**
+         * Disables a text input.
+         * @param {String} id the id of the text input 
+         */
+        disable: function(id) {
             form.disable(id);
             mobile.disableTextField(id);
         }
@@ -928,13 +1484,211 @@ define('ui',['require','$','ui/mobile','ui/form'],function(require) {
 
 });
 
-define('constants',['require'],function(require) {
+/** 
+ * Utilities for handling JQuery UI and mobile tables.
+ * @module table 
+ */
+define('ui/table',['require','$','util','ui/mobile'],function(require) {
     'use strict';
 
+    var $ = require('$');
+    var util = require('util');
+    var mobile = require('ui/mobile');
+
     return {
-        ONE_SECOND: 1000,
-        ONE_MINUTE: 60000
+
+        /**
+         * 
+         * Initializes a table.  This call creates a JQuery table in mobile environment.
+         * In non mobile browsers it does nothing and can be used without any side effects.
+         * 
+         * @param {String} id the id of the table
+         * 
+         */
+        init: function(id) {
+            mobile.initTable(id);
+        },
+
+        /**
+         * 
+         * Refreshes the table.  This call is only needed for
+         * refreshing a JQuery table in mobile environment.
+         * In non mobile browsers it does nothing and can be used without any side effects.
+         * 
+         * @param {String} id the id of the table
+         * 
+         */
+        refresh: function(id) {
+            mobile.refreshTable(id);
+        },
+
+
+        /**
+         * Adds the table sorter feature to the table.  Requires the table sorter plug-in.
+         * @param {String} id of the table
+         * @param {Object} [options] an options object to pass to the table sorter plug-in
+         * @param {Array} [widgets] a list of widget names to pass in.  By default the 'group' and 'filter' widget is always included
+         * @param {Object} [widgetOptions] options for the widgets
+         * @param {Function} [groupFormatter] a function to tell the table sorter how to display the group header title
+         * @param {Function} [groupCallback] a function 
+         *  
+         */
+        /*eslint max-params: 0 */
+        initTableSorter: function(id, options, widgets, widgetOptions, groupFormatter, groupCallback) {
+            if (!$.tablesorter || util.isMobile()) {
+                return;
+            }
+
+            // wrap the passed in group formatter
+            var groupFormatterWrapper = function(txt, col, table, c, wo) {
+                txt = (util.isEmpty(txt) ? 'Empty' : txt);
+                if (!groupFormatter) {
+                    return txt;
+                }
+                return groupFormatter(txt, col, table, c, wo);
+            };
+
+            // Since we have the groupCallback as optional, we need to always pass in one
+            // so create a wrapper does nothing if one was not provided
+            var groupCallbackWrapper = function($cell, $rows, column, table) {
+                if (groupCallback) {
+                    groupCallback($cell, $rows, column, table);
+                }
+            };
+
+            /*eslint camelcase: 0 */
+            var widgetOptionsObject = {
+                group_collapsible: true, // make the group header clickable and collapse the rows below it.
+                group_collapsed: false, // start with all groups collapsed (if true)
+                group_saveGroups: false, // remember collapsed groups
+                group_saveReset: '.group_reset', // element to clear saved collapsed groups
+                group_count: ' ({num} items)', // if not false, the '{num}' string is replaced with the number of rows in the group
+                group_formatter: groupFormatterWrapper,
+                group_callback: groupCallbackWrapper,
+                // event triggered on the table when the grouping widget has finished work
+                group_complete: 'groupingComplete',
+                filter_hideFilters: true
+            };
+
+            if (widgetOptions && $.isPlainObject(widgetOptions)) {
+                $.extend(widgetOptionsObject, widgetOptions);
+            }
+
+            var widgetsArray = ['group', 'filter'];
+            if (widgets && $.isArray(widgets)) {
+                $.merge(widgetsArray, widgets);
+            }
+
+            var optionsObject = {
+                theme: 'blue',
+                widgets: widgetsArray,
+                widgetOptions: widgetOptionsObject
+            };
+
+            if (options && $.isPlainObject(options)) {
+                $.extend(optionsObject, options);
+            }
+
+            $(util.idAsSelector(id)).tablesorter(optionsObject);
+        }
+
     };
+
+
+});
+
+/** 
+ * Utilities for polling a function and URLs.
+ * @module poller 
+ */
+define('poller',['require','$','util','log'],function(require) {
+    'use strict';
+
+    var $ = require('$');
+    var util = require('util');
+    var log = require('log');
+
+    return {
+
+        /**
+         * Executes a function at a given interval
+         * 
+         * @param {integer} interval - the interval in milliseconds
+         * @param {Function} theFunction - the function to call
+         * 
+         */
+        pollFunction: function(interval, theFunction) {
+            if (!$.isFunction(theFunction)) {
+                return;
+            }
+            (function loopsiloop() {
+                setTimeout(function() {
+                    theFunction();
+                    // recurse
+                    loopsiloop();
+                }, interval);
+            }());
+        },
+
+        /**
+         * Sends a request to the provided URL on a set interval.
+         * 
+         * @param {Object}  options a list of options required for this function.
+         * @param {integer} options.interval - the interval in milliseconds.
+         * @param {String}  options.url - A string containing the URL to which the request is sent.
+         * @param {Object}  options.data - Either a function to be called to get data or a plain object or string that is 
+         * sent to the server with the request
+         * @param {Function} options.success - A callback function that is executed if the request succeeds.
+         * @param {Function} options.error - A callback function that is executed if the request fails.
+         * @param {String} options.dataType - he type of data expected from the server. Default: json
+         */
+        pollUrl: function(options) {
+            var interval = options.interval,
+                url = options.url,
+                data = options.data,
+                success = options.success,
+                error = options.error,
+                dataType = options.dataType;
+
+            if (util.isEmpty(data)) {
+                data = {};
+            }
+            (function loopsiloop() {
+                setTimeout(function() {
+                    var postData = {};
+                    if ($.isFunction(data)) {
+                        postData = data();
+                    }
+                    else {
+                        postData = data;
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        dataType: dataType,
+                        data: postData,
+                        success: function(response) {
+                            if ($.isFunction(success)) {
+                                success(response);
+                            }
+                            // recurse
+                            loopsiloop();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            if ($.isFunction(error)) {
+                                error(jqXHR, textStatus, errorThrown);
+                            }
+                            // recurse
+                            loopsiloop();
+                            log.error('poll: errorThrown=' + errorThrown + 'textStatus=' + textStatus);
+                        }
+                    });
+                }, interval);
+            }());
+        }
+    };
+
 
 });
 
@@ -944,19 +1698,26 @@ define('constants',['require'],function(require) {
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('main',['require','ui','$','log','constants','util'],function(require) {
+define('main',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/text','ui/table','$','constants','log','poller','util'],function(require) {
     'use strict';
 
     var ui = require('ui');
+    ui.dialog = require('ui/dialog');
+    ui.form = require('ui/form');
+    ui.tabs = require('ui/tabs');
+    ui.select = require('ui/select');
+    ui.text = require('ui/text');
+    ui.table = require('ui/table');
 
     //Return the module value.
     return {
         version: '0.0.1',
         $: require('$'),
-        log: require('log'),
         constants: require('constants'),
-        util: require('util'),
-        ui: ui
+        log: require('log'),
+        poller: require('poller'),
+        ui: ui,
+        util: require('util')
     };
 });
 

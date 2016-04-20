@@ -1,3 +1,7 @@
+/** 
+ * A class of Constants
+ * @module constants 
+ */
 define(function(require) {
     'use strict';
 

@@ -1,4 +1,32 @@
-/** 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui/dialog.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui/dialog.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
  * Utilities for handling JQuery dialog and mobile pop-ups.
  * @module dialog 
  */
@@ -9,33 +37,33 @@ define(function(require) {
     var ui = require('ui');
     var util = require('util');
 
-    var CONFIRM_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false"';
+    var CONFIRM_DIALOG_TMPL = '&lt;div data-role="popup" data-shadow="false" data-dismissible="false"';
     CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'id="my-confirm-dialog" ';
     CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'class="ui-dialog dialog confirm-dialog ui-corner-all" ';
     CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + 'title="{title}">';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '{header}<div class="icon-content {iconClass}"/><div class="ui-dialog-content text-content">{text}</div>';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<div class="dialog-footer">';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<button class="save" type="button">Ok</button>';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '<button class="cancel" type="button">Cancel</button>';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '</div>';
-    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '</div>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '{header}&lt;div class="icon-content {iconClass}"/>&lt;div class="ui-dialog-content text-content">{text}&lt;/div>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '&lt;div class="dialog-footer">';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '&lt;button class="save" type="button">Ok&lt;/button>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '&lt;button class="cancel" type="button">Cancel&lt;/button>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '&lt;/div>';
+    CONFIRM_DIALOG_TMPL = CONFIRM_DIALOG_TMPL + '&lt;/div>';
 
-    var CONFIRM_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header">{title}</div>';
+    var CONFIRM_DIALOG_HEADER_TMPL = '&lt;div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header">{title}&lt;/div>';
 
-    var LOADING_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false" ';
+    var LOADING_DIALOG_TMPL = '&lt;div data-role="popup" data-shadow="false" data-dismissible="false" ';
     LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + ' class="ui-dialog dialog loading-dialog ui-corner-all" ';
     LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + 'id="my-loading-dialog" title="{title}">';
-    LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + '<div class="{loadingImageClass}"></div>{text}</div>';
+    LOADING_DIALOG_TMPL = LOADING_DIALOG_TMPL + '&lt;div class="{loadingImageClass}">&lt;/div>{text}&lt;/div>';
 
-    var ALERT_DIALOG_TMPL = '<div data-role="popup" data-shadow="false" data-dismissible="false" title="{title}"';
+    var ALERT_DIALOG_TMPL = '&lt;div data-role="popup" data-shadow="false" data-dismissible="false" title="{title}"';
     ALERT_DIALOG_TMPL = ALERT_DIALOG_TMPL + 'class="ui-dialog dialog alert-dialog ui-corner-all">{header}';
-    ALERT_DIALOG_TMPL = ALERT_DIALOG_TMPL + '<div class="icon-content {iconClass}"/><div class="text-content">{text}</div></div>';
+    ALERT_DIALOG_TMPL = ALERT_DIALOG_TMPL + '&lt;div class="icon-content {iconClass}"/>&lt;div class="text-content">{text}&lt;/div>&lt;/div>';
 
-    var CLOSE_BUTTON_TMPL = '<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" ';
-    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + 'role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick">';
-    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + '</span><span class="ui-button-text">close</span></button>';
+    var CLOSE_BUTTON_TMPL = '&lt;button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" ';
+    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + 'role="button" aria-disabled="false" title="close">&lt;span class="ui-button-icon-primary ui-icon ui-icon-closethick">';
+    CLOSE_BUTTON_TMPL = CLOSE_BUTTON_TMPL + '&lt;/span>&lt;span class="ui-button-text">close&lt;/span>&lt;/button>';
 
-    var ALERT_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header"><span class="ui-dialog-title">{title}</span>{close}</div>';
+    var ALERT_DIALOG_HEADER_TMPL = '&lt;div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header">&lt;span class="ui-dialog-title">{title}&lt;/span>{close}&lt;/div>';
 
     var LOADING_IMAGE = 'Loading, please wait...';
 
@@ -256,3 +284,26 @@ define(function(require) {
 
 
 });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-$.html">$</a></li><li><a href="module-constants.html">constants</a></li><li><a href="module-dialog.html">dialog</a></li><li><a href="module-form.html">form</a></li><li><a href="module-log.html">log</a></li><li><a href="module-poller.html">poller</a></li><li><a href="module-select.html">select</a></li><li><a href="module-table.html">table</a></li><li><a href="module-tabs.html">tabs</a></li><li><a href="module-template.html">template</a></li><li><a href="module-text.html">text</a></li><li><a href="module-ui.html">ui</a></li><li><a href="module-util.html">util</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Apr 19 2016 23:45:19 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

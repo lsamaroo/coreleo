@@ -1,3 +1,7 @@
+/** 
+ * Utilities for handling form and form inputs.
+ * @module form 
+ */
 define(function(require) {
     'use strict';
 
@@ -20,7 +24,7 @@ define(function(require) {
          * 
          * @param {string} id - the id or selector of the element to disable
          * @param {int} [milliseconds] - an optional time in milliseconds before re-enabling it 
-         * before 
+         * before re-enabling it.
          * 
          */
         disable: function(id, milliseconds) {

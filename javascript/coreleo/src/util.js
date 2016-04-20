@@ -1,24 +1,18 @@
+/** 
+ * Generic utilities for dealing with strings, objects, etc.
+ * @module util 
+ */
 define(function(require) {
     'use strict';
 
     var $ = require('$');
     var _ = require('lodash');
     var log = require('log');
-    var template = require('template/template');
 
     var util = {
 
-        renderTemplateWithCaching: function(selector, data) {
-            return template.renderTemplateWithCaching(selector, data);
-        },
-
-
-        renderTemplate: function(templateString, data) {
-            return template.renderTemplate(templateString, data);
-        },
-
         deprecated: function() {
-            log.warn('This function is deprecated.  See documentation.');
+            log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
         },
 
         isEmpty: function(obj) {
@@ -44,7 +38,7 @@ define(function(require) {
         },
 
         formatPhone: function(phone) {
-            if (_.isEmpty(phone)) {
+            if (this.isEmpty(phone)) {
                 return '';
             }
             return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
@@ -77,6 +71,9 @@ define(function(require) {
 
         /**
          * If the string is null it returns a empty string otherwise returns the string
+         * 
+         * @param {String} string the string to check
+         * @return {String} A empty string if the parameter was null or undefined otherwise the parameter
          */
         blankNull: function(string) {
             if (this.isEmpty(string)) {
@@ -112,6 +109,12 @@ define(function(require) {
 
         /**
          * Left pads the given string with zeros to fill the size specified
+         * 
+         * @param {String} string the String to pad
+         * @param {Integer} size the number of zeros to pad
+         * 
+         * @return {String} the string with padded zeros
+         * 
          */
         zeroFill: function(string, size) {
             if (this.isEmpty(string)) {
@@ -226,7 +229,12 @@ define(function(require) {
         },
 
 
-        toProperCase: function(str) {
+        /**
+         * Converts the provided string to proper case
+         * @param {String} str the string to convert
+         * @return {String} the string in proper case
+         */
+        properCase: function(str) {
             if (this.isEmpty(str)) {
                 return '';
             }
@@ -238,16 +246,13 @@ define(function(require) {
 
 
         /**
-         * An alias for toProperCase
-         */
-        properCase: function(str) {
-            this.deprecated();
-            return this.toProperCase(str);
-        },
-
-
-        /**
-         * Adds a param and value to an existing url.
+         * Adds a parameter and value to an existing URL.
+         * 
+         * @param {String} url the URL to append to
+         * @param {String} name the name of the parameter
+         * @param {String} value the value of the parameter
+         * @return {String} the url with the given parameter appended
+         * 
          */
         addParameterToUrl: function(url, name, value) {
             if (this.isEmpty(name)) {

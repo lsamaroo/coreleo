@@ -1,6 +1,11 @@
+/** 
+ * A logger utility.
+ * @module log 
+ */
+
+/* eslint no-console:0 */
 define(function(require) {
     'use strict';
-
     if (!(window.console && console.log)) {
         return {
             log: function() {},

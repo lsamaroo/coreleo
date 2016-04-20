@@ -1,4 +1,6 @@
 var gulp = require('gulp'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),    
     eslint = require('gulp-eslint'),
 	gulpSequence = require('gulp-sequence'),
     beautify = require('gulp-jsbeautifier'),
@@ -12,7 +14,15 @@ var destMinFilename = 'coreleo.min.js';
 var jsFiles = [ srcDir + '/**/*.js' ];
 
 
-gulp.task('lint', function() {
+gulp.task('jshint', function() {
+	  return gulp.src(jsFiles)
+	    .pipe(jshint({"expr": "true"}))
+	    .pipe(jshint.reporter(stylish))
+	    .pipe(jshint.reporter('fail'));
+});
+
+
+gulp.task('eslint', function() {
   return gulp.src(jsFiles)
 	    .pipe(eslint({
 	    	fix: true
@@ -40,12 +50,12 @@ gulp.task('requirejs-optimizer', shell.task([
 
 
 gulp.task('jsdoc', shell.task([
-    'node node_modules/jsdoc/jsdoc.js ' + srcDir + ' -r -c jsdoc-conf.json -d ' +   docDir
+    'node node_modules/jsdoc/jsdoc.js --readme ./README.md ' + srcDir + ' -r -c jsdoc-conf.json -d ' +   docDir
 ]));
 
 
 gulp.task('build', function(cb) {
-	gulpSequence('lint', 'beautify', 'requirejs-optimizer', 'jsdoc')(cb);
+	gulpSequence('jshint', 'eslint', 'beautify', 'requirejs-optimizer', 'jsdoc')(cb);
 });
 
 

@@ -10,7 +10,7 @@
   <body>
   	<input type="text" id="testfield" value="I should be disabled"></input>
     <script>
-    	coreleo.ui.disableTextField( 'testfield' );
+    	coreleo.ui.text.disable( 'testfield' );
       	var val = coreleo.$( '#testfield').val();
       	coreleo.$( '#testfield').val( coreleo.util.toUpper( val ) );
 

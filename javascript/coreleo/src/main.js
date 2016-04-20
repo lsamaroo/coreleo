@@ -8,14 +8,21 @@ define(function(require) {
     'use strict';
 
     var ui = require('ui');
+    ui.dialog = require('ui/dialog');
+    ui.form = require('ui/form');
+    ui.tabs = require('ui/tabs');
+    ui.select = require('ui/select');
+    ui.text = require('ui/text');
+    ui.table = require('ui/table');
 
     //Return the module value.
     return {
         version: '0.0.1',
         $: require('$'),
-        log: require('log'),
         constants: require('constants'),
-        util: require('util'),
-        ui: ui
+        log: require('log'),
+        poller: require('poller'),
+        ui: ui,
+        util: require('util')
     };
 });
