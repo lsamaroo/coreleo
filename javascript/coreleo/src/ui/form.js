@@ -8,8 +8,7 @@ define(function(require) {
     var $ = require('$');
     var util = require('util');
 
-    return {
-
+    var module = {
         /**
          * @param {string} id - the id or selector of the element to disable
          */
@@ -31,14 +30,15 @@ define(function(require) {
             var item = $(util.idAsSelector(id));
             item.prop('disabled', true);
 
-            if (milliseconds) {
-                var self = this;
+            if (util.isNotEmpty(milliseconds)) {
                 setTimeout(function() {
-                    self.enable(id);
+                    module.enable(id);
                 }, milliseconds);
             }
         }
     };
+
+    return module;
 
 
 });

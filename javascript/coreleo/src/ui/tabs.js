@@ -18,15 +18,17 @@ define(function(require) {
         tabCount--;
     };
 
-    return /** @alias module:tabs */ {
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+    var module = /** @alias module:tabs */ {
         maxTabs: 12,
 
-
         isMaxNumTabsOpen: function() {
-            return tabCount >= this.maxTabs;
+            return tabCount >= getThis().maxTabs;
         },
-
-
 
         addTab: function(tabContainerId, tabId, tabTitle, tabContent, showCloseIcon, closeTabText) {
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="#{href}">{tabTitle}</a>{closeIcon}</li>';
@@ -44,7 +46,7 @@ define(function(require) {
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', tabId).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
             tabs.append('<div id="' + tabId + '"><p>' + tabContent + '</p></div>');
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             incrementTabCount();
         },
 
@@ -63,7 +65,7 @@ define(function(require) {
             var tabs = $(util.idAsSelector(tabContainerId));
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', href).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             incrementTabCount();
         },
 
@@ -97,7 +99,7 @@ define(function(require) {
 
         selectTab: function(tabContainerId, tabId) {
             tabContainerId = util.idAsSelector(tabContainerId);
-            var tabIndex = this.getTabIndexById(tabContainerId, tabId);
+            var tabIndex = getThis().getTabIndexById(tabContainerId, tabId);
             var tabs = $(tabContainerId).tabs();
             tabs.tabs('option', 'active', tabIndex);
         },
@@ -110,7 +112,7 @@ define(function(require) {
             tabs.delegate('span.ui-icon-close', 'click', function() {
                 var panelId = $(this).closest('li').remove().attr('aria-controls');
                 $(util.idAsSelector(panelId)).remove();
-                this.refresh(tabContainerId);
+                getThis().refresh(tabContainerId);
                 decrementTabCount();
             });
         },
@@ -119,7 +121,7 @@ define(function(require) {
         closeTab: function(tabContainerId, tabId) {
             var panelId = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]').closest('li').remove().attr('aria-controls');
             $('#' + panelId).remove();
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             decrementTabCount();
         },
 
@@ -131,12 +133,14 @@ define(function(require) {
 
         getSelectedTabId: function(tabContainerId) {
             tabContainerId = util.idAsSelector(tabContainerId);
-            var index = this.getSelectedTabIndex(tabContainerId);
+            var index = getThis().getSelectedTabIndex(tabContainerId);
             var id = ($(tabContainerId + ' ul>li a').eq(index).attr('href'));
             return util.startsWith(id, '#') ? id.substring(1, id.lenght) : id;
         }
 
     };
+
+    return module;
 
 
 });

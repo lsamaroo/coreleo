@@ -9,7 +9,13 @@ define(function(require) {
     var _ = require('lodash');
     var log = require('log');
 
-    var util = {
+
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+    var module = {
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
@@ -20,7 +26,7 @@ define(function(require) {
         },
 
         isNotEmpty: function(text) {
-            return !this.isEmpty(text);
+            return !getThis().isEmpty(text);
         },
 
         startsWith: function(str, ch, position) {
@@ -38,7 +44,7 @@ define(function(require) {
         },
 
         formatPhone: function(phone) {
-            if (this.isEmpty(phone)) {
+            if (getThis().isEmpty(phone)) {
                 return '';
             }
             return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
@@ -76,7 +82,7 @@ define(function(require) {
          * @return {String} A empty string if the parameter was null or undefined otherwise the parameter
          */
         blankNull: function(string) {
-            if (this.isEmpty(string)) {
+            if (getThis().isEmpty(string)) {
                 return '';
             }
             else {
@@ -86,7 +92,7 @@ define(function(require) {
 
 
         toBoolean: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
@@ -100,11 +106,11 @@ define(function(require) {
 
 
         isTrue: function(str) {
-            return this.toBoolean(str) === true;
+            return getThis().toBoolean(str);
         },
 
         isFalse: function(str) {
-            return !this.isTrue(str);
+            return !getThis().isTrue(str);
         },
 
         /**
@@ -117,57 +123,57 @@ define(function(require) {
          * 
          */
         zeroFill: function(string, size) {
-            if (this.isEmpty(string)) {
+            if (getThis().isEmpty(string)) {
                 return '';
             }
             return _.padStart(string, (size - string.length), '0');
         },
 
         isIdSelector: function(id) {
-            if (this.isEmpty(id)) {
+            if (getThis().isEmpty(id)) {
                 return false;
             }
 
-            return this.startsWith(id, '#');
+            return getThis().startsWith(id, '#');
         },
 
         isClassSelector: function(cssClass) {
-            if (this.isEmpty(cssClass)) {
+            if (getThis().isEmpty(cssClass)) {
                 return false;
             }
-            return this.startsWith(cssClass, '.');
+            return getThis().startsWith(cssClass, '.');
         },
 
         idAsSelector: function(id) {
-            if (this.isEmpty(id)) {
+            if (getThis().isEmpty(id)) {
                 return '';
             }
 
             id = id.trim();
-            if (this.isIdSelector(id) || this.isClassSelector(id)) {
+            if (getThis().isIdSelector(id) || getThis().isClassSelector(id)) {
                 return id;
             }
             return '#' + id;
         },
 
         classAsSelector: function(cssClass) {
-            if (this.isEmpty(cssClass)) {
+            if (getThis().isEmpty(cssClass)) {
                 return '';
             }
 
             cssClass = cssClass.trim();
-            if (this.isIdSelector(cssClass) || this.isClassSelector(cssClass)) {
+            if (getThis().isIdSelector(cssClass) || getThis().isClassSelector(cssClass)) {
                 return cssClass;
             }
             return '.' + cssClass;
         },
 
         contains: function(str, subString) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
-            if (this.isEmpty(subString)) {
+            if (getThis().isEmpty(subString)) {
                 return false;
             }
 
@@ -175,19 +181,19 @@ define(function(require) {
         },
 
         containsIgnoreCase: function(str, subString) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
-            if (this.isEmpty(subString)) {
+            if (getThis().isEmpty(subString)) {
                 return false;
             }
 
-            return this.contains(str.toLowerCase(), str.toLowerCase());
+            return getThis().contains(str.toLowerCase(), str.toLowerCase());
         },
 
         trimNewLineChar: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             return str.replace(/(\r\n|\n|\r)/gm, '');
@@ -195,7 +201,7 @@ define(function(require) {
 
 
         trimWhiteSpaceChar: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             return str.replace(/(\s)/gm, '');
@@ -204,7 +210,7 @@ define(function(require) {
 
         redirectAsHttpPost: function(location, args, target) {
             if (!target) {
-                target = '_self';
+                target = '_getThis()';
             }
 
             var form = '';
@@ -235,7 +241,7 @@ define(function(require) {
          * @return {String} the string in proper case
          */
         properCase: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             str = str.toLowerCase();
@@ -255,11 +261,7 @@ define(function(require) {
          * 
          */
         addParameterToUrl: function(url, name, value) {
-            if (this.isEmpty(name)) {
-                return url;
-            }
-
-            if (this.isEmpty(value)) {
+            if (getThis().isEmpty(name) || getThis().isEmpty(value)) {
                 return url;
             }
 
@@ -283,5 +285,5 @@ define(function(require) {
 
     };
 
-    return _.assign({}, _, util);
+    return _.assign({}, _, module);
 });

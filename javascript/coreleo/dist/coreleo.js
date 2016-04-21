@@ -490,7 +490,13 @@ define('util',['require','$','lodash','log'],function(require) {
     var _ = require('lodash');
     var log = require('log');
 
-    var util = {
+
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+    var module = {
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
@@ -501,7 +507,7 @@ define('util',['require','$','lodash','log'],function(require) {
         },
 
         isNotEmpty: function(text) {
-            return !this.isEmpty(text);
+            return !getThis().isEmpty(text);
         },
 
         startsWith: function(str, ch, position) {
@@ -519,7 +525,7 @@ define('util',['require','$','lodash','log'],function(require) {
         },
 
         formatPhone: function(phone) {
-            if (this.isEmpty(phone)) {
+            if (getThis().isEmpty(phone)) {
                 return '';
             }
             return '(' + phone.substr(0, 3) + ') ' + phone.substr(3, 3) + '-' + phone.substr(6, 4);
@@ -557,7 +563,7 @@ define('util',['require','$','lodash','log'],function(require) {
          * @return {String} A empty string if the parameter was null or undefined otherwise the parameter
          */
         blankNull: function(string) {
-            if (this.isEmpty(string)) {
+            if (getThis().isEmpty(string)) {
                 return '';
             }
             else {
@@ -567,7 +573,7 @@ define('util',['require','$','lodash','log'],function(require) {
 
 
         toBoolean: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
@@ -581,11 +587,11 @@ define('util',['require','$','lodash','log'],function(require) {
 
 
         isTrue: function(str) {
-            return this.toBoolean(str) === true;
+            return getThis().toBoolean(str);
         },
 
         isFalse: function(str) {
-            return !this.isTrue(str);
+            return !getThis().isTrue(str);
         },
 
         /**
@@ -598,57 +604,57 @@ define('util',['require','$','lodash','log'],function(require) {
          * 
          */
         zeroFill: function(string, size) {
-            if (this.isEmpty(string)) {
+            if (getThis().isEmpty(string)) {
                 return '';
             }
             return _.padStart(string, (size - string.length), '0');
         },
 
         isIdSelector: function(id) {
-            if (this.isEmpty(id)) {
+            if (getThis().isEmpty(id)) {
                 return false;
             }
 
-            return this.startsWith(id, '#');
+            return getThis().startsWith(id, '#');
         },
 
         isClassSelector: function(cssClass) {
-            if (this.isEmpty(cssClass)) {
+            if (getThis().isEmpty(cssClass)) {
                 return false;
             }
-            return this.startsWith(cssClass, '.');
+            return getThis().startsWith(cssClass, '.');
         },
 
         idAsSelector: function(id) {
-            if (this.isEmpty(id)) {
+            if (getThis().isEmpty(id)) {
                 return '';
             }
 
             id = id.trim();
-            if (this.isIdSelector(id) || this.isClassSelector(id)) {
+            if (getThis().isIdSelector(id) || getThis().isClassSelector(id)) {
                 return id;
             }
             return '#' + id;
         },
 
         classAsSelector: function(cssClass) {
-            if (this.isEmpty(cssClass)) {
+            if (getThis().isEmpty(cssClass)) {
                 return '';
             }
 
             cssClass = cssClass.trim();
-            if (this.isIdSelector(cssClass) || this.isClassSelector(cssClass)) {
+            if (getThis().isIdSelector(cssClass) || getThis().isClassSelector(cssClass)) {
                 return cssClass;
             }
             return '.' + cssClass;
         },
 
         contains: function(str, subString) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
-            if (this.isEmpty(subString)) {
+            if (getThis().isEmpty(subString)) {
                 return false;
             }
 
@@ -656,19 +662,19 @@ define('util',['require','$','lodash','log'],function(require) {
         },
 
         containsIgnoreCase: function(str, subString) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return false;
             }
 
-            if (this.isEmpty(subString)) {
+            if (getThis().isEmpty(subString)) {
                 return false;
             }
 
-            return this.contains(str.toLowerCase(), str.toLowerCase());
+            return getThis().contains(str.toLowerCase(), str.toLowerCase());
         },
 
         trimNewLineChar: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             return str.replace(/(\r\n|\n|\r)/gm, '');
@@ -676,7 +682,7 @@ define('util',['require','$','lodash','log'],function(require) {
 
 
         trimWhiteSpaceChar: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             return str.replace(/(\s)/gm, '');
@@ -685,7 +691,7 @@ define('util',['require','$','lodash','log'],function(require) {
 
         redirectAsHttpPost: function(location, args, target) {
             if (!target) {
-                target = '_self';
+                target = '_getThis()';
             }
 
             var form = '';
@@ -716,7 +722,7 @@ define('util',['require','$','lodash','log'],function(require) {
          * @return {String} the string in proper case
          */
         properCase: function(str) {
-            if (this.isEmpty(str)) {
+            if (getThis().isEmpty(str)) {
                 return '';
             }
             str = str.toLowerCase();
@@ -736,11 +742,7 @@ define('util',['require','$','lodash','log'],function(require) {
          * 
          */
         addParameterToUrl: function(url, name, value) {
-            if (this.isEmpty(name)) {
-                return url;
-            }
-
-            if (this.isEmpty(value)) {
+            if (getThis().isEmpty(name) || getThis().isEmpty(value)) {
                 return url;
             }
 
@@ -764,7 +766,7 @@ define('util',['require','$','lodash','log'],function(require) {
 
     };
 
-    return _.assign({}, _, util);
+    return _.assign({}, _, module);
 });
 
 /** 
@@ -794,7 +796,13 @@ define('ui/mobile',['require','$','util'],function(require) {
     var util = require('util');
 
 
-    return {
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+
+    var module = {
 
         /*
          * Refreshes a JQuery mobile select item when options are changed.
@@ -804,7 +812,7 @@ define('ui/mobile',['require','$','util'],function(require) {
          */
         refreshSelect: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.selectmenu) {
+            if (getThis().isMobile() && item.selectmenu) {
                 item.selectmenu('refresh');
             }
         },
@@ -817,14 +825,14 @@ define('ui/mobile',['require','$','util'],function(require) {
          */
         initTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.table) {
+            if (getThis().isMobile() && item.table) {
                 item.table();
             }
         },
 
         refreshTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.table) {
+            if (getThis().isMobile() && item.table) {
                 item.table('rebuild');
             }
         },
@@ -832,14 +840,14 @@ define('ui/mobile',['require','$','util'],function(require) {
 
         enableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.textinput) {
+            if (getThis().isMobile() && item.textinput) {
                 item.textinput('enable');
             }
         },
 
         disableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.textinput) {
+            if (getThis().isMobile() && item.textinput) {
                 item.textinput('disable');
             }
         },
@@ -848,6 +856,7 @@ define('ui/mobile',['require','$','util'],function(require) {
             return $.mobile ? true : false;
         }
     };
+    return module;
 });
 
 /** 
@@ -860,8 +869,7 @@ define('ui/form',['require','$','util'],function(require) {
     var $ = require('$');
     var util = require('util');
 
-    return {
-
+    var module = {
         /**
          * @param {string} id - the id or selector of the element to disable
          */
@@ -883,14 +891,15 @@ define('ui/form',['require','$','util'],function(require) {
             var item = $(util.idAsSelector(id));
             item.prop('disabled', true);
 
-            if (milliseconds) {
-                var self = this;
+            if (util.isNotEmpty(milliseconds)) {
                 setTimeout(function() {
-                    self.enable(id);
+                    module.enable(id);
                 }, milliseconds);
             }
         }
     };
+
+    return module;
 
 
 });
@@ -992,8 +1001,8 @@ define('ui',['require','$','util','constants','ui/mobile','ui/form','template/te
 
 
         /**
-         * Displays a loading spinner in the element that matches the provided id.  
-         * By default it replaces the content of that element.
+         * Displays a loading spinner in the element which matches the provided id.  
+         * By default it replaces the content of the element.
          * 
          * @param {String} id the id of the element.
          * @param {boolean} [append=false] set to true to append the spinner to the element instead
@@ -1302,15 +1311,17 @@ define('ui/tabs',['require','$','util'],function(require) {
         tabCount--;
     };
 
-    return /** @alias module:tabs */ {
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+    var module = /** @alias module:tabs */ {
         maxTabs: 12,
 
-
         isMaxNumTabsOpen: function() {
-            return tabCount >= this.maxTabs;
+            return tabCount >= getThis().maxTabs;
         },
-
-
 
         addTab: function(tabContainerId, tabId, tabTitle, tabContent, showCloseIcon, closeTabText) {
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="#{href}">{tabTitle}</a>{closeIcon}</li>';
@@ -1328,7 +1339,7 @@ define('ui/tabs',['require','$','util'],function(require) {
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', tabId).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
             tabs.append('<div id="' + tabId + '"><p>' + tabContent + '</p></div>');
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             incrementTabCount();
         },
 
@@ -1347,7 +1358,7 @@ define('ui/tabs',['require','$','util'],function(require) {
             var tabs = $(util.idAsSelector(tabContainerId));
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', href).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             incrementTabCount();
         },
 
@@ -1381,7 +1392,7 @@ define('ui/tabs',['require','$','util'],function(require) {
 
         selectTab: function(tabContainerId, tabId) {
             tabContainerId = util.idAsSelector(tabContainerId);
-            var tabIndex = this.getTabIndexById(tabContainerId, tabId);
+            var tabIndex = getThis().getTabIndexById(tabContainerId, tabId);
             var tabs = $(tabContainerId).tabs();
             tabs.tabs('option', 'active', tabIndex);
         },
@@ -1394,7 +1405,7 @@ define('ui/tabs',['require','$','util'],function(require) {
             tabs.delegate('span.ui-icon-close', 'click', function() {
                 var panelId = $(this).closest('li').remove().attr('aria-controls');
                 $(util.idAsSelector(panelId)).remove();
-                this.refresh(tabContainerId);
+                getThis().refresh(tabContainerId);
                 decrementTabCount();
             });
         },
@@ -1403,7 +1414,7 @@ define('ui/tabs',['require','$','util'],function(require) {
         closeTab: function(tabContainerId, tabId) {
             var panelId = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]').closest('li').remove().attr('aria-controls');
             $('#' + panelId).remove();
-            this.refresh(tabContainerId);
+            getThis().refresh(tabContainerId);
             decrementTabCount();
         },
 
@@ -1415,12 +1426,14 @@ define('ui/tabs',['require','$','util'],function(require) {
 
         getSelectedTabId: function(tabContainerId) {
             tabContainerId = util.idAsSelector(tabContainerId);
-            var index = this.getSelectedTabIndex(tabContainerId);
+            var index = getThis().getSelectedTabIndex(tabContainerId);
             var id = ($(tabContainerId + ' ul>li a').eq(index).attr('href'));
             return util.startsWith(id, '#') ? id.substring(1, id.lenght) : id;
         }
 
     };
+
+    return module;
 
 
 });
@@ -1488,12 +1501,13 @@ define('ui/text',['require','ui/form','ui/mobile'],function(require) {
  * Utilities for handling JQuery UI and mobile tables.
  * @module table 
  */
-define('ui/table',['require','$','util','ui/mobile'],function(require) {
+define('ui/table',['require','$','util','ui/mobile','ui'],function(require) {
     'use strict';
 
     var $ = require('$');
     var util = require('util');
     var mobile = require('ui/mobile');
+    var ui = require('ui');
 
     return {
 
@@ -1535,7 +1549,7 @@ define('ui/table',['require','$','util','ui/mobile'],function(require) {
          */
         /*eslint max-params: 0 */
         initTableSorter: function(id, options, widgets, widgetOptions, groupFormatter, groupCallback) {
-            if (!$.tablesorter || util.isMobile()) {
+            if (!$.tablesorter || ui.isMobile()) {
                 return;
             }
 
@@ -1601,11 +1615,10 @@ define('ui/table',['require','$','util','ui/mobile'],function(require) {
  * Utilities for polling a function and URLs.
  * @module poller 
  */
-define('poller',['require','$','util','log'],function(require) {
+define('poller',['require','$','log'],function(require) {
     'use strict';
 
     var $ = require('$');
-    var util = require('util');
     var log = require('log');
 
     return {
@@ -1636,10 +1649,10 @@ define('poller',['require','$','util','log'],function(require) {
          * @param {Object}  options a list of options required for this function.
          * @param {integer} options.interval - the interval in milliseconds.
          * @param {String}  options.url - A string containing the URL to which the request is sent.
-         * @param {Object}  options.data - Either a function to be called to get data or a plain object or string that is 
-         * sent to the server with the request
-         * @param {Function} options.success - A callback function that is executed if the request succeeds.
-         * @param {Function} options.error - A callback function that is executed if the request fails.
+         * @param {Object}  options.data - Either a function to be called to get data, a plain object or string to 
+         * send to the server with the request
+         * @param {Function} options.success - A callback function which is executed if the request succeeds.
+         * @param {Function} options.error - A callback function which is executed if the request fails.
          * @param {String} options.dataType - he type of data expected from the server. Default: json
          */
         pollUrl: function(options) {
@@ -1650,8 +1663,12 @@ define('poller',['require','$','util','log'],function(require) {
                 error = options.error,
                 dataType = options.dataType;
 
-            if (util.isEmpty(data)) {
+            if (!data) {
                 data = {};
+            }
+
+            if (!dataType) {
+                dataType = 'json';
             }
             (function loopsiloop() {
                 setTimeout(function() {
@@ -1698,7 +1715,7 @@ define('poller',['require','$','util','log'],function(require) {
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('main',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/text','ui/table','$','constants','log','poller','util'],function(require) {
+define('coreleo',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/text','ui/table','$','constants','log','poller','util'],function(require) {
     'use strict';
 
     var ui = require('ui');
@@ -1710,7 +1727,7 @@ define('main',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/te
     ui.table = require('ui/table');
 
     //Return the module value.
-    return {
+    var coreleo = {
         version: '0.0.1',
         $: require('$'),
         constants: require('constants'),
@@ -1719,6 +1736,8 @@ define('main',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/te
         ui: ui,
         util: require('util')
     };
+
+    return coreleo;
 });
 
     //Register in the values from the outer closure for common dependencies
@@ -1737,5 +1756,5 @@ define('main',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/te
     //Use almond's special top-level, synchronous require to trigger factory
     //functions, get the final module value, and export it as the public
     //value.
-    return require('main');
+    return require('coreleo');
 }));

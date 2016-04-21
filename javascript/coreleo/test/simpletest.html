@@ -11,8 +11,14 @@
   	<input type="text" id="testfield" value="I should be disabled"></input>
     <script>
     	coreleo.ui.text.disable( 'testfield' );
-      	var val = coreleo.$( '#testfield').val();
-      	coreleo.$( '#testfield').val( coreleo.util.toUpper( val ) );
+    	var input = coreleo.$( '#testfield');
+      	var val = input.val();
+      	input.val(  val  );
+      	
+      	var allIsWell = 'All is well';
+      	if( coreleo.util.isNotEmpty(allIsWell)){
+      		input.val( allIsWell );
+      	}
 
     </script>
   </body>

@@ -11,7 +11,13 @@ define(function(require) {
     var util = require('util');
 
 
-    return {
+    // Workaround for "this" being undefined when used in the util object literal
+    var getThis = function() {
+        return module;
+    };
+
+
+    var module = {
 
         /*
          * Refreshes a JQuery mobile select item when options are changed.
@@ -21,7 +27,7 @@ define(function(require) {
          */
         refreshSelect: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.selectmenu) {
+            if (getThis().isMobile() && item.selectmenu) {
                 item.selectmenu('refresh');
             }
         },
@@ -34,14 +40,14 @@ define(function(require) {
          */
         initTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.table) {
+            if (getThis().isMobile() && item.table) {
                 item.table();
             }
         },
 
         refreshTable: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.table) {
+            if (getThis().isMobile() && item.table) {
                 item.table('rebuild');
             }
         },
@@ -49,14 +55,14 @@ define(function(require) {
 
         enableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.textinput) {
+            if (getThis().isMobile() && item.textinput) {
                 item.textinput('enable');
             }
         },
 
         disableTextField: function(id) {
             var item = $(util.idAsSelector(id));
-            if (this.isMobile() && item.textinput) {
+            if (getThis().isMobile() && item.textinput) {
                 item.textinput('disable');
             }
         },
@@ -65,4 +71,5 @@ define(function(require) {
             return $.mobile ? true : false;
         }
     };
+    return module;
 });

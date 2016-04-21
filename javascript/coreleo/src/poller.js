@@ -6,7 +6,6 @@ define(function(require) {
     'use strict';
 
     var $ = require('$');
-    var util = require('util');
     var log = require('log');
 
     return {
@@ -37,10 +36,10 @@ define(function(require) {
          * @param {Object}  options a list of options required for this function.
          * @param {integer} options.interval - the interval in milliseconds.
          * @param {String}  options.url - A string containing the URL to which the request is sent.
-         * @param {Object}  options.data - Either a function to be called to get data or a plain object or string that is 
-         * sent to the server with the request
-         * @param {Function} options.success - A callback function that is executed if the request succeeds.
-         * @param {Function} options.error - A callback function that is executed if the request fails.
+         * @param {Object}  options.data - Either a function to be called to get data, a plain object or string to 
+         * send to the server with the request
+         * @param {Function} options.success - A callback function which is executed if the request succeeds.
+         * @param {Function} options.error - A callback function which is executed if the request fails.
          * @param {String} options.dataType - he type of data expected from the server. Default: json
          */
         pollUrl: function(options) {
@@ -51,8 +50,12 @@ define(function(require) {
                 error = options.error,
                 dataType = options.dataType;
 
-            if (util.isEmpty(data)) {
+            if (!data) {
                 data = {};
+            }
+
+            if (!dataType) {
+                dataType = 'json';
             }
             (function loopsiloop() {
                 setTimeout(function() {

@@ -16,7 +16,7 @@ define(function(require) {
     ui.table = require('ui/table');
 
     //Return the module value.
-    return {
+    var coreleo = {
         version: '0.0.1',
         $: require('$'),
         constants: require('constants'),
@@ -25,4 +25,6 @@ define(function(require) {
         ui: ui,
         util: require('util')
     };
+
+    return coreleo;
 });

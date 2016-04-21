@@ -8,6 +8,7 @@ define(function(require) {
     var $ = require('$');
     var util = require('util');
     var mobile = require('ui/mobile');
+    var ui = require('ui');
 
     return {
 
@@ -49,7 +50,7 @@ define(function(require) {
          */
         /*eslint max-params: 0 */
         initTableSorter: function(id, options, widgets, widgetOptions, groupFormatter, groupCallback) {
-            if (!$.tablesorter || util.isMobile()) {
+            if (!$.tablesorter || ui.isMobile()) {
                 return;
             }
 

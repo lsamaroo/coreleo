@@ -40,8 +40,8 @@ define(function(require) {
 
 
         /**
-         * Displays a loading spinner in the element that matches the provided id.  
-         * By default it replaces the content of that element.
+         * Displays a loading spinner in the element which matches the provided id.  
+         * By default it replaces the content of the element.
          * 
          * @param {String} id the id of the element.
          * @param {boolean} [append=false] set to true to append the spinner to the element instead
