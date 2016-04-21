@@ -21,8 +21,17 @@ define(function(require) {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
         },
 
-        isEmpty: function(obj) {
-            return _.isEmpty(obj);
+        /*jshint eqnull:true */
+        /* eslint eqeqeq:0 no-eq-null:0 */
+        isEmpty: function(text) {
+            return (
+                text == null || text === null ||
+                text === undefined ||
+                typeof text === 'undefined' ||
+                $.trim(text) === 'null' ||
+                $.trim(text) === '' ||
+                ($.isArray(text) && text.length === 0)
+            );
         },
 
         isNotEmpty: function(text) {
