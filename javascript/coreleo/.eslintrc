@@ -86,7 +86,7 @@
         "no-with": 2,
         "no-wrap-func": 0,
         "block-scoped-var": 0,
-		"brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+		"brace-style": [1, "stroustrup", { "allowSingleLine": true }],
         "camelcase": 2,
         "complexity": [0, 11],
         "consistent-return": 0,

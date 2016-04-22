@@ -11,12 +11,45 @@ define(function(require) {
         return module;
     };
 
+    var isIdSelector = function(id) {
+        if (getThis().isEmpty(id)) {
+            return false;
+        }
+
+        return getThis().startsWith(id, '#');
+    };
+
+    var isClassSelector = function(cssClass) {
+        if (getThis().isEmpty(cssClass)) {
+            return false;
+        }
+        return getThis().startsWith(cssClass, '.');
+    };
+
+
     /** 
      * Generic utilities for dealing with strings, objects, etc.  It is built on top of the lodash libary. 
      * @see the [lodash API] @link https://lodash.com/docs for additional functions that you have access to via this class
      * @exports util 
      */
     var module = {
+
+        /**
+         * Checks if the string is a valid JQuery selector
+         * 
+         * @param {string}  selector - the selector to check.
+         * @return {boolean} true if a valid selector false otherwise.
+         */
+
+        isValidSelector: function(selector) {
+            try {
+                $(selector);
+            }
+            catch (error) {
+                return false;
+            }
+            return true;
+        },
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
@@ -148,20 +181,6 @@ define(function(require) {
             return _.padStart(string, (size - string.length), '0');
         },
 
-        isIdSelector: function(id) {
-            if (getThis().isEmpty(id)) {
-                return false;
-            }
-
-            return getThis().startsWith(id, '#');
-        },
-
-        isClassSelector: function(cssClass) {
-            if (getThis().isEmpty(cssClass)) {
-                return false;
-            }
-            return getThis().startsWith(cssClass, '.');
-        },
 
         idAsSelector: function(id) {
             if (getThis().isEmpty(id)) {
@@ -169,7 +188,7 @@ define(function(require) {
             }
 
             id = id.trim();
-            if (getThis().isIdSelector(id) || getThis().isClassSelector(id)) {
+            if (isIdSelector(id) || isClassSelector(id)) {
                 return id;
             }
             return '#' + id;
@@ -181,7 +200,7 @@ define(function(require) {
             }
 
             cssClass = cssClass.trim();
-            if (getThis().isIdSelector(cssClass) || getThis().isClassSelector(cssClass)) {
+            if (isIdSelector(cssClass) || isClassSelector(cssClass)) {
                 return cssClass;
             }
             return '.' + cssClass;

@@ -4,15 +4,6 @@ define(function(require) {
     var $ = require('$');
     var util = require('util');
 
-    var tabCount = 1;
-
-    var incrementTabCount = function() {
-        tabCount++;
-    };
-
-    var decrementTabCount = function() {
-        tabCount--;
-    };
 
     // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
@@ -20,22 +11,30 @@ define(function(require) {
     };
 
     /** 
-     *  Utilities for handling JQuery tabs.
+     * Utilities for handling JQuery tabs.
      * @exports tabs 
      */
     var module = {
-        maxTabs: 12,
 
         /**
+         * Add a new tab to an existing tab container.
          * 
-         * 
-         * @return {Boolean} true if the max number of tabs have been opened.
+         * @param {object}  options - a list of options required for this function
+         * @param {string}  options.tabContainerId - the id of the tab container to add the new tab to
+         * @param {string}  options.tabId - an id to give the new tab.  Has to be unique
+         * @param {string}  options.tabTitle - the text to display as the title of the tab
+         * @param {string}  options.tabContent - the content to display in the tab
+         * @param {boolean} [options.showCloseIcon] - true to show a "x" close icon.
+         * @param {string}  [options.closeTabText] - Text to display if there is a close icon
          */
-        isMaxNumTabsOpen: function() {
-            return tabCount >= getThis().maxTabs;
-        },
+        addTab: function(options) {
+            var tabContainerId = options.tabContainerId,
+                tabId = options.tabId,
+                tabTitle = options.tabTitle,
+                tabContent = options.tabContent,
+                showCloseIcon = options.showCloseIcon,
+                closeTabText = options.closeTabText;
 
-        addTab: function(tabContainerId, tabId, tabTitle, tabContent, showCloseIcon, closeTabText) {
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="#{href}">{tabTitle}</a>{closeIcon}</li>';
             var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
 
@@ -52,10 +51,27 @@ define(function(require) {
             tabs.find('.ui-tabs-nav').first().append(li);
             tabs.append('<div id="' + tabId + '"><p>' + tabContent + '</p></div>');
             getThis().refresh(tabContainerId);
-            incrementTabCount();
         },
 
-        addAjaxTab: function(tabContainerId, tabId, tabTitle, href, showCloseIcon, closeTabText) {
+        /**
+         * Add a new tab to an existing tab container using an AJAX call to get the content.
+         * 
+         * @param {object}  options - a list of options required for this function
+         * @param {string}  options.tabContainerId - the id of the tab container to add the new tab to
+         * @param {string}  options.tabId - an id to give the new tab.  Has to be unique
+         * @param {string}  options.tabTitle - the text to display as the title of the tab
+         * @param {string}  options.href - the URL to get the tab content from.
+         * @param {boolean} [options.showCloseIcon] - true to show a "x" close icon.
+         * @param {string}  [options.closeTabText] - Text to display if there is a close icon
+         */
+        addAjaxTab: function(options) {
+            var tabContainerId = options.tabContainerId,
+                tabId = options.tabId,
+                tabTitle = options.tabTitle,
+                href = options.href,
+                showCloseIcon = options.showCloseIcon,
+                closeTabText = options.closeTabText;
+
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="{href}">{tabTitle}</a>{closeIcon}</li>';
             var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
 
@@ -71,7 +87,6 @@ define(function(require) {
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', href).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
             getThis().refresh(tabContainerId);
-            incrementTabCount();
         },
 
         renameTab: function(tabContainerId, tabId, title) {
@@ -118,7 +133,6 @@ define(function(require) {
                 var panelId = $(this).closest('li').remove().attr('aria-controls');
                 $(util.idAsSelector(panelId)).remove();
                 getThis().refresh(tabContainerId);
-                decrementTabCount();
             });
         },
 
@@ -127,7 +141,6 @@ define(function(require) {
             var panelId = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]').closest('li').remove().attr('aria-controls');
             $('#' + panelId).remove();
             getThis().refresh(tabContainerId);
-            decrementTabCount();
         },
 
 

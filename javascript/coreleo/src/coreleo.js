@@ -22,6 +22,7 @@ define(function(require) {
         constants: require('constants'),
         log: require('log'),
         poller: require('poller'),
+        template: require('template'),
         ui: ui,
         util: require('util')
     };

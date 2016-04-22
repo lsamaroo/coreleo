@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ui/form.js</title>
+    <title>JSDoc: Source: template.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ui/form.js</h1>
+    <h1 class="page-title">Source: template.js</h1>
 
     
 
@@ -29,46 +29,57 @@
             <pre class="prettyprint source linenums"><code>define(function(require) {
     'use strict';
 
-    var $ = require('$');
-    var util = require('util');
 
+    var $ = require('$');
+    var handlebars = require('handlebars');
     /** 
-     * Utilities for handling form and form inputs.
-     * @exports form 
+     * Utilities for rendering handlebar templates.
+     * @exports template 
      */
     var module = {
-        /**
-         * @param {string} id - the id or selector of the element to disable
-         */
-        enable: function(id) {
-            var item = $(util.idAsSelector(id));
-            item.prop('disabled', false);
+        cache: {
+            get: function(selector) {
+                if (!this.templates) {
+                    this.templates = {};
+                }
+
+                var template = this.templates[selector];
+                if (!template) {
+                    // pre compile the template
+                    template = handlebars.compile($(selector).html());
+                    this.templates[selector] = template;
+                }
+                return template;
+            }
         },
 
         /**
+         * This function will find the template using the selector
+         * and compile and cache it for future use.
          * 
-         * Disable the element and optionally re-enables it after a specific number of milliseconds.
-         * 
-         * @param {string} id - the id or selector of the element to disable
-         * @param {int} [milliseconds] - an optional time in milliseconds before re-enabling it 
-         * before re-enabling it.
+         * @param {string} selector - the selector to the template html
+         * @param {object} data - the data values to use for the template
+         * @return {string} the rendered template and data string
          * 
          */
-        disable: function(id, milliseconds) {
-            var item = $(util.idAsSelector(id));
-            item.prop('disabled', true);
+        renderAndCache: function(selector, data) {
+            var renderer = this.cache.get(selector);
+            return renderer(data);
+        },
 
-            if (util.isNotEmpty(milliseconds)) {
-                setTimeout(function() {
-                    module.enable(id);
-                }, milliseconds);
-            }
+        /**
+         * Combines the template and data to create a rendered String
+         * @param {string} templateString - the template to render
+         * @param {object} data - the data values to use for the template
+         * @return {string} the rendered template and data
+         */
+        render: function(templateString, data) {
+            var renderer = handlebars.compile(templateString);
+            return renderer(data);
         }
+
     };
-
     return module;
-
-
 });
 </code></pre>
         </article>

@@ -492,12 +492,45 @@ define('util',['require','$','lodash','log'],function(require) {
         return module;
     };
 
+    var isIdSelector = function(id) {
+        if (getThis().isEmpty(id)) {
+            return false;
+        }
+
+        return getThis().startsWith(id, '#');
+    };
+
+    var isClassSelector = function(cssClass) {
+        if (getThis().isEmpty(cssClass)) {
+            return false;
+        }
+        return getThis().startsWith(cssClass, '.');
+    };
+
+
     /** 
      * Generic utilities for dealing with strings, objects, etc.  It is built on top of the lodash libary. 
      * @see the [lodash API] @link https://lodash.com/docs for additional functions that you have access to via this class
      * @exports util 
      */
     var module = {
+
+        /**
+         * Checks if the string is a valid JQuery selector
+         * 
+         * @param {string}  selector - the selector to check.
+         * @return {boolean} true if a valid selector false otherwise.
+         */
+
+        isValidSelector: function(selector) {
+            try {
+                $(selector);
+            }
+            catch (error) {
+                return false;
+            }
+            return true;
+        },
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
@@ -629,20 +662,6 @@ define('util',['require','$','lodash','log'],function(require) {
             return _.padStart(string, (size - string.length), '0');
         },
 
-        isIdSelector: function(id) {
-            if (getThis().isEmpty(id)) {
-                return false;
-            }
-
-            return getThis().startsWith(id, '#');
-        },
-
-        isClassSelector: function(cssClass) {
-            if (getThis().isEmpty(cssClass)) {
-                return false;
-            }
-            return getThis().startsWith(cssClass, '.');
-        },
 
         idAsSelector: function(id) {
             if (getThis().isEmpty(id)) {
@@ -650,7 +669,7 @@ define('util',['require','$','lodash','log'],function(require) {
             }
 
             id = id.trim();
-            if (getThis().isIdSelector(id) || getThis().isClassSelector(id)) {
+            if (isIdSelector(id) || isClassSelector(id)) {
                 return id;
             }
             return '#' + id;
@@ -662,7 +681,7 @@ define('util',['require','$','lodash','log'],function(require) {
             }
 
             cssClass = cssClass.trim();
-            if (getThis().isIdSelector(cssClass) || getThis().isClassSelector(cssClass)) {
+            if (isIdSelector(cssClass) || isClassSelector(cssClass)) {
                 return cssClass;
             }
             return '.' + cssClass;
@@ -934,65 +953,10 @@ define('ui/form',['require','$','util'],function(require) {
 });
 
 /** 
- * Utilities for rendering handlebar templates.
- * @module template 
- */
-define('template/template',['require','$','handlebars'],function(require) {
-    'use strict';
-
-    var $ = require('$');
-    var handlebars = require('handlebars');
-
-    return {
-        cache: {
-            get: function(selector) {
-                if (!this.templates) {
-                    this.templates = {};
-                }
-
-                var template = this.templates[selector];
-                if (!template) {
-                    // pre compile the template
-                    template = handlebars.compile($(selector).html());
-                    this.templates[selector] = template;
-                }
-                return template;
-            }
-        },
-
-        /**
-         * This function will find the template using the given selector,
-         * compile it with handlebars and cache it for future use.
-         * 
-         * @param {String} selector - the selector/id to the template html
-         * @param {Object} data - the data values to use for the template
-         * @return {String} the rendered template and data string
-         * 
-         */
-        renderTemplateWithCaching: function(selector, data) {
-            var render = this.cache.get(selector);
-            return render(data);
-        },
-
-        /**
-         * Combines the template and data to create a rendered String
-         * @param {String} templateString - the template to render
-         * @param {Object} data - the data values to use for the template
-         * @return {String} the rendered template and data
-         */
-        renderTemplate: function(templateString, data) {
-            var render = handlebars.compile(templateString);
-            return render(data);
-        }
-
-    };
-});
-
-/** 
  * Utilities for handling generic UI elements.
  * @module ui 
  */
-define('ui',['require','$','util','constants','ui/mobile','ui/form','template/template'],function(require) {
+define('ui',['require','$','util','constants','ui/mobile','ui/form'],function(require) {
     'use strict';
 
 
@@ -1001,26 +965,25 @@ define('ui',['require','$','util','constants','ui/mobile','ui/form','template/te
     var constants = require('constants');
     var mobile = require('ui/mobile');
     var form = require('ui/form');
-    var template = require('template/template');
-
 
     var SPINNER_IMAGE_DATA_URL = 'data:image/gif;base64,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';
 
 
     return {
-        renderTemplateWithCaching: function(selector, data) {
-            return template.renderTemplateWithCaching(selector, data);
-        },
 
-
-        renderTemplate: function(templateString, data) {
-            return template.renderTemplate(templateString, data);
-        },
-
+        /**
+         * @return {boolean} true if running in a mobile browser
+         */
         isMobile: function() {
             return mobile.isMobile();
         },
 
+
+        /**
+         * Disable a button for a specified amount of time
+         * @param {string} id the id of the element
+         * @param {number} [time=2000] time in milliseconds
+         */
         timeoutButton: function(id, time) {
             if (!time) {
                 time = constants.ONE_SECOND * 2;
@@ -1141,20 +1104,20 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
         template = template.replace('{header}', header);
         template = template.replace('{iconClass}', iconClass);
 
-        var item = $(template);
-        $('.save', item).click(function(eventObject) {
-            successFunction(item);
+        var $el = $(template);
+        $('.save', $el).click(function(eventObject) {
+            successFunction($el);
             closeDialogOrPopup('#my-confirm-dialog');
             destroyDialogOrPopup('#my-confirm-dialog');
         });
 
-        $('.cancel', item).click(function(eventObject) {
+        $('.cancel', $el).click(function(eventObject) {
             closeDialogOrPopup('#my-confirm-dialog');
             destroyDialogOrPopup('#my-confirm-dialog');
         });
 
-        item.popup();
-        item.popup('open');
+        $el.popup();
+        $el.popup('open');
     };
 
 
@@ -1165,61 +1128,61 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
         template = template.replace('{header}', '');
         template = template.replace('{iconClass}', iconClass);
 
-        var item = $(template);
-        $('.save', item).click(function(eventObject) {
-            successFunction(item);
+        var $el = $(template);
+        $('.save', $el).click(function(eventObject) {
+            successFunction($el);
             closeDialogOrPopup('#my-confirm-dialog');
             destroyDialogOrPopup('#my-confirm-dialog');
         });
 
-        $('.cancel', item).click(function(eventObject) {
+        $('.cancel', $el).click(function(eventObject) {
             closeDialogOrPopup('#my-confirm-dialog');
             destroyDialogOrPopup('#my-confirm-dialog');
         });
 
-        item.dialog({
+        $el.dialog({
             autoOpen: false,
             resizable: true,
             modal: true
         });
 
-        item.dialog('open');
+        $el.dialog('open');
     };
 
 
     var destroyDialogOrPopup = function(id) {
-        var item = null;
+        var $el = null;
         if (typeof id === 'string') {
             var itemId = util.idAsSelector(id);
-            item = $(itemId);
+            $el = $(itemId);
         }
         else {
-            item = id;
+            $el = id;
         }
 
-        if (item.popup) {
-            item.popup('destroy').remove();
+        if ($el.popup) {
+            $el.popup('destroy').remove();
         }
         else {
-            item.dialog('destroy').remove();
+            $el.dialog('destroy').remove();
         }
     };
 
     var closeDialogOrPopup = function(id) {
-        var item = null;
+        var $el = null;
         if (typeof id === 'string') {
             var itemId = util.idAsSelector(id);
-            item = $(itemId);
+            $el = $(itemId);
         }
         else {
-            item = id;
+            $el = id;
         }
 
-        if (item.popup) {
-            item.popup('close');
+        if ($el.popup) {
+            $el.popup('close');
         }
         else {
-            item.dialog('close');
+            $el.dialog('close');
         }
     };
 
@@ -1258,28 +1221,28 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
          */
         open: function(id, width, height, modal) {
             var itemId = util.idAsSelector(id);
-            var item = $(itemId);
-            if (item.panel) {
-                item.css('display', '');
-                item.panel('open');
+            var $el = $(itemId);
+            if ($el.panel) {
+                $el.css('display', 'inherit');
+                $el.panel('open');
             }
             else {
-                var dialogInstance = item.dialog('instance');
+                var dialogInstance = $el.dialog('instance');
                 if (!dialogInstance) {
                     initDialog(itemId, width, height, (!modal ? true : modal));
                 }
                 else {
                     if (width) {
-                        item.dialog('option', 'width', width);
+                        $el.dialog('option', 'width', width);
                     }
                     if (height) {
-                        item.dialog('option', 'height', height);
+                        $el.dialog('option', 'height', height);
                     }
                     if (util.isNotEmpty(modal)) {
-                        item.dialog('option', 'modal', modal);
+                        $el.dialog('option', 'modal', modal);
                     }
                 }
-                $(itemId).dialog('open');
+                $el.dialog('open');
             }
         },
 
@@ -1328,13 +1291,13 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
             template = template.replace('{title}', title);
             template = template.replace('{text}', text);
 
-            var item = $(template);
+            var $el = $(template);
             if (ui.isMobile()) {
-                item.popup();
-                item.popup('open');
+                $el.popup();
+                $el.popup('open');
             }
             else {
-                item.dialog({
+                $el.dialog({
                     autoOpen: false,
                     closeOnEscape: false,
                     modal: true,
@@ -1347,7 +1310,7 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
                         }
                     }
                 });
-                item.dialog('open');
+                $el.dialog('open');
             }
         },
 
@@ -1373,15 +1336,15 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
                 header = header.replace('{close}', CLOSE_BUTTON_TMPL);
                 template = template.replace('{header}', header);
 
-                var item = $(template);
+                var $el = $(template);
 
-                $('.header', item).click(function(eventObject) {
-                    closeDialogOrPopup(item);
-                    destroyDialogOrPopup(item);
+                $('.header', $el).click(function(eventObject) {
+                    closeDialogOrPopup($el);
+                    destroyDialogOrPopup($el);
                 });
 
-                item.popup();
-                item.popup('open');
+                $el.popup();
+                $el.popup('open');
             }
             else {
                 template = template.replace('{header}', '');
@@ -1404,15 +1367,6 @@ define('ui/tabs',['require','$','util'],function(require) {
     var $ = require('$');
     var util = require('util');
 
-    var tabCount = 1;
-
-    var incrementTabCount = function() {
-        tabCount++;
-    };
-
-    var decrementTabCount = function() {
-        tabCount--;
-    };
 
     // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
@@ -1420,22 +1374,30 @@ define('ui/tabs',['require','$','util'],function(require) {
     };
 
     /** 
-     *  Utilities for handling JQuery tabs.
+     * Utilities for handling JQuery tabs.
      * @exports tabs 
      */
     var module = {
-        maxTabs: 12,
 
         /**
+         * Add a new tab to an existing tab container.
          * 
-         * 
-         * @return {Boolean} true if the max number of tabs have been opened.
+         * @param {object}  options - a list of options required for this function
+         * @param {string}  options.tabContainerId - the id of the tab container to add the new tab to
+         * @param {string}  options.tabId - an id to give the new tab.  Has to be unique
+         * @param {string}  options.tabTitle - the text to display as the title of the tab
+         * @param {string}  options.tabContent - the content to display in the tab
+         * @param {boolean} [options.showCloseIcon] - true to show a "x" close icon.
+         * @param {string}  [options.closeTabText] - Text to display if there is a close icon
          */
-        isMaxNumTabsOpen: function() {
-            return tabCount >= getThis().maxTabs;
-        },
+        addTab: function(options) {
+            var tabContainerId = options.tabContainerId,
+                tabId = options.tabId,
+                tabTitle = options.tabTitle,
+                tabContent = options.tabContent,
+                showCloseIcon = options.showCloseIcon,
+                closeTabText = options.closeTabText;
 
-        addTab: function(tabContainerId, tabId, tabTitle, tabContent, showCloseIcon, closeTabText) {
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="#{href}">{tabTitle}</a>{closeIcon}</li>';
             var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
 
@@ -1452,10 +1414,27 @@ define('ui/tabs',['require','$','util'],function(require) {
             tabs.find('.ui-tabs-nav').first().append(li);
             tabs.append('<div id="' + tabId + '"><p>' + tabContent + '</p></div>');
             getThis().refresh(tabContainerId);
-            incrementTabCount();
         },
 
-        addAjaxTab: function(tabContainerId, tabId, tabTitle, href, showCloseIcon, closeTabText) {
+        /**
+         * Add a new tab to an existing tab container using an AJAX call to get the content.
+         * 
+         * @param {object}  options - a list of options required for this function
+         * @param {string}  options.tabContainerId - the id of the tab container to add the new tab to
+         * @param {string}  options.tabId - an id to give the new tab.  Has to be unique
+         * @param {string}  options.tabTitle - the text to display as the title of the tab
+         * @param {string}  options.href - the URL to get the tab content from.
+         * @param {boolean} [options.showCloseIcon] - true to show a "x" close icon.
+         * @param {string}  [options.closeTabText] - Text to display if there is a close icon
+         */
+        addAjaxTab: function(options) {
+            var tabContainerId = options.tabContainerId,
+                tabId = options.tabId,
+                tabTitle = options.tabTitle,
+                href = options.href,
+                showCloseIcon = options.showCloseIcon,
+                closeTabText = options.closeTabText;
+
             var tabTemplate = '<li><a id="tab-anchor-{id}" href="{href}">{tabTitle}</a>{closeIcon}</li>';
             var closeIconTemplate = '<span tabIndex="0" class="ui-icon ui-icon-close">{closeText}</span>';
 
@@ -1471,7 +1450,6 @@ define('ui/tabs',['require','$','util'],function(require) {
             var li = $(tabTemplate.replace('{id}', tabId).replace('{href}', href).replace('{tabTitle}', tabTitle));
             tabs.find('.ui-tabs-nav').first().append(li);
             getThis().refresh(tabContainerId);
-            incrementTabCount();
         },
 
         renameTab: function(tabContainerId, tabId, title) {
@@ -1518,7 +1496,6 @@ define('ui/tabs',['require','$','util'],function(require) {
                 var panelId = $(this).closest('li').remove().attr('aria-controls');
                 $(util.idAsSelector(panelId)).remove();
                 getThis().refresh(tabContainerId);
-                decrementTabCount();
             });
         },
 
@@ -1527,7 +1504,6 @@ define('ui/tabs',['require','$','util'],function(require) {
             var panelId = $(tabContainerId + ' a[id="tab-anchor-' + tabId + '"]').closest('li').remove().attr('aria-controls');
             $('#' + panelId).remove();
             getThis().refresh(tabContainerId);
-            decrementTabCount();
         },
 
 
@@ -1548,27 +1524,71 @@ define('ui/tabs',['require','$','util'],function(require) {
     return module;
 });
 
-/** 
- * Utilities for handling JQuery mobile and select2 select.
- * @module select 
- */
-define('ui/select',['require','ui/mobile'],function(require) {
+define('ui/select',['require','$','util','ui/mobile'],function(require) {
     'use strict';
 
+    var $ = require('$');
+    var util = require('util');
     var mobile = require('ui/mobile');
 
-    return {
+
+    /*
+     * Fix to allow Select2 dropdown to work properly in jquery UI dialog
+     * This should only be called once
+     */
+    var select2DialogFixLoaded = false;
+
+    /* eslint no-underscore-dangle: 0 */
+    var select2DialogFix = function() {
+        if (!select2DialogFixLoaded && $.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
+            var uiDialogInteraction = $.ui.dialog.prototype._allowInteraction;
+            $.ui.dialog.prototype._allowInteraction = function(e) {
+                if ($(e.target).closest('.select2-dropdown').length) {
+                    return true;
+                }
+                return uiDialogInteraction.apply(this, arguments);
+            };
+
+            select2DialogFixLoaded = true;
+        }
+    };
+
+    /** 
+     * Utilities for handling JQuery mobile and select2 select.
+     * @exports select 
+     */
+    var module = {
+
         /**
          * Refreshes the select drop down after items have been added and removed.
-         * For mobile select items it assumes jquery mobile is being used.
+         * For mobile select items it assumes JQuery mobile is being used.
          * 
          * @param {String} id the id of the select item
          * 
          */
         refresh: function(id) {
-            mobile.refreshSelect();
+            mobile.refreshSelect(id);
+        },
+
+
+        /**
+         * Initializes a select2 drop down for non-mobile browsers if select2 is available.
+         * Can be safely called on mobile browser as it will have no effect.
+         * 
+         * @param {string} id the id of the element
+         * @param {object} options a set of options to pass to the select2 drop down
+         */
+        initSelect2: function(id, options) {
+            var $el = $(util.idAsSelector(id));
+            if (!mobile.isMobile() && $el.select2) {
+                select2DialogFix();
+                $el.select2(options);
+            }
         }
     };
+
+
+    return module;
 
 
 });
@@ -1821,13 +1841,69 @@ define('poller',['require','$','log'],function(require) {
 
 });
 
+define('template',['require','$','handlebars'],function(require) {
+    'use strict';
+
+
+    var $ = require('$');
+    var handlebars = require('handlebars');
+    /** 
+     * Utilities for rendering handlebar templates.
+     * @exports template 
+     */
+    var module = {
+        cache: {
+            get: function(selector) {
+                if (!this.templates) {
+                    this.templates = {};
+                }
+
+                var template = this.templates[selector];
+                if (!template) {
+                    // pre compile the template
+                    template = handlebars.compile($(selector).html());
+                    this.templates[selector] = template;
+                }
+                return template;
+            }
+        },
+
+        /**
+         * This function will find the template using the selector
+         * and compile and cache it for future use.
+         * 
+         * @param {string} selector - the selector to the template html
+         * @param {object} data - the data values to use for the template
+         * @return {string} the rendered template and data string
+         * 
+         */
+        renderAndCache: function(selector, data) {
+            var renderer = this.cache.get(selector);
+            return renderer(data);
+        },
+
+        /**
+         * Combines the template and data to create a rendered String
+         * @param {string} templateString - the template to render
+         * @param {object} data - the data values to use for the template
+         * @return {string} the rendered template and data
+         */
+        render: function(templateString, data) {
+            var renderer = handlebars.compile(templateString);
+            return renderer(data);
+        }
+
+    };
+    return module;
+});
+
 /*global define */
 
 /**
  * The main module (sometimes called main.js) which defines the public 
  * interface for the coreleo library
  */
-define('coreleo',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/text','ui/table','$','constants','log','poller','util'],function(require) {
+define('coreleo',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui/text','ui/table','$','constants','log','poller','template','util'],function(require) {
     'use strict';
 
     var ui = require('ui');
@@ -1845,6 +1921,7 @@ define('coreleo',['require','ui','ui/dialog','ui/form','ui/tabs','ui/select','ui
         constants: require('constants'),
         log: require('log'),
         poller: require('poller'),
+        template: require('template'),
         ui: ui,
         util: require('util')
     };
