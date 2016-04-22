@@ -1,13 +1,13 @@
-/** 
- * Utilities for handling form and form inputs.
- * @module form 
- */
 define(function(require) {
     'use strict';
 
     var $ = require('$');
     var util = require('util');
 
+    /** 
+     * Utilities for handling form and form inputs.
+     * @exports form 
+     */
     var module = {
         /**
          * @param {string} id - the id or selector of the element to disable

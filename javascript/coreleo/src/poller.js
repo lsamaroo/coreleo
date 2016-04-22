@@ -1,14 +1,14 @@
-/** 
- * Utilities for polling a function and URLs.
- * @module poller 
- */
 define(function(require) {
     'use strict';
 
     var $ = require('$');
     var log = require('log');
 
-    return {
+    /** 
+     * Utilities for polling a function and URLs.
+     * @exports poller 
+     */
+    var module = {
 
         /**
          * Executes a function at a given interval
@@ -92,6 +92,8 @@ define(function(require) {
             }());
         }
     };
+
+    return module;
 
 
 });

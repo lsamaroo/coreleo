@@ -1,5 +1,5 @@
 /** 
- * A logger utility.
+ * A delegate (wrapper) for window.console.
  * @module log 
  */
 

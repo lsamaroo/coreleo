@@ -1,7 +1,3 @@
-/** 
- * Utilities for handling JQuery tabs.
- * @module tabs 
- */
 define(function(require) {
     'use strict';
 
@@ -18,14 +14,23 @@ define(function(require) {
         tabCount--;
     };
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };
 
-    var module = /** @alias module:tabs */ {
+    /** 
+     *  Utilities for handling JQuery tabs.
+     * @exports tabs 
+     */
+    var module = {
         maxTabs: 12,
 
+        /**
+         * 
+         * 
+         * @return {Boolean} true if the max number of tabs have been opened.
+         */
         isMaxNumTabsOpen: function() {
             return tabCount >= getThis().maxTabs;
         },
@@ -141,6 +146,4 @@ define(function(require) {
     };
 
     return module;
-
-
 });

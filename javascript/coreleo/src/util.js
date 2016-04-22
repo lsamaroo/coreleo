@@ -1,7 +1,3 @@
-/** 
- * Generic utilities for dealing with strings, objects, etc.
- * @module util 
- */
 define(function(require) {
     'use strict';
 
@@ -10,32 +6,44 @@ define(function(require) {
     var log = require('log');
 
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };
 
+    /** 
+     * Generic utilities for dealing with strings, objects, etc.  It is built on top of the lodash libary. 
+     * @see the [lodash API] @link https://lodash.com/docs for additional functions that you have access to via this class
+     * @exports util 
+     */
     var module = {
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
         },
 
+        /**
+         * Checks to see if the argument is empty.  Empty is considered null, undefined, the string 'null', an empty string or
+         * an array of length zero.
+         * 
+         * @param {(string|Array|Object)} item the item to check
+         * @return true if empty, false otherwise.
+         */
         /*jshint eqnull:true */
         /* eslint eqeqeq:0 no-eq-null:0 */
-        isEmpty: function(text) {
+        isEmpty: function(item) {
             return (
-                text == null || text === null ||
-                text === undefined ||
-                typeof text === 'undefined' ||
-                $.trim(text) === 'null' ||
-                $.trim(text) === '' ||
-                ($.isArray(text) && text.length === 0)
+                item == null || item === null ||
+                item === undefined ||
+                typeof item === 'undefined' ||
+                $.trim(item) === 'null' ||
+                $.trim(item) === '' ||
+                ($.isArray(item) && item.length === 0)
             );
         },
 
-        isNotEmpty: function(text) {
-            return !getThis().isEmpty(text);
+        isNotEmpty: function(item) {
+            return !getThis().isEmpty(item);
         },
 
         startsWith: function(str, ch, position) {
@@ -135,6 +143,8 @@ define(function(require) {
             if (getThis().isEmpty(string)) {
                 return '';
             }
+
+            string = _.toString(string);
             return _.padStart(string, (size - string.length), '0');
         },
 

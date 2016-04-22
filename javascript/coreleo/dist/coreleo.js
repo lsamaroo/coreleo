@@ -448,7 +448,7 @@ var requirejs, require, define;
 define("../node_modules/almond/almond", function(){});
 
 /** 
- * The JQuery object
+ * A delegate class for JQuery
  * @module $ 
  */
 define('$',['require','jquery'],function(require) {
@@ -457,7 +457,7 @@ define('$',['require','jquery'],function(require) {
 });
 
 /** 
- * A logger utility.
+ * A delegate (wrapper) for window.console.
  * @module log 
  */
 
@@ -479,10 +479,6 @@ define('log',['require'],function(require) {
 
 });
 
-/** 
- * Generic utilities for dealing with strings, objects, etc.
- * @module util 
- */
 define('util',['require','$','lodash','log'],function(require) {
     'use strict';
 
@@ -491,32 +487,44 @@ define('util',['require','$','lodash','log'],function(require) {
     var log = require('log');
 
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };
 
+    /** 
+     * Generic utilities for dealing with strings, objects, etc.  It is built on top of the lodash libary. 
+     * @see the [lodash API] @link https://lodash.com/docs for additional functions that you have access to via this class
+     * @exports util 
+     */
     var module = {
 
         deprecated: function() {
             log.warn('This function has been deprecated and will not be supported in future releases.  See documentation.');
         },
 
+        /**
+         * Checks to see if the argument is empty.  Empty is considered null, undefined, the string 'null', an empty string or
+         * an array of length zero.
+         * 
+         * @param {(string|Array|Object)} item the item to check
+         * @return true if empty, false otherwise.
+         */
         /*jshint eqnull:true */
         /* eslint eqeqeq:0 no-eq-null:0 */
-        isEmpty: function(text) {
+        isEmpty: function(item) {
             return (
-                text == null || text === null ||
-                text === undefined ||
-                typeof text === 'undefined' ||
-                $.trim(text) === 'null' ||
-                $.trim(text) === '' ||
-                ($.isArray(text) && text.length === 0)
+                item == null || item === null ||
+                item === undefined ||
+                typeof item === 'undefined' ||
+                $.trim(item) === 'null' ||
+                $.trim(item) === '' ||
+                ($.isArray(item) && item.length === 0)
             );
         },
 
-        isNotEmpty: function(text) {
-            return !getThis().isEmpty(text);
+        isNotEmpty: function(item) {
+            return !getThis().isEmpty(item);
         },
 
         startsWith: function(str, ch, position) {
@@ -616,6 +624,8 @@ define('util',['require','$','lodash','log'],function(require) {
             if (getThis().isEmpty(string)) {
                 return '';
             }
+
+            string = _.toString(string);
             return _.padStart(string, (size - string.length), '0');
         },
 
@@ -786,7 +796,17 @@ define('constants',['require'],function(require) {
     'use strict';
 
     return {
+        /** 
+         * One second in milliseconds
+         * @constant {number}
+         */
         ONE_SECOND: 1000,
+
+
+        /** 
+         * One minute in milliseconds
+         * @constant {number}
+         */
         ONE_MINUTE: 60000
     };
 
@@ -805,7 +825,7 @@ define('ui/mobile',['require','$','util'],function(require) {
     var util = require('util');
 
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };
@@ -868,16 +888,16 @@ define('ui/mobile',['require','$','util'],function(require) {
     return module;
 });
 
-/** 
- * Utilities for handling form and form inputs.
- * @module form 
- */
 define('ui/form',['require','$','util'],function(require) {
     'use strict';
 
     var $ = require('$');
     var util = require('util');
 
+    /** 
+     * Utilities for handling form and form inputs.
+     * @exports form 
+     */
     var module = {
         /**
          * @param {string} id - the id or selector of the element to disable
@@ -1013,7 +1033,7 @@ define('ui',['require','$','util','constants','ui/mobile','ui/form','template/te
          * Displays a loading spinner in the element which matches the provided id.  
          * By default it replaces the content of the element.
          * 
-         * @param {String} id the id of the element.
+         * @param {string} id the id of the element.
          * @param {boolean} [append=false] set to true to append the spinner to the element instead
          * of replacing it's content.
          *    
@@ -1030,10 +1050,45 @@ define('ui',['require','$','util','constants','ui/mobile','ui/form','template/te
             }
         },
 
-
+        /**
+         * Hides the loading spinner in the element which matches the provided id.  
+         * 
+         * @param {string} id the id of the element.
+         *    
+         */
         stopSpinner: function(id) {
             var div = $(util.idAsSelector(id));
             $('#coreleo-spinner-image', div).remove();
+        },
+
+        /**
+         * Toggles (hide/show) the element with the matching id
+         * 
+         * @param {string} id the id of the element.
+         * @param {function} [onShow] a callback function when the element is shown
+         * @param {function} [onHide] a callback function when the element is hidden
+         * @param {boolean} [animate] true to animate the toggle, false otherwise
+         *    
+         */
+        toggle: function(id, onShow, onHide, animate) {
+            var el = $(util.idAsSelector(id));
+            var open = !el.is(':hidden');
+            if (open) {
+                if (animate) {
+                    el.slideUp(400, onHide);
+                }
+                else {
+                    el.hide(400, onHide);
+                }
+            }
+            else {
+                if (animate) {
+                    el.slideDown(400, onShow);
+                }
+                else {
+                    el.show(400, onShow);
+                }
+            }
         }
 
     };
@@ -1041,10 +1096,6 @@ define('ui',['require','$','util','constants','ui/mobile','ui/form','template/te
 
 });
 
-/** 
- * Utilities for handling JQuery dialog and mobile pop-ups.
- * @module dialog 
- */
 define('ui/dialog',['require','$','ui','util'],function(require) {
     'use strict';
 
@@ -1080,7 +1131,7 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
 
     var ALERT_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header"><span class="ui-dialog-title">{title}</span>{close}</div>';
 
-    var LOADING_IMAGE = 'Loading, please wait...';
+    var LOADING_IMAGE_TEXT_TEXT = 'Loading, please wait...';
 
     var showConfirmPopup = function(title, text, successFunction, iconClass) {
         var template = CONFIRM_DIALOG_TMPL;
@@ -1172,17 +1223,71 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
         }
     };
 
-    return {
-        open: function(id) {
+
+    var initDialog = function(id, width, height, modal) {
+        var options = {
+            autoOpen: false,
+            modal: modal
+        };
+        if (width) {
+            options.width = width;
+        }
+        if (height) {
+            options.height = height;
+        }
+        $(util.idAsSelector(id)).dialog(options);
+
+    };
+
+
+    /** 
+     * Utilities for dealing with JQuery dialogs, mobile pop-ups and mobile panels.
+     * @exports dialog 
+     */
+    var module = {
+        /**
+         * Opens a dialog on desktop browser or a side panel on mobile browsers.
+         * Note: For dialogs it will initialize the dialog if it was never initialized before.
+         * 
+         * @param {String} id the id of the dialog or panel
+         * @param {number} [width] a width to display the dialog
+         * @param {number} [height] a height to display the dialog
+         * @param {boolean} [modal=true] true if the dialog should be modal, false otherwise.  
+         * Defaults to true for the first time the dialog is opened if not specified.
+         * 
+         */
+        open: function(id, width, height, modal) {
             var itemId = util.idAsSelector(id);
-            if ($(itemId).panel) {
-                $(itemId).panel('open');
+            var item = $(itemId);
+            if (item.panel) {
+                item.css('display', '');
+                item.panel('open');
             }
             else {
+                var dialogInstance = item.dialog('instance');
+                if (!dialogInstance) {
+                    initDialog(itemId, width, height, (!modal ? true : modal));
+                }
+                else {
+                    if (width) {
+                        item.dialog('option', 'width', width);
+                    }
+                    if (height) {
+                        item.dialog('option', 'height', height);
+                    }
+                    if (util.isNotEmpty(modal)) {
+                        item.dialog('option', 'modal', modal);
+                    }
+                }
                 $(itemId).dialog('open');
             }
         },
 
+        /**
+         * Closes the dialog or side panel on mobile browsers
+         * @param {String} id the id of the dialog or panel
+         * 
+         */
         close: function(id) {
             var itemId = util.idAsSelector(id);
             if ($(itemId).panel) {
@@ -1193,16 +1298,6 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
             }
         },
 
-        init: function(id, width, height) {
-            if (!ui.isMobile()) {
-                $(util.idAsSelector(id)).dialog({
-                    autoOpen: false,
-                    height: height,
-                    width: width,
-                    modal: true
-                });
-            }
-        },
 
         confirm: function(title, text, successFunction, iconClass) {
             if (util.isEmpty(iconClass)) {
@@ -1221,7 +1316,7 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
 
         showLoadingDialog: function(title, text, loadingImageClass) {
             if (util.isEmpty(text)) {
-                text = LOADING_IMAGE;
+                text = LOADING_IMAGE_TEXT_TEXT;
             }
 
             if (util.isEmpty(loadingImageClass)) {
@@ -1298,12 +1393,11 @@ define('ui/dialog',['require','$','ui','util'],function(require) {
     };
 
 
+    return module;
+
+
 });
 
-/** 
- * Utilities for handling JQuery tabs.
- * @module tabs 
- */
 define('ui/tabs',['require','$','util'],function(require) {
     'use strict';
 
@@ -1320,14 +1414,23 @@ define('ui/tabs',['require','$','util'],function(require) {
         tabCount--;
     };
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };
 
-    var module = /** @alias module:tabs */ {
+    /** 
+     *  Utilities for handling JQuery tabs.
+     * @exports tabs 
+     */
+    var module = {
         maxTabs: 12,
 
+        /**
+         * 
+         * 
+         * @return {Boolean} true if the max number of tabs have been opened.
+         */
         isMaxNumTabsOpen: function() {
             return tabCount >= getThis().maxTabs;
         },
@@ -1443,8 +1546,6 @@ define('ui/tabs',['require','$','util'],function(require) {
     };
 
     return module;
-
-
 });
 
 /** 
@@ -1620,17 +1721,17 @@ define('ui/table',['require','$','util','ui/mobile','ui'],function(require) {
 
 });
 
-/** 
- * Utilities for polling a function and URLs.
- * @module poller 
- */
 define('poller',['require','$','log'],function(require) {
     'use strict';
 
     var $ = require('$');
     var log = require('log');
 
-    return {
+    /** 
+     * Utilities for polling a function and URLs.
+     * @exports poller 
+     */
+    var module = {
 
         /**
          * Executes a function at a given interval
@@ -1714,6 +1815,8 @@ define('poller',['require','$','log'],function(require) {
             }());
         }
     };
+
+    return module;
 
 
 });

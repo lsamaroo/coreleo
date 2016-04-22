@@ -11,7 +11,7 @@ define(function(require) {
     var util = require('util');
 
 
-    // Workaround for "this" being undefined when used in the util object literal
+    // Workaround for "this" being undefined when used in the object literal "module" below
     var getThis = function() {
         return module;
     };

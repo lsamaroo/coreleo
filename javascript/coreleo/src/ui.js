@@ -43,7 +43,7 @@ define(function(require) {
          * Displays a loading spinner in the element which matches the provided id.  
          * By default it replaces the content of the element.
          * 
-         * @param {String} id the id of the element.
+         * @param {string} id the id of the element.
          * @param {boolean} [append=false] set to true to append the spinner to the element instead
          * of replacing it's content.
          *    
@@ -60,10 +60,45 @@ define(function(require) {
             }
         },
 
-
+        /**
+         * Hides the loading spinner in the element which matches the provided id.  
+         * 
+         * @param {string} id the id of the element.
+         *    
+         */
         stopSpinner: function(id) {
             var div = $(util.idAsSelector(id));
             $('#coreleo-spinner-image', div).remove();
+        },
+
+        /**
+         * Toggles (hide/show) the element with the matching id
+         * 
+         * @param {string} id the id of the element.
+         * @param {function} [onShow] a callback function when the element is shown
+         * @param {function} [onHide] a callback function when the element is hidden
+         * @param {boolean} [animate] true to animate the toggle, false otherwise
+         *    
+         */
+        toggle: function(id, onShow, onHide, animate) {
+            var el = $(util.idAsSelector(id));
+            var open = !el.is(':hidden');
+            if (open) {
+                if (animate) {
+                    el.slideUp(400, onHide);
+                }
+                else {
+                    el.hide(400, onHide);
+                }
+            }
+            else {
+                if (animate) {
+                    el.slideDown(400, onShow);
+                }
+                else {
+                    el.show(400, onShow);
+                }
+            }
         }
 
     };

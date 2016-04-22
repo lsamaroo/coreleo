@@ -1,5 +1,5 @@
 /** 
- * The JQuery object
+ * A delegate class for JQuery
  * @module $ 
  */
 define(function(require) {

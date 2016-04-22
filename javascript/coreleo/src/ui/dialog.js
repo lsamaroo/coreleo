@@ -1,7 +1,3 @@
-/** 
- * Utilities for handling JQuery dialog and mobile pop-ups.
- * @module dialog 
- */
 define(function(require) {
     'use strict';
 
@@ -37,7 +33,7 @@ define(function(require) {
 
     var ALERT_DIALOG_HEADER_TMPL = '<div class="header ui-dialog-titlebar ui-widget-header ui-corner-all" data-role="header"><span class="ui-dialog-title">{title}</span>{close}</div>';
 
-    var LOADING_IMAGE = 'Loading, please wait...';
+    var LOADING_IMAGE_TEXT_TEXT = 'Loading, please wait...';
 
     var showConfirmPopup = function(title, text, successFunction, iconClass) {
         var template = CONFIRM_DIALOG_TMPL;
@@ -129,17 +125,71 @@ define(function(require) {
         }
     };
 
-    return {
-        open: function(id) {
+
+    var initDialog = function(id, width, height, modal) {
+        var options = {
+            autoOpen: false,
+            modal: modal
+        };
+        if (width) {
+            options.width = width;
+        }
+        if (height) {
+            options.height = height;
+        }
+        $(util.idAsSelector(id)).dialog(options);
+
+    };
+
+
+    /** 
+     * Utilities for dealing with JQuery dialogs, mobile pop-ups and mobile panels.
+     * @exports dialog 
+     */
+    var module = {
+        /**
+         * Opens a dialog on desktop browser or a side panel on mobile browsers.
+         * Note: For dialogs it will initialize the dialog if it was never initialized before.
+         * 
+         * @param {String} id the id of the dialog or panel
+         * @param {number} [width] a width to display the dialog
+         * @param {number} [height] a height to display the dialog
+         * @param {boolean} [modal=true] true if the dialog should be modal, false otherwise.  
+         * Defaults to true for the first time the dialog is opened if not specified.
+         * 
+         */
+        open: function(id, width, height, modal) {
             var itemId = util.idAsSelector(id);
-            if ($(itemId).panel) {
-                $(itemId).panel('open');
+            var item = $(itemId);
+            if (item.panel) {
+                item.css('display', '');
+                item.panel('open');
             }
             else {
+                var dialogInstance = item.dialog('instance');
+                if (!dialogInstance) {
+                    initDialog(itemId, width, height, (!modal ? true : modal));
+                }
+                else {
+                    if (width) {
+                        item.dialog('option', 'width', width);
+                    }
+                    if (height) {
+                        item.dialog('option', 'height', height);
+                    }
+                    if (util.isNotEmpty(modal)) {
+                        item.dialog('option', 'modal', modal);
+                    }
+                }
                 $(itemId).dialog('open');
             }
         },
 
+        /**
+         * Closes the dialog or side panel on mobile browsers
+         * @param {String} id the id of the dialog or panel
+         * 
+         */
         close: function(id) {
             var itemId = util.idAsSelector(id);
             if ($(itemId).panel) {
@@ -150,16 +200,6 @@ define(function(require) {
             }
         },
 
-        init: function(id, width, height) {
-            if (!ui.isMobile()) {
-                $(util.idAsSelector(id)).dialog({
-                    autoOpen: false,
-                    height: height,
-                    width: width,
-                    modal: true
-                });
-            }
-        },
 
         confirm: function(title, text, successFunction, iconClass) {
             if (util.isEmpty(iconClass)) {
@@ -178,7 +218,7 @@ define(function(require) {
 
         showLoadingDialog: function(title, text, loadingImageClass) {
             if (util.isEmpty(text)) {
-                text = LOADING_IMAGE;
+                text = LOADING_IMAGE_TEXT_TEXT;
             }
 
             if (util.isEmpty(loadingImageClass)) {
@@ -253,6 +293,9 @@ define(function(require) {
         }
 
     };
+
+
+    return module;
 
 
 });
