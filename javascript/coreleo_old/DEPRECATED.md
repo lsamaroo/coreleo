@@ -1,1 +1,0 @@
-Deprecated in favor of coreleo version 2.
