@@ -1,19 +1,15 @@
-# README #
+## CORELEO Java Library 
+This library contains a set of utilities for working with strings, array, objects, reflection, threads, etc.
+
+### How do I get set up for development? ###
+* Import into Eclipse
+* Run the default ant build.
 
 
-### Utility library for java and javascript ###
-
-* Version 0.0.1
-
-
-### How do I get set up? ###
-#### Java ####
-* Run ant build to create the java jar.
-
-#### Javascript ####
-* Run npm gulp to create the optimized js file.
+### How do use it? ###
+* Take a look at the javadoc in the doc/ directory.  
+All of the modules listed can be executed as "coreleo.module_name.function_name"
 
 
-### Who do I talk to? ###
-
+### Issues? Who can I talk to? ###
 * orrinsamaroo@gmail.com
