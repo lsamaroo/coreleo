@@ -42,13 +42,13 @@ public final class CollectionUtil {
 	 */
 	public static <T> List<List<T>> split(final List<T> list, final int subListLength, final boolean subListAsView) {
 		final List<List<T>> parts = new ArrayList<List<T>>();
-		final int N = list.size();
-		for (int i = 0; i < N; i += subListLength) {
+		final int size = list.size();
+		for (int i = 0; i < size; i += subListLength) {
 			if (subListAsView) {
-				parts.add(list.subList(i, Math.min(N, i + subListLength)));
+				parts.add(list.subList(i, Math.min(size, i + subListLength)));
 			}
 			else {
-				parts.add(new ArrayList<T>(list.subList(i, Math.min(N, i + subListLength))));
+				parts.add(new ArrayList<T>(list.subList(i, Math.min(size, i + subListLength))));
 			}
 		}
 		return parts;
@@ -221,8 +221,8 @@ public final class CollectionUtil {
 
 	public static <T extends Comparable<T>> boolean compare(final Collection<T> x1, final Collection<T> x2) {
 		boolean isEqual = false;
-		ArrayList<T> list1 = null;
-		ArrayList<T> list2 = null;
+		ArrayList<T> list1;
+		ArrayList<T> list2;
 		// converting the collections into ArrayList inorder to apply sort(),
 		// binary search and
 		// since it implements randomAccess interface ,binary search takes
@@ -232,7 +232,7 @@ public final class CollectionUtil {
 		Collections.sort(list2);// list2 has to be sorted before applying
 		// binarySearch()
 		if (list1.size() == list2.size()) {
-			if (list1.size() == 0) {
+			if (list1.isEmpty()) {
 				isEqual = true;
 			}
 			else {

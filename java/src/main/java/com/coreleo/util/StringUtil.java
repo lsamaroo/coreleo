@@ -54,6 +54,26 @@ public final class StringUtil {
 	}
 
 	/**
+	 * Replaces all the specified character in the target string with the
+	 * replacement string.
+	 *
+	 * @param target
+	 *            the target string to replace
+	 * @param characters
+	 *            list of characters to replace in the target string
+	 * @param replacement
+	 *            the string to replace the character with.
+	 * @return a new string after replacement
+	 */
+	public static String replaceAllCharacters(final String target, final char[] characters, final String replacement) {
+		String newValue = target;
+		for (final char c : characters) {
+			newValue = newValue.replaceAll(String.valueOf(c), replacement);
+		}
+		return newValue;
+	}
+
+	/**
 	 *
 	 * @param s
 	 *            the string with underscore used as separator

@@ -20,69 +20,80 @@ import com.coreleo.util.Constants;
 public final class DateUtil {
 
 	/** MM/dd/yyyy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat MMddyyyyForwardSlash = FastDateFormat.getInstance("MM/dd/yyyy");
+	public static final FastDateFormat MMddyyyyForwardSlash = FastDateFormat.getInstance("MM/dd/yyyy");
 
 	/** ww - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat ww = FastDateFormat.getInstance("ww");
+	public static final FastDateFormat ww = FastDateFormat.getInstance("ww");
 
 	/** yyyy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat yyyy = FastDateFormat.getInstance("yyyy");
+	public static final FastDateFormat yyyy = FastDateFormat.getInstance("yyyy");
 
 	/** yyyy-MM-dd - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat yyyyMMddHyphened = FastDateFormat.getInstance("yyyy-MM-dd");
+	public static final FastDateFormat yyyyMMddHyphened = FastDateFormat.getInstance("yyyy-MM-dd");
 
 	/** MM-yyyy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat MMyyyyHyphened = FastDateFormat.getInstance("MM-yyyy");
+	public static final FastDateFormat MMyyyyHyphened = FastDateFormat.getInstance("MM-yyyy");
 
 	/** ww-yyyy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat wwyyyyHyphened = FastDateFormat.getInstance("ww-yyyy");
+	public static final FastDateFormat wwyyyyHyphened = FastDateFormat.getInstance("ww-yyyy");
 
 	/** MM-dd-yyyy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat MMddyyyyHyphened = FastDateFormat.getInstance("MM-dd-yyyy");
+	public static final FastDateFormat MMddyyyyHyphened = FastDateFormat.getInstance("MM-dd-yyyy");
 
 	/** MM-dd-yy - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat MMddyyHyphened = FastDateFormat.getInstance("MM-dd-yy");
+	public static final FastDateFormat MMddyyHyphened = FastDateFormat.getInstance("MM-dd-yy");
 
 	/**
 	 * yyyy-MM-dd HH:mm:ss - Only use this to format a date, parsing is not
 	 * supported
 	 */
-	public final static FastDateFormat yyyyMMddHyphened_HHmmssColon = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+	public static final FastDateFormat yyyyMMddHyphened_HHmmssColon = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
 	/**
 	 * MM/dd/yyyy HH:mm:ss - Only use this to format a date, parsing is not
 	 * supported
 	 */
-	public final static FastDateFormat MMddyyyyForwardSlash_HHmmssColon = FastDateFormat
+	public static final FastDateFormat MMddyyyyForwardSlash_HHmmssColon = FastDateFormat
 	        .getInstance("MM/dd/yyyy HH:mm:ss");
 
 	/**
 	 * MM-dd-yyyy HH:mm:ss - Only use this to format a date, parsing is not
 	 * supported
 	 */
-	public final static FastDateFormat MMddyyyyHyphened_HHmmssColon = FastDateFormat.getInstance("MM-dd-yyyy HH:mm:ss");
+	public static final FastDateFormat MMddyyyyHyphened_HHmmssColon = FastDateFormat.getInstance("MM-dd-yyyy HH:mm:ss");
 
 	/** MMM dd, yyyy */
-	public final static FastDateFormat MMM_dd_Coma_yyyy = FastDateFormat.getInstance("MMM dd, yyyy");
+	public static final FastDateFormat MMM_dd_Coma_yyyy = FastDateFormat.getInstance("MMM dd, yyyy");
 
 	/** hh:mm aa - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat hhmmColon_aa = FastDateFormat.getInstance("hh:mm aa");
+	public static final FastDateFormat hhmmColon_aa = FastDateFormat.getInstance("hh:mm aa");
 
 	/** h:mm aa - Only use this to format a date, parsing is not supported */
-	public final static FastDateFormat hmmColon_aa = FastDateFormat.getInstance("h:mm aa");
+	public static final FastDateFormat hmmColon_aa = FastDateFormat.getInstance("h:mm aa");
 
 	/** yyyy-MM-dd HH:mm aa */
-	public final static FastDateFormat yyyyMMddHyphened_hhmmColon_aa = FastDateFormat
+	public static final FastDateFormat yyyyMMddHyphened_hhmmColon_aa = FastDateFormat
 	        .getInstance("yyyy-MM-dd hh:mm aa");
 
-	public final static FastDateFormat ISO8601DateTimeFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mmZ");
+	public static final FastDateFormat ISO8601DateTimeFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mmZ");
 
-	public final static FastDateFormat yyyyMMddHyphened_T_HHmmssColon = FastDateFormat
+	public static final FastDateFormat yyyyMMddHyphened_T_HHmmssColon = FastDateFormat
 	        .getInstance("yyyy-MM-dd'T'HH:mm:ss");
 
 	private DateUtil() {
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 *            - Date object
+	 * @param x2
+	 *            - Date object
+	 * @return - the value 0 if the argument x2 is equal to x1; a value less
+	 *         than 0 if x1 is before x2 ; and a value greater than 0 if x1 is
+	 *         after x2.
+	 */
 	public static int compare(final Date x1, final Date x2) {
 		if ((x1 == null) && (x2 == null)) {
 			return 0;
@@ -99,6 +110,33 @@ public final class DateUtil {
 		return x1.compareTo(x2);
 	}
 
+	/**
+	 *
+	 *
+	 * @param x1
+	 *            - A date or calendar object
+	 * @param x2
+	 *            - A date or calendar object
+	 * @return - the value 0 if the argument x2 is equal to x1; a value less
+	 *         than 0 if x1 is before x2 ; and a value greater than 0 if x1 is
+	 *         after x2.
+	 */
+	public static int compare(final Object x1, final Object x2) {
+		if ((x1 == null) && (x2 == null)) {
+			return 0;
+		}
+
+		if (x1 == null) {
+			return -1;
+		}
+
+		if (x2 == null) {
+			return 1;
+		}
+
+		return toCalendar(x1).compareTo(toCalendar(x2));
+	}
+
 	public static Calendar utcTo(final Date date, final TimeZone tz) {
 		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
@@ -107,10 +145,10 @@ public final class DateUtil {
 	}
 
 	public static long getUnixTimestamp(final Date date) {
-		return (date.getTime() / 1000L);
+		return date.getTime() / 1000L;
 	}
 
-	public final static Calendar clone(final Calendar c) {
+	public static final Calendar clone(final Calendar c) {
 		return (Calendar) c.clone();
 	}
 
@@ -119,7 +157,7 @@ public final class DateUtil {
 	 *
 	 * @return a new Calendar object
 	 */
-	public final static Calendar toISO(final Calendar c) {
+	public static final Calendar toISO(final Calendar c) {
 		final Calendar cal = clone(c);
 		cal.setMinimalDaysInFirstWeek(4);
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
@@ -131,7 +169,7 @@ public final class DateUtil {
 	 *
 	 * @return a new Calendar object
 	 */
-	public final static Calendar toISO(final Date date) {
+	public static final Calendar toISO(final Date date) {
 		final Calendar cal = toCalendar(date);
 		cal.setMinimalDaysInFirstWeek(4);
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
@@ -233,15 +271,6 @@ public final class DateUtil {
 		return Calendar.getInstance();
 	}
 
-	public static Calendar toCalendar(final Date date) {
-		if (date == null) {
-			throw new IllegalArgumentException("Date is null");
-		}
-		final Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		return cal;
-	}
-
 	/**
 	 *
 	 * @return a new calendar
@@ -279,6 +308,31 @@ public final class DateUtil {
 
 	public static Calendar zeroOutTime(final Calendar cal) {
 		return setTime(cal, 0, 0, 0, 0);
+	}
+
+	public static Calendar toCalendar(final Object date) {
+		if (date == null) {
+			throw new IllegalArgumentException("Date is null");
+		}
+
+		if (date instanceof Date) {
+			return toCalendar((Date) date);
+		}
+
+		if (date instanceof Calendar) {
+			return (Calendar) date;
+		}
+
+		throw new IllegalArgumentException("Date must be an instance of java.util.Date or java.util.Calendar");
+	}
+
+	public static Calendar toCalendar(final Date date) {
+		if (date == null) {
+			throw new IllegalArgumentException("Date is null");
+		}
+		final Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
 	}
 
 	public static Calendar toCalendar(final Date date, final int hourOfDay, final int minute, final int second,
@@ -546,13 +600,13 @@ public final class DateUtil {
 		return cal.get(Calendar.SECOND);
 	}
 
-	public final static Date set(final Date date, final int field, final int value) {
+	public static final Date set(final Date date, final int field, final int value) {
 		final Calendar c = toCalendar(date);
 		c.set(field, value);
 		return c.getTime();
 	}
 
-	public final static Calendar set(final Calendar c, final int field, final int value) {
+	public static final Calendar set(final Calendar c, final int field, final int value) {
 		if (c == null) {
 			throw new IllegalArgumentException("Calendar is null");
 		}
@@ -562,23 +616,23 @@ public final class DateUtil {
 		return cal;
 	}
 
-	public final static int getActualMaximum(final Date date, final int field) {
+	public static final int getActualMaximum(final Date date, final int field) {
 		final Calendar c = toCalendar(date);
 		return c.getActualMaximum(field);
 	}
 
-	public final static int getActualMinimum(final Date date, final int field) {
+	public static final int getActualMinimum(final Date date, final int field) {
 		final Calendar c = toCalendar(date);
 		return c.getActualMinimum(field);
 	}
 
-	public final static Date setToLastDayOfMonth(final Date date) {
+	public static final Date setToLastDayOfMonth(final Date date) {
 		final Calendar c = toCalendar(date);
 		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 		return c.getTime();
 	}
 
-	public final static Calendar setToLastDayOfMonth(final Calendar c) {
+	public static final Calendar setToLastDayOfMonth(final Calendar c) {
 		final Calendar cal = clone(c);
 		cal.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 		return cal;
@@ -729,13 +783,13 @@ public final class DateUtil {
 	// Week
 	// -------------------------------------------------------------------------------------------
 
-	public final static Calendar changeDayOfWeek(final Calendar theWeek, final int newDayOfWeek) {
+	public static final Calendar changeDayOfWeek(final Calendar theWeek, final int newDayOfWeek) {
 		final Calendar cal = clone(theWeek);
 		cal.set(Calendar.DAY_OF_WEEK, newDayOfWeek);
 		return cal;
 	}
 
-	public final static Date changeDayOfWeek(final Date theWeek, final int newDayOfWeek) {
+	public static final Date changeDayOfWeek(final Date theWeek, final int newDayOfWeek) {
 		final Calendar cal = toCalendar(theWeek);
 		cal.set(Calendar.DAY_OF_WEEK, newDayOfWeek);
 		return cal.getTime();
@@ -747,7 +801,7 @@ public final class DateUtil {
 	 * end .
 	 *
 	 */
-	public final static int getNumberOfWeeksBetween(final Calendar start, final Calendar end) {
+	public static final int getNumberOfWeeksBetween(final Calendar start, final Calendar end) {
 		final int weekOffset = (end.get(Calendar.DAY_OF_WEEK) - start.get(Calendar.DAY_OF_WEEK)) < 0 ? 1 : 0;
 		final int numberOfDaysBetween = getNumberOfDaysBetween(start, end, false);
 
@@ -755,11 +809,11 @@ public final class DateUtil {
 		return Math.round(numberOfWeeksBetween + weekOffset);
 	}
 
-	public final static int getNumberOfWeeksBetween(final Date start, final Date end) {
+	public static final int getNumberOfWeeksBetween(final Date start, final Date end) {
 		return getNumberOfWeeksBetween(toCalendar(start), toCalendar(end));
 	}
 
-	public final static Calendar[] getWeeksBetween(final Calendar start, final Calendar end, final boolean inclusive) {
+	public static final Calendar[] getWeeksBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
 		if (numberOfWeeksBetween < 0) {
@@ -784,7 +838,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static Date[] getWeeksBetween(final Date start, final Date end, final boolean inclusive) {
+	public static final Date[] getWeeksBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
 		if (numberOfWeeksBetween < 0) {
@@ -809,7 +863,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedWeeksBetween(final Calendar start, final Calendar end,
+	public static final String[] getFormattedWeeksBetween(final Calendar start, final Calendar end,
 	        final boolean inclusive, final Format format) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
@@ -835,7 +889,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedWeeksBetween(final Date start, final Date end, final boolean inclusive,
+	public static final String[] getFormattedWeeksBetween(final Date start, final Date end, final boolean inclusive,
 	        final Format format) {
 		final int numberOfWeeksBetween = getNumberOfWeeksBetween(start, end);
 
@@ -861,23 +915,23 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static int getISOWeekOfYear(final Calendar c) {
+	public static final int getISOWeekOfYear(final Calendar c) {
 		final Calendar cal = clone(c);
 		cal.setMinimalDaysInFirstWeek(4);
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
 
-	public final static int getISOWeekOfYear(final Date date) {
+	public static final int getISOWeekOfYear(final Date date) {
 		return getISOWeekOfYear(toCalendar(date));
 	}
 
-	public final static int getWeekOfYear(final Calendar c) {
+	public static final int getWeekOfYear(final Calendar c) {
 		final Calendar cal = clone(c);
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
 
-	public final static int getWeekOfYear(final Date date) {
+	public static final int getWeekOfYear(final Date date) {
 		return getWeekOfYear(toCalendar(date));
 	}
 
@@ -885,7 +939,7 @@ public final class DateUtil {
 	// Months
 	// -------------------------------------------------------------------------------------------
 
-	public final static int getNumberOfMonthsBetween(final Calendar start, final Calendar end) {
+	public static final int getNumberOfMonthsBetween(final Calendar start, final Calendar end) {
 		final int startMonth = start.get(Calendar.MONTH) + 1;
 		final int startYear = start.get(Calendar.YEAR);
 		final int endMonth = end.get(Calendar.MONTH) + 1;
@@ -897,11 +951,11 @@ public final class DateUtil {
 		return Math.round(((endYear - startYear) * (start.getMaximum(Calendar.MONTH) + 1)) + (endMonth - startMonth));
 	}
 
-	public final static int getNumberOfMonthsBetween(final Date start, final Date end) {
+	public static final int getNumberOfMonthsBetween(final Date start, final Date end) {
 		return getNumberOfMonthsBetween(toCalendar(start), toCalendar(end));
 	}
 
-	public final static Calendar[] getMonthsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
+	public static final Calendar[] getMonthsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
 		if (numberOfMonthsBetween < 0) {
@@ -926,7 +980,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static Date[] getMonthsBetween(final Date start, final Date end, final boolean inclusive) {
+	public static final Date[] getMonthsBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
 		if (numberOfMonthsBetween < 0) {
@@ -951,7 +1005,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedMonthsBetween(final Calendar start, final Calendar end,
+	public static final String[] getFormattedMonthsBetween(final Calendar start, final Calendar end,
 	        final boolean inclusive, final Format format) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
@@ -977,7 +1031,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedMonthsBetween(final Date start, final Date end, final boolean inclusive,
+	public static final String[] getFormattedMonthsBetween(final Date start, final Date end, final boolean inclusive,
 	        final Format format) {
 		final int numberOfMonthsBetween = getNumberOfMonthsBetween(start, end);
 
@@ -1007,17 +1061,17 @@ public final class DateUtil {
 	// Years
 	// -------------------------------------------------------------------------------------------
 
-	public final static int getNumberOfYearsBetween(final Calendar start, final Calendar end) {
+	public static final int getNumberOfYearsBetween(final Calendar start, final Calendar end) {
 		final int startYear = start.get(Calendar.YEAR);
 		final int endYear = end.get(Calendar.YEAR);
 		return Math.round(endYear - startYear);
 	}
 
-	public final static int getNumberOfYearsBetween(final Date start, final Date end) {
+	public static final int getNumberOfYearsBetween(final Date start, final Date end) {
 		return getNumberOfYearsBetween(toCalendar(start), toCalendar(end));
 	}
 
-	public final static Calendar[] getYearsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
+	public static final Calendar[] getYearsBetween(final Calendar start, final Calendar end, final boolean inclusive) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
 		if (numberOfYearsBetween < 0) {
@@ -1042,7 +1096,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static Date[] getYearsBetween(final Date start, final Date end, final boolean inclusive) {
+	public static final Date[] getYearsBetween(final Date start, final Date end, final boolean inclusive) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
 		if (numberOfYearsBetween < 0) {
@@ -1067,7 +1121,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedYearsBetween(final Calendar start, final Calendar end,
+	public static final String[] getFormattedYearsBetween(final Calendar start, final Calendar end,
 	        final boolean inclusive, final Format format) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
@@ -1093,7 +1147,7 @@ public final class DateUtil {
 		return dates;
 	}
 
-	public final static String[] getFormattedYearsBetween(final Date start, final Date end, final boolean inclusive,
+	public static final String[] getFormattedYearsBetween(final Date start, final Date end, final boolean inclusive,
 	        final Format format) {
 		final int numberOfYearsBetween = getNumberOfYearsBetween(start, end);
 
@@ -1101,8 +1155,7 @@ public final class DateUtil {
 			return null;
 		}
 
-		String[] dates = null;
-
+		String[] dates;
 		if (inclusive) {
 			dates = new String[numberOfYearsBetween == 1 ? 2 : numberOfYearsBetween + 1];
 			for (int i = 0; i < dates.length; i++) {
@@ -1131,7 +1184,7 @@ public final class DateUtil {
 	 *         Nth quarter is reached. The integer returned may be Mod by 4 to
 	 *         keep it within the typical four quarters range.
 	 */
-	public final static int getQuarter(final Calendar date, final Calendar startOfFiscalYear) {
+	public static final int getQuarter(final Calendar date, final Calendar startOfFiscalYear) {
 		return getQuarter(date.getTime(), startOfFiscalYear.getTime());
 	}
 
@@ -1143,21 +1196,21 @@ public final class DateUtil {
 	 *         Nth quarter is reached. The integer returned may be Mod by 4 to
 	 *         keep it within the typical four quarters range.
 	 */
-	public final static int getQuarter(Date date, final Date startOfFiscalYear) {
-		date = zeroOutTime(date);
+	public static final int getQuarter(final Date date, final Date startOfFiscalYear) {
+		final Date newDate = zeroOutTime(date);
 		int myQuarter = 0;
 		Date endOfQuarter = zeroOutTime(startOfFiscalYear);
 		do {
 			++myQuarter;
 			endOfQuarter = addMonths(endOfQuarter, 3);
-			if (date.compareTo(addDays(endOfQuarter, -1)) <= 0) {
+			if (newDate.compareTo(addDays(endOfQuarter, -1)) <= 0) {
 				return myQuarter;
 			}
 		}
 		while (true);
 	}
 
-	public final static Calendar[] getQuarterStartDates(final Calendar startOfFiscalYear) {
+	public static final Calendar[] getQuarterStartDates(final Calendar startOfFiscalYear) {
 		final Calendar[] startDates = new Calendar[4];
 		startDates[0] = startOfFiscalYear;
 		startDates[1] = addMonths(startOfFiscalYear, 3);
@@ -1166,7 +1219,7 @@ public final class DateUtil {
 		return startDates;
 	}
 
-	public final static Date[] getQuarterStartDates(final Date startOfFiscalYear) {
+	public static final Date[] getQuarterStartDates(final Date startOfFiscalYear) {
 		final Date[] startDates = new Date[4];
 		startDates[0] = startOfFiscalYear;
 		startDates[1] = addMonths(startOfFiscalYear, 3);
@@ -1175,7 +1228,7 @@ public final class DateUtil {
 		return startDates;
 	}
 
-	public final static Calendar[] getQuarterEndDates(final Calendar startOfFiscalYear) {
+	public static final Calendar[] getQuarterEndDates(final Calendar startOfFiscalYear) {
 		final Calendar[] startDates = new Calendar[4];
 		startDates[0] = addDays(addMonths(startOfFiscalYear, 3), -1);
 		startDates[1] = addDays(addMonths(startOfFiscalYear, 6), -1);
@@ -1184,7 +1237,7 @@ public final class DateUtil {
 		return startDates;
 	}
 
-	public final static Date[] getQuarterEndDates(final Date startOfFiscalYear) {
+	public static final Date[] getQuarterEndDates(final Date startOfFiscalYear) {
 		final Date[] startDates = new Date[4];
 		startDates[0] = addDays(addMonths(startOfFiscalYear, 3), -1);
 		startDates[1] = addDays(addMonths(startOfFiscalYear, 6), -1);
@@ -1298,66 +1351,198 @@ public final class DateUtil {
 	// Add/Subtract
 	// -------------------------------------------------------------------------------------------
 
-	public static final Date subtractDays(final Date date, final int x) {
-		return add(date, Calendar.DAY_OF_MONTH, (x * -1));
-	}
-
-	public static final Calendar subtractDays(final Calendar cal, final int x) {
-		return add(cal, Calendar.DAY_OF_MONTH, (x * -1));
-	}
-
+	/**
+	 * Add seconds to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of seconds to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addSeconds(final Date date, final int x) {
 		return add(date, Calendar.SECOND, x);
 	}
 
+	/**
+	 * Add seconds to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of seconds to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addSeconds(final Calendar cal, final int x) {
 		return add(cal, Calendar.SECOND, x);
 	}
 
+	/**
+	 * Add minutes to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of minutes to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addMinutes(final Date date, final int x) {
 		return add(date, Calendar.MINUTE, x);
 	}
 
+	/**
+	 * Add minutes to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of minutes to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addMinutes(final Calendar cal, final int x) {
 		return add(cal, Calendar.MINUTE, x);
 	}
 
+	/**
+	 * Add hours to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of hours to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addHours(final Date date, final int x) {
 		return add(date, Calendar.HOUR_OF_DAY, x);
 	}
 
+	/**
+	 * Add hours to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of hours to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addHours(final Calendar cal, final int x) {
 		return add(cal, Calendar.HOUR_OF_DAY, x);
 	}
 
+	/**
+	 * Add days to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of hours to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addDays(final Date date, final int x) {
 		return add(date, Calendar.DAY_OF_MONTH, x);
 	}
 
+	/**
+	 * Add days to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of hours to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addDays(final Calendar cal, final int x) {
 		return add(cal, Calendar.DAY_OF_MONTH, x);
 	}
 
+	/**
+	 * Add weeks to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of hours to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addWeeks(final Date date, final int x) {
 		return add(date, Calendar.WEEK_OF_YEAR, x);
 	}
 
+	/**
+	 * Add weeks to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of weeks to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addWeeks(final Calendar cal, final int x) {
 		return add(cal, Calendar.WEEK_OF_YEAR, x);
 	}
 
+	/**
+	 * Add months to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of months to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addMonths(final Date date, final int x) {
 		return add(date, Calendar.MONTH, x);
 	}
 
+	/**
+	 * Add months to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of months to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addMonths(final Calendar cal, final int x) {
 		return add(cal, Calendar.MONTH, x);
 	}
 
+	/**
+	 * Add years to the given date
+	 *
+	 * @param date
+	 *            - the date
+	 * @param x
+	 *            - the number of years to add. Use a negative number to
+	 *            subtract.
+	 * @return a new date
+	 */
 	public static final Date addYears(final Date date, final int x) {
 		return add(date, Calendar.YEAR, x);
 	}
 
+	/**
+	 * Add years to the given calendar
+	 *
+	 * @param cal
+	 *            - the calendar
+	 * @param x
+	 *            - the number of years to add. Use a negative number to
+	 *            subtract.
+	 * @return a new calendar
+	 */
 	public static final Calendar addYears(final Calendar cal, final int x) {
 		return add(cal, Calendar.YEAR, x);
 	}

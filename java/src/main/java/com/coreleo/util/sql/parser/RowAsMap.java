@@ -25,7 +25,7 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 	private boolean keysToLowercase;
 	private TimeZone timeZone;
 	private boolean underscoreColumnNamesToCamelCase;
-	private boolean clobValuesToString;
+	private boolean clobValuesToString = true;
 
 	public RowAsMap() {
 		super();
@@ -154,7 +154,7 @@ public class RowAsMap implements RowParser<Map<String, Object>> {
 	 *
 	 * @param bool
 	 *            true to convert CLOB data type to Strings before adding to the
-	 *            map
+	 *            map, false otherwise. Default is true
 	 */
 	public void setClobValuesToString(final boolean bool) {
 		this.clobValuesToString = bool;
