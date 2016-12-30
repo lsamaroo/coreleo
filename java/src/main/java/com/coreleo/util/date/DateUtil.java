@@ -85,6 +85,40 @@ public final class DateUtil {
 
 	/**
 	 *
+	 * Tests if x1 date is before the specified x2 date.
+	 *
+	 * @param x1
+	 *            a date object
+	 * @param x2
+	 *            another date object
+	 * @return true if x1 is before x2
+	 */
+	public static boolean before(final Date x1, final Date x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.before(x2);
+	}
+
+	/**
+	 *
+	 * Tests if x1 date is after the specified x2 date.
+	 *
+	 * @param x1
+	 *            a date object
+	 * @param x2
+	 *            another date object
+	 * @return true if x1 is after x2
+	 */
+	public static boolean after(final Date x1, final Date x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.after(x2);
+	}
+
+	/**
+	 *
 	 *
 	 * @param x1
 	 *            - Date object
