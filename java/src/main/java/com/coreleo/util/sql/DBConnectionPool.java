@@ -17,14 +17,14 @@ import com.coreleo.util.StringUtil;
 import com.coreleo.util.pool.ObjectPool;
 
 /**
- * 
+ *
  * @see ObjectPool
- * 
+ *
  */
 
 public class DBConnectionPool extends ObjectPool<Connection> implements DataSource {
 
-	public final static int DEFAULT_VALIDATION_QUERY_TIMEOUT = 15; // 15 seconds
+	public static final int DEFAULT_VALIDATION_QUERY_TIMEOUT = 15; // 15 seconds
 	private final int initialConnectionsInPool;
 	private final String url, username, password;
 	private final Driver driver;
@@ -33,18 +33,22 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	private String validationQuery;
 	private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final int maxConnections) {
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+	        final String pwd, final int maxConnections) {
 		this(name, driverClassName, url, usr, pwd, 18000, 18000, 21000, 0, 0, maxConnections, null);
 	}
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final long idleTimeOut,
-			final long connectionLife, final long reapTime, final int initialConnections, final int minConnections, final int maxConnections) {
-		this(name, driverClassName, url, usr, pwd, idleTimeOut, connectionLife, reapTime, initialConnections, minConnections, maxConnections, null);
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+	        final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
+	        final int initialConnections, final int minConnections, final int maxConnections) {
+		this(name, driverClassName, url, usr, pwd, idleTimeOut, connectionLife, reapTime, initialConnections,
+		        minConnections, maxConnections, null);
 	}
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr, final String pwd, final long idleTimeOut,
-			final long connectionLife, final long reapTime, final int initialConnections, final int minConnections, final int maxConnections,
-			final String[] executeSqlOnCreate) {
+	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+	        final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
+	        final int initialConnections, final int minConnections, final int maxConnections,
+	        final String[] executeSqlOnCreate) {
 		super(name, idleTimeOut, connectionLife, reapTime, minConnections, maxConnections);
 		this.url = url;
 		this.username = usr;
@@ -96,10 +100,10 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	/**
 	 * A wrapper around the checkout call. Used to implement the DataSource
 	 * interface. Internal use only.
-	 * 
+	 *
 	 * @return the connection
 	 * @throws SQLException
-	 * 
+	 *
 	 */
 	private Connection checkOutConnection() throws SQLException {
 		LogUtil.trace(this, "DBConnectionPool:checkOutConnection");
@@ -132,7 +136,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	@Override
 	protected Connection create() throws SQLException {
 		LogUtil.trace(this, "DBConnectionPool:create");
-		final Connection con = (DriverManager.getConnection(url, username, password));
+		final Connection con = DriverManager.getConnection(url, username, password);
 		if (ArrayUtil.isNotEmpty(executeSqlOnCreate)) {
 			for (final String sql : executeSqlOnCreate) {
 				try {
@@ -151,7 +155,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 	 * done by executing a commit and/or executing a query, if a error is
 	 * thrown, the connection is invalid. As of 2005, the query is the only
 	 * guaranteed method of validating a connection.
-	 * 
+	 *
 	 * @param obj
 	 *            - the Connection to validate.
 	 */
@@ -169,7 +173,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
 			DBUtil.commit(con); // validation 1
 
 			if (con.isValid(validationQueryTimeout) && !con.isClosed()) { // validation
-																			// 2
+			                                                              // 2
 				if (StringUtil.isNotEmpty(validationQuery)) { // validation 3
 					stmt = con.createStatement();
 					stmt.setQueryTimeout(validationQueryTimeout);

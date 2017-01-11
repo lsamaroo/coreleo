@@ -10,13 +10,13 @@ import com.coreleo.util.LogUtil;
 import com.coreleo.util.MapUtil;
 
 /**
- * 
- * Object threadPool design is generic enough to handle storage, tracking, and expiration times, but instantiation, validation,
- * and destruction of specific object types must be handled by sub-classing.
- * 
+ *
+ * Object threadPool design is generic enough to handle storage, tracking, and
+ * expiration times, but instantiation, validation, and destruction of specific
+ * object types must be handled by sub-classing.
+ *
  */
-public abstract class ObjectPool<T> extends AbstractPool<T>
-{
+public abstract class ObjectPool<T> extends AbstractPool<T> {
 	private final ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
 	private final Map<T, MetaData> locked;
@@ -24,12 +24,15 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 	private final int minObjectsInPool;
 	private final int maxObjectsInPool;
 	/**
-	 * Specifies the interval in milliseconds after which an idle connection is discarded. A value of zero means allow to idle
-	 * indefinitely.
+	 * Specifies the interval in milliseconds after which an idle connection is
+	 * discarded. A value of zero means allow to idle indefinitely.
 	 */
 	private final long objectIdleTimeOut;
 
-	/** Specifies the length of life in milliseconds for a connection, 0 is alive forever. */
+	/**
+	 * Specifies the length of life in milliseconds for a connection, 0 is alive
+	 * forever.
+	 */
 	private final long objectLife;
 
 	private long lastCheckOutTime = System.currentTimeMillis();
@@ -38,11 +41,11 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 
 	private final long reapTime;
 
-	protected ObjectPool(String name, long objectIdleTimeOut, long objectLife, long reapTime, int minObjectsInPool, int maxObjectsInPool)
-	{
+	protected ObjectPool(final String name, final long objectIdleTimeOut, final long objectLife, final long reapTime,
+	        final int minObjectsInPool, final int maxObjectsInPool) {
 		super(name);
-		this.locked = new Hashtable<T, MetaData>();
-		this.unlocked = new Hashtable<T, MetaData>();
+		this.locked = new Hashtable<>();
+		this.unlocked = new Hashtable<>();
 		this.objectIdleTimeOut = objectIdleTimeOut;
 		this.objectLife = objectLife;
 		this.minObjectsInPool = minObjectsInPool;
@@ -52,11 +55,11 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		LogUtil.trace(this, "ObjectPool:constructor " + this.toString());
 	}
 
-	protected ObjectPool(long objectIdleTimeOut, long objectLife, long reapTime, int minObjectsInPool, int maxObjectsInPool)
-	{
+	protected ObjectPool(final long objectIdleTimeOut, final long objectLife, final long reapTime,
+	        final int minObjectsInPool, final int maxObjectsInPool) {
 		super();
-		this.locked = new Hashtable<T, MetaData>();
-		this.unlocked = new Hashtable<T, MetaData>();
+		this.locked = new Hashtable<>();
+		this.unlocked = new Hashtable<>();
 		this.objectIdleTimeOut = objectIdleTimeOut;
 		this.objectLife = objectLife;
 		this.minObjectsInPool = minObjectsInPool;
@@ -66,84 +69,73 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		LogUtil.trace(this, "ObjectPool:constructor " + this.toString());
 	}
 
-	public void startObjectReaper()
-	{
+	public void startObjectReaper() {
 		LogUtil.trace(this, "ObjectPool:startObjectReaper");
 		threadPool.execute(new ObjectReaper(this, reapTime));
 	}
 
-	public synchronized long getLastCheckOutTime()
-	{
+	public synchronized long getLastCheckOutTime() {
 		return lastCheckOutTime;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the object idle time out
 	 * @deprecated use getIdleTimeOut instead
 	 */
 	@Deprecated
-	public long getExpire()
-	{
+	public long getExpire() {
 		return objectIdleTimeOut;
 	}
 
-	public long getObjectIdleTimeOut()
-	{
+	public long getObjectIdleTimeOut() {
 		return objectIdleTimeOut;
 	}
 
-	public long getObjectLife()
-	{
+	public long getObjectLife() {
 		return objectLife;
 	}
 
 	/**
-	 * 
-	 * Returns the interval, in seconds, between runs of the <code>ObjectReaper </code>.
-	 * 
+	 *
+	 * Returns the interval, in seconds, between runs of the
+	 * <code>ObjectReaper </code>.
+	 *
 	 * @deprecated
-	 * 
+	 *
 	 */
 	@Deprecated
-	public long getReapTime()
-	{
+	public long getReapTime() {
 		return reapTime;
 	}
 
 	@Override
-	public synchronized int getNumberOfObjectsLocked()
-	{
+	public synchronized int getNumberOfObjectsLocked() {
 		return this.numberOfObjectsLocked;
 	}
 
 	@Override
-	public synchronized int getNumberOfObjectsUnLocked()
-	{
+	public synchronized int getNumberOfObjectsUnLocked() {
 		return this.numberOfObjectsUnLocked;
 	}
 
-	public int getMinimumObjectsInPool()
-	{
+	public int getMinimumObjectsInPool() {
 		return this.minObjectsInPool;
 	}
 
-	public int getMaximumObjectsInPool()
-	{
+	public int getMaximumObjectsInPool() {
 		return this.maxObjectsInPool;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "id=" + super.getId() + " name=" + super.getName() + " objectIdleTimeOut=" + objectIdleTimeOut + " objectLife=" + objectLife;
+	public String toString() {
+		return "id=" + super.getId() + " name=" + super.getName() + " objectIdleTimeOut=" + objectIdleTimeOut
+		        + " objectLife=" + objectLife;
 	}
 
-	protected synchronized void initializeObjects(int numberOfObjectsInPool) throws Exception
-	{
+	protected synchronized void initializeObjects(final int numberOfObjectsInPool) throws Exception {
 		LogUtil.trace(this, "ObjectPool:initializeObjects");
-		for (int i = 0; i < numberOfObjectsInPool; i++)
-		{
+		for (int i = 0; i < numberOfObjectsInPool; i++) {
 			unlocked.put(create(), new MetaData());
 			LogUtil.debug(this, "ObjectPool:initializeObjects - " + i + 1);
 		}
@@ -151,8 +143,7 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 	}
 
 	@Override
-	public synchronized T checkOut() throws Exception
-	{
+	public synchronized T checkOut() throws Exception {
 		LogUtil.trace(this, "ObjectPool:checkOut - name=" + super.getName());
 
 		lastCheckOutTime = System.currentTimeMillis();
@@ -160,24 +151,20 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		MetaData metaData;
 		Map.Entry<T, MetaData> entry;
 
-		if (unlocked.size() > 0)
-		{
-			try
-			{
-				for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();)
-				{
+		if (unlocked.size() > 0) {
+			try {
+				for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();) {
 					entry = i.next();
 					object = entry.getKey();
-					if (validate(object))
-					{
+					if (validate(object)) {
 						metaData = entry.getValue();
 						i.remove();
 						locked.put(object, metaData);
-						LogUtil.trace(this, "ObjectPool:checkOut - name=" + super.getName() + " obj=" + object + " metaData=" + metaData);
+						LogUtil.trace(this, "ObjectPool:checkOut - name=" + super.getName() + " obj=" + object
+						        + " metaData=" + metaData);
 						return (object);
 					}
-					else
-					{
+					else {
 						i.remove();
 						expire(object);
 						object = null;
@@ -185,66 +172,63 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 					}
 				}
 			}
-			catch (final Exception e)
-			{
-				LogUtil.warn(this, "ObjectPool:checkOut - name=" + super.getName() + " error retrieving object from unlocked threadPool", e);
+			catch (final Exception e) {
+				LogUtil.warn(this, "ObjectPool:checkOut - name=" + super.getName()
+				        + " error retrieving object from unlocked threadPool", e);
 			}
 		}
 
-		// If we reached here then we either have a empty threadPool or invalid (via validate method) objects.
+		// If we reached here then we either have a empty threadPool or invalid
+		// (via validate method) objects.
 		object = create();
 		metaData = new MetaData();
 		locked.put(object, metaData);
 		this.numberOfObjectsLocked = locked.size();
 		this.numberOfObjectsUnLocked = unlocked.size();
 
-		LogUtil.trace(this, "ObjectPool:checkOut - name=" + super.getName() + " obj=" + object + " metaData=" + metaData);
+		LogUtil.trace(this,
+		        "ObjectPool:checkOut - name=" + super.getName() + " obj=" + object + " metaData=" + metaData);
 		return (object);
 	}
 
 	@Override
-	public synchronized void checkIn(T obj)
-	{
+	public synchronized void checkIn(final T obj) {
 		LogUtil.trace(this, "ObjectPool:checkIn - name=" + super.getName() + " obj=" + obj);
 
-		if (obj != null)
-		{
+		if (obj != null) {
 			LogUtil.trace(this, "ObjectPool:checkIn - name=" + super.getName() + " checking in connection");
 
 			final int totalObjectsInPool = locked.size() + unlocked.size();
 			MetaData metaData = locked.remove(obj);
 
-			if (metaData != null)
-			{
-				if (totalObjectsInPool <= maxObjectsInPool || maxObjectsInPool == 0)
-				{
+			if (metaData != null) {
+				if (totalObjectsInPool <= maxObjectsInPool || maxObjectsInPool == 0) {
 					metaData = new MetaData(metaData.getCreated(), System.currentTimeMillis());
 					unlocked.put(obj, metaData);
 				}
-				else
-				{
+				else {
 					expire(obj);
 				}
 			}
-			else
-			{
-				LogUtil.error(this, "ObjectPool:checkIn - name=" + super.getName() + " unable to checkin, object does not belong to this threadPool");
+			else {
+				LogUtil.error(this, "ObjectPool:checkIn - name=" + super.getName()
+				        + " unable to checkin, object does not belong to this threadPool");
 			}
 		}
-		else
-		{
+		else {
 			LogUtil.error(this, "ObjectPool:checkIn - name=" + super.getName() + " unable to checkin, object is null");
 		}
 
 		this.numberOfObjectsLocked = locked.size();
 		this.numberOfObjectsUnLocked = unlocked.size();
-		LogUtil.trace(this, "ObjectPool:checkIn - name=" + super.getName() + " numberOfObjectsLocked=" + numberOfObjectsLocked + " numberOfObjectsUnLocked= "
-				+ numberOfObjectsUnLocked + " totalObjectsInPool=" + (numberOfObjectsLocked + numberOfObjectsUnLocked));
+		LogUtil.trace(this,
+		        "ObjectPool:checkIn - name=" + super.getName() + " numberOfObjectsLocked=" + numberOfObjectsLocked
+		                + " numberOfObjectsUnLocked= " + numberOfObjectsUnLocked + " totalObjectsInPool="
+		                + (numberOfObjectsLocked + numberOfObjectsUnLocked));
 	}
 
 	@Override
-	protected synchronized void cleanUp()
-	{
+	protected synchronized void cleanUp() {
 		LogUtil.trace(this, "ObjectPool:cleanUp - name=" + super.getName());
 		final long now = System.currentTimeMillis();
 
@@ -252,13 +236,11 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		MetaData metaData;
 		Map.Entry<T, MetaData> entry;
 
-		try
-		{
-			for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();)
-			{
-				if ((locked.size() + unlocked.size()) <= minObjectsInPool)
-				{
-					LogUtil.trace(this, "ObjectPool:cleanUp - name=" + super.getName() + " minimum objects in threadPool reached, finished clean up");
+		try {
+			for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();) {
+				if ((locked.size() + unlocked.size()) <= minObjectsInPool) {
+					LogUtil.trace(this, "ObjectPool:cleanUp - name=" + super.getName()
+					        + " minimum objects in threadPool reached, finished clean up");
 					break;
 				}
 
@@ -269,18 +251,16 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 				final long timePassedSinceCreated = (now - (metaData != null ? metaData.getCreated() : 0));
 				final boolean hasIdled = (objectIdleTimeOut != 0 && timeIdleInPool > objectIdleTimeOut);
 				final boolean hasGrownOld = (objectLife != 0 && timePassedSinceCreated > objectLife);
-				if (hasIdled || hasGrownOld)
-				{
-					LogUtil.debug(this, "ObjectPool:cleanUp - name=" + super.getName() + " expiring object=" + object + " metaData=" + metaData
-							+ " timeIdleInPool=" + timeIdleInPool + " hasIdled=" + hasIdled + " timePassedSinceCreated=" + timePassedSinceCreated
-							+ " hasGrownOld=" + hasGrownOld);
+				if (hasIdled || hasGrownOld) {
+					LogUtil.debug(this, "ObjectPool:cleanUp - name=" + super.getName() + " expiring object=" + object
+					        + " metaData=" + metaData + " timeIdleInPool=" + timeIdleInPool + " hasIdled=" + hasIdled
+					        + " timePassedSinceCreated=" + timePassedSinceCreated + " hasGrownOld=" + hasGrownOld);
 					i.remove();
 					expire(object);
 				}
 			}
 		}
-		catch (final Exception e)
-		{
+		catch (final Exception e) {
 			LogUtil.warn(this, "ObjectPool:cleanUp - name=" + super.getName() + " error cleaning up threadPool", e);
 		}
 
@@ -291,13 +271,11 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 	/**
 	 * Closes all available connections.
 	 */
-	protected synchronized void release()
-	{
+	protected synchronized void release() {
 		LogUtil.trace(this, "ObjectPool:release");
 		T object;
 
-		for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();)
-		{
+		for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();) {
 			object = i.next().getKey();
 			i.remove();
 			expire(object);
@@ -306,8 +284,7 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 		this.numberOfObjectsUnLocked = 0;
 	}
 
-	public synchronized void close()
-	{
+	public synchronized void close() {
 		LogUtil.trace(this, "ObjectPool:close");
 		release();
 
@@ -317,44 +294,37 @@ public abstract class ObjectPool<T> extends AbstractPool<T>
 	}
 
 	@Override
-	protected void finalize() throws Throwable
-	{
+	protected void finalize() throws Throwable {
 		LogUtil.trace(this, "ObjectPool:finalize");
 		super.finalize();
 		close();
 	}
 
-	private final static class MetaData
-	{
+	private final static class MetaData {
 		private final long created;
 		private final long accessed;
 
-		public MetaData()
-		{
+		public MetaData() {
 			final long now = System.currentTimeMillis();
 			created = now;
 			accessed = now;
 		}
 
-		public MetaData(long created, long accesssed)
-		{
+		public MetaData(final long created, final long accesssed) {
 			this.created = created;
 			this.accessed = accesssed;
 		}
 
-		public long getCreated()
-		{
+		public long getCreated() {
 			return created;
 		}
 
-		public long getAccessed()
-		{
+		public long getAccessed() {
 			return accessed;
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return "ObjectMetaData - created=" + created + " accessed=" + accessed;
 		}
 
