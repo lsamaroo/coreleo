@@ -100,6 +100,20 @@ public final class DateUtil {
 		return x1.before(x2);
 	}
 
+	public static boolean before(final Date x1, final Calendar x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.before(toDate(x2));
+	}
+
+	public static boolean before(final Calendar x1, final Calendar x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.before(x2);
+	}
+
 	/**
 	 *
 	 * Tests if x1 date is after the specified x2 date.
@@ -111,6 +125,20 @@ public final class DateUtil {
 	 * @return true if x1 is after x2
 	 */
 	public static boolean after(final Date x1, final Date x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.after(x2);
+	}
+
+	public static boolean after(final Date x1, final Calendar x2) {
+		if (x1 == null || x2 == null) {
+			return false;
+		}
+		return x1.after(toDate(x2));
+	}
+
+	public static boolean after(final Calendar x1, final Calendar x2) {
 		if (x1 == null || x2 == null) {
 			return false;
 		}

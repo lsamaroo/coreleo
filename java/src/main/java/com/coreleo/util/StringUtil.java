@@ -22,35 +22,57 @@ import org.apache.commons.lang.WordUtils;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class StringUtil {
 
-	public final static String SPECIAL_CHARACTERS = "`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
-	private final static String _255 = "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
+	public static final String SPECIAL_CHARACTERS = "`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+	private static final String _255 = "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
 	// Pre-compiled regex patterns
-	private final static Pattern REGEX_WHITESPACE = Pattern.compile("^.*\\s.*$");
-	private final static Pattern REGEX_ALPHANUMERIC = Pattern.compile("^\\w+$");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES = Pattern.compile("^[a-zA-Z0-9\\s]*\\w+$");
-	private final static Pattern REGEX_ALPHA = Pattern.compile("^[a-zA-Z]+$");
-	private final static Pattern REGEX_ALPHA_ALLOW_SPACES = Pattern.compile("^[a-zA-Z\\s]*[a-zA-Z]+$");
-	private final static Pattern REGEX_NUMERIC = Pattern.compile("^[0-9]+$");
-	private final static Pattern REGEX_NUMERIC_ALLOW_SPACES = Pattern.compile("^[0-9\\s]*[0-9]+$");
-	private final static Pattern REGEX_QUESTIONMARK = Pattern.compile("\\?");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE = Pattern
+	private static final Pattern REGEX_WHITESPACE = Pattern.compile("^.*\\s.*$");
+	private static final Pattern REGEX_ALPHANUMERIC = Pattern.compile("^\\w+$");
+	private static final Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES = Pattern.compile("^[a-zA-Z0-9\\s]*\\w+$");
+	private static final Pattern REGEX_ALPHA = Pattern.compile("^[a-zA-Z]+$");
+	private static final Pattern REGEX_ALPHA_ALLOW_SPACES = Pattern.compile("^[a-zA-Z\\s]*[a-zA-Z]+$");
+	private static final Pattern REGEX_NUMERIC = Pattern.compile("^[0-9]+$");
+	private static final Pattern REGEX_NUMERIC_ALLOW_SPACES = Pattern.compile("^[0-9\\s]*[0-9]+$");
+	private static final Pattern REGEX_QUESTIONMARK = Pattern.compile("\\?");
+	private static final Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE = Pattern
 	        .compile("^[a-zA-Z_0-9\\Q-\\E\\s]*\\w+$");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_HYPHEN_UNDERSCORE = Pattern
+	private static final Pattern REGEX_ALPHANUMERIC_ALLOW_HYPHEN_UNDERSCORE = Pattern
 	        .compile("^[a-zA-Z_0-9\\Q-\\E]*\\w+$");
-	private final static Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE_PERIOD_COMMA = Pattern
+	private static final Pattern REGEX_ALPHANUMERIC_ALLOW_SPACES_HYPHEN_UNDERSCORE_PERIOD_COMMA = Pattern
 	        .compile("^[a-zA-Z_0-9\\Q-\\E.,\\s]*\\w+$");
-	private final static Pattern REGEX_EMAIL = Pattern
+	private static final Pattern REGEX_EMAIL = Pattern
 	        .compile("^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9\\Q-\\E]+\\.)+[A-Za-z]{2,4}$");
-	private final static Pattern REGEX_IPADDRESS = Pattern.compile("^(?:" + _255 + "\\.){3}" + _255 + "$");
-	private final static Pattern REGEX_DOLLARSIGN = Pattern.compile("\\$");
-	private final static Pattern REGEX_HOST_NAME = Pattern.compile("^([A-Za-z0-9\\Q-\\E.]+\\.)+[A-Za-z]{2,4}$");
-	private final static Pattern REGEX_USPHONE_NUMBERS = Pattern
+	private static final Pattern REGEX_IPADDRESS = Pattern.compile("^(?:" + _255 + "\\.){3}" + _255 + "$");
+	private static final Pattern REGEX_DOLLARSIGN = Pattern.compile("\\$");
+	private static final Pattern REGEX_HOST_NAME = Pattern.compile("^([A-Za-z0-9\\Q-\\E.]+\\.)+[A-Za-z]{2,4}$");
+	private static final Pattern REGEX_USPHONE_NUMBERS = Pattern
 	        .compile("([0-9]( |-)?)?(\\(?[0-9]{3}\\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4})");
-	private final static Pattern REGEX_PROPER_CASE = Pattern.compile("(^|\\W)([a-z])");
+	private static final Pattern REGEX_PROPER_CASE = Pattern.compile("(^|\\W)([a-z])");
 
 	private StringUtil() {
 		super();
+	}
+
+	/**
+	 * Returns a new string with only the numeric characters of the input
+	 * string.
+	 *
+	 * @param x
+	 * @return
+	 */
+	public static String getNumericCharacters(final String x) {
+		if (isEmpty(x)) {
+			return x;
+		}
+		final String string = trim(x);
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < string.length(); i++) {
+			final char c = string.charAt(i);
+			if (Character.isDigit(c)) {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -98,6 +120,11 @@ public final class StringUtil {
 
 		if (phoneNumber.length() < 10) {
 			return phoneNumber;
+		}
+
+		if (phoneNumber.length() == 11) {
+			return phoneNumber.substring(0, 1) + " (" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6)
+			        + "-" + phoneNumber.substring(6, 10);
 		}
 
 		return "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-"

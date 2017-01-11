@@ -1,6 +1,13 @@
 package com.coreleo.util.date;
 
+import static com.coreleo.util.date.DateUtil.after;
+import static com.coreleo.util.date.DateUtil.before;
+import static com.coreleo.util.date.DateUtil.toDate;
+import static com.coreleo.util.date.DateUtil.today;
+import static com.coreleo.util.date.DateUtil.tomorrow;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Calendar;
@@ -633,4 +640,13 @@ public class DateUtilTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testBeforeDateDate() {
+		assertTrue(before(toDate(today()), toDate(tomorrow())));
+	}
+
+	@Test
+	public void testAfterDateDate() {
+		assertFalse(after(toDate(today()), toDate(tomorrow())));
+	}
 }

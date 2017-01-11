@@ -14,6 +14,18 @@ import org.junit.Test;
 public class StringUtilTest {
 
 	@Test
+	public final void testgetNumericCharacters() {
+		final String phone1 = "1 (347) 878-1536";
+		final String phone2 = "1-347-878-1536";
+		final String phone3 = "+1 347 878 1536             ";
+		final String result = "13478781536";
+
+		assertEquals(result, StringUtil.getNumericCharacters(phone1));
+		assertEquals(result, StringUtil.getNumericCharacters(phone2));
+		assertEquals(result, StringUtil.getNumericCharacters(phone3));
+	}
+
+	@Test
 	public final void testReplaceAllNamedParameter() {
 		final String string = "This is a {namedParam} and so is this one: {namedParam}";
 		final String result = "This is a value and so is this one: value";
