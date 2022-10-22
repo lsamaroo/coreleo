@@ -24,272 +24,312 @@ import com.coreleo.util.pool.ObjectPool;
 
 public class DBConnectionPool extends ObjectPool<Connection> implements DataSource {
 
-	public static final int DEFAULT_VALIDATION_QUERY_TIMEOUT = 15; // 15 seconds
-	private final int initialConnectionsInPool;
-	private final String url, username, password;
-	private final Driver driver;
-	private String[] executeSqlOnCreate;
+    public static final int DEFAULT_VALIDATION_QUERY_TIMEOUT = 15; // 15 seconds
+    private final int initialConnectionsInPool;
+    private String url;
+    private String username;
+    private String password;
+    private Driver driver;
+    private String[] executeSqlOnCreate;
 
-	private String validationQuery;
-	private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
+    private String validationQuery;
+    private int validationQueryTimeout = DEFAULT_VALIDATION_QUERY_TIMEOUT;
+    private String driverClassName;
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
-	        final String pwd, final int maxConnections) {
-		this(name, driverClassName, url, usr, pwd, 18000, 18000, 21000, 0, 0, maxConnections, null);
-	}
+    public DBConnectionPool() {
+        super(18000, 18000, 21000, 0, 0);
+        this.initialConnectionsInPool = 0;
+    }
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
-	        final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
-	        final int initialConnections, final int minConnections, final int maxConnections) {
-		this(name, driverClassName, url, usr, pwd, idleTimeOut, connectionLife, reapTime, initialConnections,
-		        minConnections, maxConnections, null);
-	}
+    public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+            final String pwd, final int maxConnections) {
+        this(name, driverClassName, url, usr, pwd, 18000, 18000, 21000, 0, 0, maxConnections, null);
+    }
 
-	public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
-	        final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
-	        final int initialConnections, final int minConnections, final int maxConnections,
-	        final String[] executeSqlOnCreate) {
-		super(name, idleTimeOut, connectionLife, reapTime, minConnections, maxConnections);
-		this.url = url;
-		this.username = usr;
-		this.password = pwd;
-		this.initialConnectionsInPool = initialConnections;
-		this.driver = DBUtil.registerDriver(driverClassName);
-		this.executeSqlOnCreate = executeSqlOnCreate;
+    public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+            final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
+            final int initialConnections, final int minConnections, final int maxConnections) {
+        this(name, driverClassName, url, usr, pwd, idleTimeOut, connectionLife, reapTime, initialConnections,
+                minConnections, maxConnections, null);
+    }
 
-		try {
-			super.initializeObjects(this.initialConnectionsInPool);
-		}
-		catch (final Exception e) {
-			LogUtil.warn(this, "Unable to initialize the initial number of connections for pool " + super.getName(), e);
-		}
-	}
+    public DBConnectionPool(final String name, final String driverClassName, final String url, final String usr,
+            final String pwd, final long idleTimeOut, final long connectionLife, final long reapTime,
+            final int initialConnections, final int minConnections, final int maxConnections,
+            final String[] executeSqlOnCreate) {
+        super(name, idleTimeOut, connectionLife, reapTime, minConnections, maxConnections);
+        this.url = url;
+        this.username = usr;
+        this.password = pwd;
+        this.initialConnectionsInPool = initialConnections;
+        this.setDriverClassName(driverClassName);
+        this.executeSqlOnCreate = executeSqlOnCreate;
+        init();
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    private void init() {
+        try {
+            super.initializeObjects(this.initialConnectionsInPool);
+        }
+        catch (final Exception e) {
+            LogUtil.warn(this, "Unable to initialize the initial number of connections for pool " + super.getName(), e);
+        }
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getUrl() {
-		return this.url;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public int getInitialConnectionsInPool() {
-		return this.initialConnectionsInPool;
-	}
+    public String getUrl() {
+        return this.url;
+    }
 
-	public synchronized String getValidationQuery() {
-		return validationQuery;
-	}
+    public String getDriverClassName() {
+        return driverClassName;
+    }
 
-	public synchronized void setValidationQuery(final String validationQuery) {
-		this.validationQuery = validationQuery;
-	}
+    public void setDriverClassName(final String driverClassName) {
+        this.driverClassName = driverClassName;
+        this.driver = DBUtil.registerDriver(this.driverClassName);
+    }
 
-	public synchronized int getValidationQueryTimeout() {
-		return validationQueryTimeout;
-	}
+    public void setDriverClass(final String driverClassName) {
+        setDriverClassName(driverClassName);
+    }
 
-	public synchronized void setValidationQueryTimeout(final int seconds) {
-		this.validationQueryTimeout = seconds;
-	}
+    public void setUrl(final String url) {
+        this.url = url;
+    }
 
-	/**
-	 * A wrapper around the checkout call. Used to implement the DataSource
-	 * interface. Internal use only.
-	 *
-	 * @return the connection
-	 * @throws SQLException
-	 *
-	 */
-	private Connection checkOutConnection() throws SQLException {
-		LogUtil.trace(this, "DBConnectionPool:checkOutConnection");
-		try {
-			return super.checkOut();
-		}
-		catch (final SQLException sqle) {
-			LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", sqle);
-			throw sqle;
-		}
-		catch (final Exception e) {
-			LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", e);
-			throw new SQLException("Generic exeption (wrapped in SQLException) " + e.getMessage());
-		}
-	}
+    public void setUsername(final String username) {
+        this.username = username;
+    }
 
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		DBUtil.deregisterDriver(driver);
-	}
+    public void setUser(final String username) {
+        this.username = username;
+    }
 
-	// -------------------------------------------------------------------------------------------
-	// Implementation of class ObjectPool
-	// -------------------------------------------------------------------------------------------
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 
-	/**
-	 * Creates a new connection object.
-	 */
-	@Override
-	protected Connection create() throws SQLException {
-		LogUtil.trace(this, "DBConnectionPool:create");
-		final Connection con = DriverManager.getConnection(url, username, password);
-		if (ArrayUtil.isNotEmpty(executeSqlOnCreate)) {
-			for (final String sql : executeSqlOnCreate) {
-				try {
-					DBUtil.update(con, sql);
-				}
-				catch (final SimpleSqlException sqle) {
-					LogUtil.warn(this, sqle);
-				}
-			}
-		}
-		return new DBConnectionWrapper(this, con);
-	}
+    public int getInitialConnectionsInPool() {
+        return this.initialConnectionsInPool;
+    }
 
-	/**
-	 * Validates the connection before checking it out from the pool. This is
-	 * done by executing a commit and/or executing a query, if a error is
-	 * thrown, the connection is invalid. As of 2005, the query is the only
-	 * guaranteed method of validating a connection.
-	 *
-	 * @param obj
-	 *            - the Connection to validate.
-	 */
-	@Override
-	protected boolean validate(final Connection con) {
-		LogUtil.trace(this, "DBConnectionPool:validate");
-		if (con == null) {
-			return false;
-		}
+    public synchronized String getValidationQuery() {
+        return validationQuery;
+    }
 
-		Statement stmt = null;
-		try {
+    public synchronized void setValidationQuery(final String validationQuery) {
+        this.validationQuery = validationQuery;
+    }
 
-			DBUtil.turnOffAutoCommit(con);
-			DBUtil.commit(con); // validation 1
+    public synchronized int getValidationQueryTimeout() {
+        return validationQueryTimeout;
+    }
 
-			if (con.isValid(validationQueryTimeout) && !con.isClosed()) { // validation
-			                                                              // 2
-				if (StringUtil.isNotEmpty(validationQuery)) { // validation 3
-					stmt = con.createStatement();
-					stmt.setQueryTimeout(validationQueryTimeout);
-					LogUtil.trace(this, "DBConnectionPool:validationQuery=" + validationQuery);
-					stmt.execute(validationQuery);
-					DBUtil.close(stmt);
-				}
+    public synchronized void setValidationQueryTimeout(final int seconds) {
+        this.validationQueryTimeout = seconds;
+    }
 
-				con.clearWarnings();
-				DBUtil.turnOnAutoCommit(con);
+    /**
+     * A wrapper around the checkout call. Used to implement the DataSource
+     * interface. Internal use only.
+     *
+     * @return the connection
+     * @throws SQLException
+     *
+     */
+    private Connection checkOutConnection() throws SQLException {
+        LogUtil.trace(this, "DBConnectionPool:checkOutConnection");
+        try {
+            return super.checkOut();
+        }
+        catch (final SQLException sqle) {
+            LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", sqle);
+            throw sqle;
+        }
+        catch (final Exception e) {
+            LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", e);
+            throw new SQLException("Generic exeption (wrapped in SQLException) " + e.getMessage());
+        }
+    }
 
-				LogUtil.trace(this, "DBConnectionPool:validate - true");
-				return true;
-			}
-			else {
-				LogUtil.trace(this, "DBConnectionPool:validate - false");
-				return false;
-			}
-		}
-		catch (final SQLException sqle) {
-			LogUtil.debug(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
-			return false;
-		}
-		catch (final Exception e) {
-			LogUtil.debug(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
-			return false;
-		}
-		finally {
-			DBUtil.close(stmt);
-		}
-	}
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        DBUtil.deregisterDriver(driver);
+    }
 
-	/**
-	 * Closes the connection.
-	 */
-	@Override
-	protected void expire(final Connection con) {
-		LogUtil.trace(this, "DBConnectionPool:expire");
+    // -------------------------------------------------------------------------------------------
+    // Implementation of class ObjectPool
+    // -------------------------------------------------------------------------------------------
 
-		if (con != null) {
-			try {
-				DBUtil.turnOffAutoCommit(con);
-				DBUtil.commit(con);
-				DBUtil.turnOnAutoCommit(con);
-			}
-			catch (final Exception e) {
-				LogUtil.warn(this, "DBConnectionPool:expire - unable to commit connection before close", e);
-			}
+    /**
+     * Creates a new connection object.
+     */
+    @Override
+    protected Connection create() throws SQLException {
+        LogUtil.trace(this, "DBConnectionPool:create");
+        final Connection con = DriverManager.getConnection(url, username, password);
+        if (ArrayUtil.isNotEmpty(executeSqlOnCreate)) {
+            for (final String sql : executeSqlOnCreate) {
+                try {
+                    DBUtil.update(con, sql);
+                }
+                catch (final SimpleSqlException sqle) {
+                    LogUtil.warn(this, sqle);
+                }
+            }
+        }
+        return new DBConnectionWrapper(this, con);
+    }
 
-			try {
-				((DBConnectionWrapper) con).closePhysicalConnection();
-			}
-			catch (final Exception e) {
-				LogUtil.debug(this, "DBConnectionPool:expire - unable to close connection", e);
-			}
+    /**
+     * Validates the connection before checking it out from the pool. This is
+     * done by executing a commit and/or executing a query, if a error is
+     * thrown, the connection is invalid. As of 2005, the query is the only
+     * guaranteed method of validating a connection.
+     *
+     * @param obj
+     *            - the Connection to validate.
+     */
+    @Override
+    protected boolean validate(final Connection con) {
+        LogUtil.trace(this, "DBConnectionPool:validate");
+        if (con == null) {
+            return false;
+        }
 
-		}
-	}
+        Statement stmt = null;
+        try {
 
-	// -------------------------------------------------------------------------------------------
-	// Implementation of interface DataSource
-	// -------------------------------------------------------------------------------------------
+            DBUtil.turnOffAutoCommit(con);
+            DBUtil.commit(con); // validation 1
 
-	@Override
-	public int getLoginTimeout() throws SQLException {
-		throw new SQLException("Unsupported method - getLoginTimeout");
-	}
+            if (con.isValid(validationQueryTimeout) && !con.isClosed()) { // validation
+                                                                          // 2
+                if (StringUtil.isNotEmpty(validationQuery)) { // validation 3
+                    stmt = con.createStatement();
+                    stmt.setQueryTimeout(validationQueryTimeout);
+                    LogUtil.trace(this, "DBConnectionPool:validationQuery=" + validationQuery);
+                    stmt.execute(validationQuery);
+                    DBUtil.close(stmt);
+                }
 
-	@Override
-	public PrintWriter getLogWriter() throws SQLException {
-		throw new SQLException("Unsupported method - getLogWriter");
-	}
+                con.clearWarnings();
+                DBUtil.turnOnAutoCommit(con);
 
-	@Override
-	public void setLoginTimeout(final int seconds) throws SQLException {
-		throw new SQLException("Unsupported method - setLoginTimeout");
-	}
+                LogUtil.trace(this, "DBConnectionPool:validate - true");
+                return true;
+            }
+            else {
+                LogUtil.trace(this, "DBConnectionPool:validate - false");
+                return false;
+            }
+        }
+        catch (final SQLException sqle) {
+            LogUtil.debug(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
+            return false;
+        }
+        catch (final Exception e) {
+            LogUtil.debug(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
+            return false;
+        }
+        finally {
+            DBUtil.close(stmt);
+        }
+    }
 
-	@Override
-	public void setLogWriter(final PrintWriter out) throws SQLException {
-		throw new SQLException("Unsupported method - setLogWriter");
-	}
+    /**
+     * Closes the connection.
+     */
+    @Override
+    protected void expire(final Connection con) {
+        LogUtil.trace(this, "DBConnectionPool:expire");
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public boolean isWrapperFor(final Class iface) throws SQLException {
-		return false;
-	}
+        if (con != null) {
+            try {
+                DBUtil.turnOffAutoCommit(con);
+                DBUtil.commit(con);
+                DBUtil.turnOnAutoCommit(con);
+            }
+            catch (final Exception e) {
+                LogUtil.debug(this, "DBConnectionPool:expire - unable to commit connection before close", e);
+            }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public Object unwrap(final Class iface) throws SQLException {
-		throw new SQLException("DBConnectionPool is not a wrapper.");
-	}
+            try {
+                ((DBConnectionWrapper) con).closePhysicalConnection();
+            }
+            catch (final Exception e) {
+                LogUtil.debug(this, "DBConnectionPool:expire - unable to close connection", e);
+            }
 
-	@Override
-	public Connection getConnection() throws SQLException {
-		return checkOutConnection();
-	}
+        }
+    }
 
-	@Override
-	public Connection getConnection(final String username, final String password) throws SQLException {
-		return checkOutConnection();
-	}
+    // -------------------------------------------------------------------------------------------
+    // Implementation of interface DataSource
+    // -------------------------------------------------------------------------------------------
 
-	@Override
-	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		throw new SQLFeatureNotSupportedException();
-	}
+    @Override
+    public int getLoginTimeout() throws SQLException {
+        throw new SQLException("Unsupported method - getLoginTimeout");
+    }
 
-	public String[] getExecuteSqlOnCreate() {
-		return executeSqlOnCreate;
-	}
+    @Override
+    public PrintWriter getLogWriter() throws SQLException {
+        throw new SQLException("Unsupported method - getLogWriter");
+    }
 
-	public void setExecuteSqlOnCreate(final String[] executeSqlOnCreate) {
-		this.executeSqlOnCreate = executeSqlOnCreate;
-	}
+    @Override
+    public void setLoginTimeout(final int seconds) throws SQLException {
+        throw new SQLException("Unsupported method - setLoginTimeout");
+    }
+
+    @Override
+    public void setLogWriter(final PrintWriter out) throws SQLException {
+        throw new SQLException("Unsupported method - setLogWriter");
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean isWrapperFor(final Class iface) throws SQLException {
+        return false;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public Object unwrap(final Class iface) throws SQLException {
+        throw new SQLException("DBConnectionPool is not a wrapper.");
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        return checkOutConnection();
+    }
+
+    @Override
+    public Connection getConnection(final String username, final String password) throws SQLException {
+        return checkOutConnection();
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new SQLFeatureNotSupportedException();
+    }
+
+    public String[] getExecuteSqlOnCreate() {
+        return executeSqlOnCreate;
+    }
+
+    public void setExecuteSqlOnCreate(final String[] executeSqlOnCreate) {
+        this.executeSqlOnCreate = executeSqlOnCreate;
+    }
 
 }

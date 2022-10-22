@@ -16,113 +16,113 @@ import java.util.List;
  */
 @Deprecated
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class MultiHashMap extends HashMap implements Serializable {
+public class MultiHashMap extends HashMap<Object, Object> implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public boolean containsValue(final Object key, final Object value) {
-		final List list = (List) super.get(key);
-		if (list != null) {
-			return list.contains(value);
-		}
-		else {
-			return false;
-		}
-	}
+    public boolean containsValue(final Object key, final Object value) {
+        final List list = (List) super.get(key);
+        if (list != null) {
+            return list.contains(value);
+        }
+        else {
+            return false;
+        }
+    }
 
-	public List getCollection(final Object key) {
-		return (List) super.get(key);
-	}
+    public List getCollection(final Object key) {
+        return (List) super.get(key);
+    }
 
-	public Iterator iterator(final Object key) {
-		final List list = (List) super.get(key);
-		if (list != null) {
-			return list.iterator();
-		}
-		else {
-			return new ArrayList().iterator();
-		}
-	}
+    public Iterator iterator(final Object key) {
+        final List list = (List) super.get(key);
+        if (list != null) {
+            return list.iterator();
+        }
+        else {
+            return new ArrayList().iterator();
+        }
+    }
 
-	public boolean putAll(final Object key, final Collection values) {
-		if (values == null) {
-			return false;
-		}
+    public boolean putAll(final Object key, final Collection values) {
+        if (values == null) {
+            return false;
+        }
 
-		final List list = (List) super.get(key);
-		if (list != null) {
-			return list.addAll(values);
-		}
-		else {
-			super.put(key, list);
-			return true;
-		}
-	}
+        final List list = (List) super.get(key);
+        if (list != null) {
+            return list.addAll(values);
+        }
+        else {
+            super.put(key, list);
+            return true;
+        }
+    }
 
-	public int size(final Object key) {
-		final List list = (List) super.get(key);
-		if (list != null) {
-			return list.size();
-		}
-		else {
-			return 0;
-		}
-	}
+    public int size(final Object key) {
+        final List list = (List) super.get(key);
+        if (list != null) {
+            return list.size();
+        }
+        else {
+            return 0;
+        }
+    }
 
-	public int totalSize() {
-		int size = 0;
+    public int totalSize() {
+        int size = 0;
 
-		for (final Iterator i = super.values().iterator(); i.hasNext();) {
-			final List list = (List) i.next();
-			size = size + list.size();
-		}
+        for (final Object element : super.values()) {
+            final List list = (List) element;
+            size = size + list.size();
+        }
 
-		return size;
-	}
+        return size;
+    }
 
-	public Object remove(final Object key, final Object item) {
-		final List list = (List) super.get(key);
-		if (list != null) {
-			final boolean containsItem = list.remove(item);
-			return containsItem ? item : null;
-		}
-		else {
-			return null;
-		}
-	}
+    @Override
+    public boolean remove(final Object key, final Object item) {
+        final List list = (List) super.get(key);
+        if (list != null) {
+            return list.remove(item);
+        }
+        else {
+            return false;
+        }
+    }
 
-	@Override
-	public Object put(final Object key, final Object value) {
-		List list = (List) super.get(key);
-		if (list == null) {
-			list = new ArrayList();
-		}
+    @Override
+    public Object put(final Object key, final Object value) {
+        List list = (List) super.get(key);
+        if (list == null) {
+            list = new ArrayList();
+        }
 
-		list.add(value);
-		return super.put(key, list);
-	}
+        list.add(value);
+        return super.put(key, list);
+    }
 
-	@Override
-	public boolean containsValue(final Object value) {
-		for (final Iterator i = super.values().iterator(); i.hasNext();) {
-			final List list = (List) i.next();
-			if (list.contains(value)) {
-				return true;
-			}
-		}
+    @Override
+    public boolean containsValue(final Object value) {
+        for (final Object element : super.values()) {
+            final List list = (List) element;
+            if (list.contains(value)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public List values() {
-		final List all = new ArrayList();
-		for (final Iterator i = super.values().iterator(); i.hasNext();) {
-			final List list = (List) i.next();
-			all.addAll(list);
-		}
+    @Override
+    public List values() {
+        final List all = new ArrayList();
+        for (final Object element : super.values()) {
+            final List list = (List) element;
+            all.addAll(list);
+        }
 
-		return all;
-	}
+        return all;
+    }
 
 }

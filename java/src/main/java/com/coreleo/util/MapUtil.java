@@ -85,7 +85,7 @@ public final class MapUtil {
 		else if (obj instanceof Object[]) {
 			return (Object[]) obj;
 		}
-		else if (obj instanceof Collection && obj != null) {
+		else if (obj instanceof Collection) {
 			return ((Collection) obj).toArray();
 		}
 		else if (obj != null) {
@@ -146,16 +146,7 @@ public final class MapUtil {
 	 */
 	public static final int[] getIntegerArray(final Map map, final Object key) {
 		final Object[] values = getValueAsObjectArray(map, key);
-
-		if (values instanceof String[]) {
-			return ArrayUtil.toIntegerArray(values);
-		}
-		else if (values instanceof Integer[]) {
-			return ArrayUtil.toIntegerArray(values);
-		}
-		else {
-			return ArrayUtil.toIntegerArray(values);
-		}
+		return ArrayUtil.toIntegerArray(values);
 	}
 
 	/**
@@ -216,7 +207,7 @@ public final class MapUtil {
 			LogUtil.warn(e);
 		}
 
-		final HashMap<String, Object[]> map = new HashMap<String, Object[]>();
+		final HashMap<String, Object[]> map = new HashMap<>();
 
 		if (queryString == null) {
 			return map;

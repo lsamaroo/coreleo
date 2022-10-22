@@ -31,8 +31,8 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter {
 
 		final String url = ((HttpServletRequest) req).getRequestURL().toString();
 		if (!isValidUrl(url)) {
-			LogUtil.info(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
-			LogUtil.info(this, "Invalid Url", url);
+			LogUtil.debug(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+			LogUtil.debug(this, "Invalid Url", url);
 			((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			((HttpServletResponse) res).getOutputStream().write(responseString.getBytes());
 			return;
@@ -42,8 +42,8 @@ public abstract class AbstractRequestValidationFilter extends AbstractFilter {
 			final String key = String.valueOf(e.nextElement());
 			final String[] values = req.getParameterValues(key);
 			if (!isValidParam(key, values)) {
-				LogUtil.info(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
-				LogUtil.info(this, "Invalid params {} and/or key {}", values, key);
+				LogUtil.debug(this, "HTTP Status {}", HttpServletResponse.SC_BAD_REQUEST);
+				LogUtil.debug(this, "Invalid params {} and/or key {}", values, key);
 				((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				((HttpServletResponse) res).getOutputStream().write(responseString.getBytes());
 				return;

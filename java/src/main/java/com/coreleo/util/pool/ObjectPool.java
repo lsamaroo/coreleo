@@ -23,16 +23,8 @@ public abstract class ObjectPool<T> extends AbstractPool<T> {
 	private final Map<T, MetaData> unlocked;
 	private final int minObjectsInPool;
 	private final int maxObjectsInPool;
-	/**
-	 * Specifies the interval in milliseconds after which an idle connection is
-	 * discarded. A value of zero means allow to idle indefinitely.
-	 */
-	private final long objectIdleTimeOut;
 
-	/**
-	 * Specifies the length of life in milliseconds for a connection, 0 is alive
-	 * forever.
-	 */
+	private final long objectIdleTimeOut;
 	private final long objectLife;
 
 	private long lastCheckOutTime = System.currentTimeMillis();
@@ -88,10 +80,18 @@ public abstract class ObjectPool<T> extends AbstractPool<T> {
 		return objectIdleTimeOut;
 	}
 
+	/**
+	 * Specifies the interval in milliseconds after which an idle connection is
+	 * discarded. A value of zero means allow to idle indefinitely.
+	 */
 	public long getObjectIdleTimeOut() {
 		return objectIdleTimeOut;
 	}
 
+	/**
+	 * Specifies the length of life in milliseconds for a connection, 0 is alive
+	 * forever.
+	 */
 	public long getObjectLife() {
 		return objectLife;
 	}
@@ -238,7 +238,7 @@ public abstract class ObjectPool<T> extends AbstractPool<T> {
 
 		try {
 			for (final Iterator<Map.Entry<T, MetaData>> i = unlocked.entrySet().iterator(); i.hasNext();) {
-				if ((locked.size() + unlocked.size()) <= minObjectsInPool) {
+				if ((locked.size() + unlocked.size()) <= minObjectsInPool || minObjectsInPool == Integer.MAX_VALUE) {
 					LogUtil.trace(this, "ObjectPool:cleanUp - name=" + super.getName()
 					        + " minimum objects in threadPool reached, finished clean up");
 					break;
@@ -252,9 +252,9 @@ public abstract class ObjectPool<T> extends AbstractPool<T> {
 				final boolean hasIdled = (objectIdleTimeOut != 0 && timeIdleInPool > objectIdleTimeOut);
 				final boolean hasGrownOld = (objectLife != 0 && timePassedSinceCreated > objectLife);
 				if (hasIdled || hasGrownOld) {
-					LogUtil.debug(this, "ObjectPool:cleanUp - name=" + super.getName() + " expiring object=" + object
-					        + " metaData=" + metaData + " timeIdleInPool=" + timeIdleInPool + " hasIdled=" + hasIdled
-					        + " timePassedSinceCreated=" + timePassedSinceCreated + " hasGrownOld=" + hasGrownOld);
+					LogUtil.debug(this,
+					        "name={} expiring object={} metaData={} timeIdleInPool={} hadIdled={} timePassedSinceCreated={} hasGrownOld={}",
+					        getName(), object, metaData, timeIdleInPool, hasIdled, timePassedSinceCreated, hasGrownOld);
 					i.remove();
 					expire(object);
 				}
@@ -300,7 +300,7 @@ public abstract class ObjectPool<T> extends AbstractPool<T> {
 		close();
 	}
 
-	private final static class MetaData {
+	private static final class MetaData {
 		private final long created;
 		private final long accessed;
 
