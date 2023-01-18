@@ -1,25 +1,26 @@
 package com.coreleo.util;
 
 /**
- * 
+ *
  * @deprecated - use RuntimeUtil instead
  *
  */
+@Deprecated
 public final class MemoryUtil {
 
-	public static final double usedMemory() {
-		return RuntimeUtil.usedMemory();
-	}
+    public static double usedMemory() {
+        return RuntimeUtil.usedMemory();
+    }
 
-	public static final double freeMemory() {
-		return RuntimeUtil.freeMemory();
-	}
+    public static double freeMemory() {
+        return RuntimeUtil.freeMemory();
+    }
 
-	public static final double totalMemory() {
-		return RuntimeUtil.totalMemory();
-	}
+    public static double totalMemory() {
+        return RuntimeUtil.totalMemory();
+    }
 
-	public static final double maxMemory(){
-		return RuntimeUtil.maxMemory();
-	}
+    public static double maxMemory() {
+        return RuntimeUtil.maxMemory();
+    }
 }

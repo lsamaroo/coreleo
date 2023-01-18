@@ -2,6 +2,10 @@
 
 <project name="common">
 
+	
+	<presetdef name="javac">
+		<javac includeantruntime="false" />
+	</presetdef>
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: -common-clean                      

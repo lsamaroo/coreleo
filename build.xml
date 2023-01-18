@@ -2,7 +2,7 @@
 
 <project name="coreleo" default="build">
 	<property name="jar.name" value="coreleo" />
-	<property name="jdk.version" value="1.7" />
+	<property name="jdk.version" value="1.10" />
 	<property name="src.dir" value="java/src/main/java" />
 	<property name="lib.dir" value="java/lib" />
 	<property name="doc.dir" value="java/doc" />
@@ -18,7 +18,7 @@
 
 	<!-- here is the version of ivy we will use. change this property to try a newer 
          version if you want -->
-	<property name="ivy.install.version" value="2.4.0" />
+	<property name="ivy.install.version" value="2.5.1" />
 	<property name="ivy.jar.dir" value="${basedir}" />
 	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
 	<property name="ivy.lib.dir" value="${lib.dir}/download-from-repo" />

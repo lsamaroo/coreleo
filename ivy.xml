@@ -9,21 +9,23 @@
     <dependencies defaultconf="default" >
    		
    		<!-- ========== Servlet API ===================================== -->
-		<dependency org="javax" name="javaee-web-api" rev="6.0"/>
+		<dependency org="javax" name="javaee-web-api" rev="8.0"/>
 
     	<!-- ========== Apache Commons ================================== -->
-        <dependency org="commons-lang" name="commons-lang" rev="2.6"/>
+        <dependency org="commons-lang" name="commons-lang" rev="2.6" />
 
 		<!-- ========== Testing ========================================== -->
-		<dependency org="junit" name="junit" rev="4.8.1"/>
+		<dependency org="junit" name="junit" rev="4.11" />
             
         <!-- ========== Logging ========================================== -->  
-        <dependency org="org.slf4j" name="slf4j-api" rev="1.7.2" />
+        <dependency org="ch.qos.logback" name="logback-classic" rev="1.2.11" />
         
         <!-- ========== JSON Library ===================== -->
-        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2" transitive="false"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2" transitive="false"/>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2" transitive="false"/>
+		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.13.4.1" transitive="false"/>
+		<dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.13.4" />
+		<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.13.4"/>
+        
+        
         
     </dependencies>
 </ivy-module>

@@ -70,18 +70,17 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     private void init() {
         try {
             super.initializeObjects(this.initialConnectionsInPool);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             LogUtil.warn(this, "Unable to initialize the initial number of connections for pool " + super.getName(), e);
         }
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public String getUrl() {
@@ -89,7 +88,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     public String getDriverClassName() {
-        return driverClassName;
+        return this.driverClassName;
     }
 
     public void setDriverClassName(final String driverClassName) {
@@ -110,7 +109,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     public void setUser(final String username) {
-        this.username = username;
+        this.setUsername(username);
     }
 
     public void setPassword(final String password) {
@@ -122,7 +121,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     public synchronized String getValidationQuery() {
-        return validationQuery;
+        return this.validationQuery;
     }
 
     public synchronized void setValidationQuery(final String validationQuery) {
@@ -130,7 +129,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     public synchronized int getValidationQueryTimeout() {
-        return validationQueryTimeout;
+        return this.validationQueryTimeout;
     }
 
     public synchronized void setValidationQueryTimeout(final int seconds) {
@@ -149,21 +148,19 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
         LogUtil.trace(this, "DBConnectionPool:checkOutConnection");
         try {
             return super.checkOut();
-        }
-        catch (final SQLException sqle) {
+        } catch (final SQLException sqle) {
             LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", sqle);
             throw sqle;
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             LogUtil.error(this, "DBConnectionPool:checkOutConnection - Unable to borrow connection from pool", e);
             throw new SQLException("Generic exeption (wrapped in SQLException) " + e.getMessage());
         }
     }
 
     @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        DBUtil.deregisterDriver(driver);
+    public synchronized void close() {
+        super.close();
+        DBUtil.deregisterDriver(this.driver);
     }
 
     // -------------------------------------------------------------------------------------------
@@ -176,13 +173,12 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     @Override
     protected Connection create() throws SQLException {
         LogUtil.trace(this, "DBConnectionPool:create");
-        final Connection con = DriverManager.getConnection(url, username, password);
-        if (ArrayUtil.isNotEmpty(executeSqlOnCreate)) {
-            for (final String sql : executeSqlOnCreate) {
+        final var con = DriverManager.getConnection(this.url, this.username, this.password);
+        if (ArrayUtil.isNotEmpty(this.executeSqlOnCreate)) {
+            for (final String sql : this.executeSqlOnCreate) {
                 try {
                     DBUtil.update(con, sql);
-                }
-                catch (final SimpleSqlException sqle) {
+                } catch (final SimpleSqlException sqle) {
                     LogUtil.warn(this, sqle);
                 }
             }
@@ -191,13 +187,12 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     /**
-     * Validates the connection before checking it out from the pool. This is
-     * done by executing a commit and/or executing a query, if a error is
-     * thrown, the connection is invalid. As of 2005, the query is the only
-     * guaranteed method of validating a connection.
+     * Validates the connection before checking it out from the pool. This is done
+     * by executing a commit and/or executing a query, if a error is thrown, the
+     * connection is invalid. As of 2005, the query is the only guaranteed method of
+     * validating a connection.
      *
-     * @param obj
-     *            - the Connection to validate.
+     * @param con - the Connection to validate.
      */
     @Override
     protected boolean validate(final Connection con) {
@@ -212,36 +207,31 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
             DBUtil.turnOffAutoCommit(con);
             DBUtil.commit(con); // validation 1
 
-            if (con.isValid(validationQueryTimeout) && !con.isClosed()) { // validation
-                                                                          // 2
-                if (StringUtil.isNotEmpty(validationQuery)) { // validation 3
-                    stmt = con.createStatement();
-                    stmt.setQueryTimeout(validationQueryTimeout);
-                    LogUtil.trace(this, "DBConnectionPool:validationQuery=" + validationQuery);
-                    stmt.execute(validationQuery);
-                    DBUtil.close(stmt);
-                }
-
-                con.clearWarnings();
-                DBUtil.turnOnAutoCommit(con);
-
-                LogUtil.trace(this, "DBConnectionPool:validate - true");
-                return true;
-            }
-            else {
+            if (!con.isValid(this.validationQueryTimeout) || con.isClosed()) {
                 LogUtil.trace(this, "DBConnectionPool:validate - false");
                 return false;
             }
-        }
-        catch (final SQLException sqle) {
+            // 2
+            if (StringUtil.isNotEmpty(this.validationQuery)) { // validation 3
+                stmt = con.createStatement();
+                stmt.setQueryTimeout(this.validationQueryTimeout);
+                LogUtil.trace(this, "DBConnectionPool:validationQuery=" + this.validationQuery);
+                stmt.execute(this.validationQuery);
+                DBUtil.close(stmt);
+            }
+
+            con.clearWarnings();
+            DBUtil.turnOnAutoCommit(con);
+
+            LogUtil.trace(this, "DBConnectionPool:validate - true");
+            return true;
+        } catch (final SQLException sqle) {
             LogUtil.debug(this, "DBConnectionPool:validate - SQL error, invalid connection", sqle);
             return false;
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             LogUtil.debug(this, "DBConnectionPool:validate - Unknown error, invalid connection", e);
             return false;
-        }
-        finally {
+        } finally {
             DBUtil.close(stmt);
         }
     }
@@ -258,15 +248,13 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
                 DBUtil.turnOffAutoCommit(con);
                 DBUtil.commit(con);
                 DBUtil.turnOnAutoCommit(con);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 LogUtil.debug(this, "DBConnectionPool:expire - unable to commit connection before close", e);
             }
 
             try {
                 ((DBConnectionWrapper) con).closePhysicalConnection();
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 LogUtil.debug(this, "DBConnectionPool:expire - unable to close connection", e);
             }
 
@@ -325,7 +313,7 @@ public class DBConnectionPool extends ObjectPool<Connection> implements DataSour
     }
 
     public String[] getExecuteSqlOnCreate() {
-        return executeSqlOnCreate;
+        return this.executeSqlOnCreate;
     }
 
     public void setExecuteSqlOnCreate(final String[] executeSqlOnCreate) {
