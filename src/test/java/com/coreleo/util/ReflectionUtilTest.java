@@ -44,7 +44,7 @@ class ReflectionUtilTest {
     @Test
     void testSetFieldValue() {
         final Object obj = new Object() {
-            String field = "";
+            public String field = "";
 
             @Override
             public String toString() {
@@ -53,15 +53,21 @@ class ReflectionUtilTest {
         };
 
         ReflectionUtil.setFieldValue(obj, "field", "TEST");
-        assertEquals(obj.toString(), "TEST");
+        assertEquals("TEST", obj.toString());
     }
 
     @Test
     void testGetFieldValue() {
         final Object obj = new Object() {
+            public String field = "Test";
+
+            @Override
+            public String toString() {
+                return this.field + "";
+            }
         };
 
-        assertEquals(ReflectionUtil.getFieldValue(obj, "field"), "Test");
+        assertEquals("Test", ReflectionUtil.getFieldValue(obj, "field"));
     }
 
     @Test
@@ -69,7 +75,7 @@ class ReflectionUtilTest {
         final List<String> list = new ArrayList<>();
         list.add("Test");
         final var size = ReflectionUtil.invoke(list, "size");
-        assertTrue("1".equals(String.valueOf(size)));
+        assertEquals("1", String.valueOf(size));
     }
 
     @Test
@@ -77,7 +83,7 @@ class ReflectionUtilTest {
         final List<String> list = new ArrayList<>();
         list.add("Test");
         ReflectionUtil.invoke(list, "add", "TEST2");
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
     }
 
     @Test
@@ -91,15 +97,20 @@ class ReflectionUtilTest {
     @Test
     void testInvokeObjectStringPrimitiveBool() {
         final Object obj = new Object() {
-            private final boolean b = false;
+            private boolean b = false;
+
+            public void setB(final boolean b) {
+                this.b = b;
+            }
 
             @Override
             public String toString() {
+                this.setB(true);
                 return this.b + "";
             }
         };
 
-        ReflectionUtil.invoke(obj, "set", true);
+        ReflectionUtil.invoke(obj, "setB", true);
         assertEquals("true", obj.toString());
     }
 

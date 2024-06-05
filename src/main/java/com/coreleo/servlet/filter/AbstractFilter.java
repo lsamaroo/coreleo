@@ -34,7 +34,8 @@ import com.coreleo.util.LogUtil;
 public abstract class AbstractFilter implements Filter {
     protected FilterConfig filterConfig;
     protected ServletContext context;
-    private boolean isOn = true;
+
+    protected boolean isOn = true;
 
     /** Constructor */
     protected AbstractFilter() {
