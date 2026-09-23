@@ -1,23 +1,23 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <groupId>com.coreleo</groupId>
     <artifactId>coreleo</artifactId>
     <version>1.0.0</version>
 
-	<properties>
- 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>		
-	    <!-- Compiler source and target versions -->
-	    <maven.compiler.source>11</maven.compiler.source>
-	    <maven.compiler.target>11</maven.compiler.target>
-	
-	    <!-- Jacoco plugin version -->
-	    <jacoco.maven.plugin.version>0.8.7</jacoco.maven.plugin.version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-	</properties>
-	
+        <!-- Set global compiler release versions -->
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <!-- Jacoco plugin version -->
+        <jacoco.maven.plugin.version>0.8.13</jacoco.maven.plugin.version>
+
+    </properties>
+
     <!-- Dependencies -->
     <dependencies>
         <!-- Servlet API -->
@@ -27,7 +27,7 @@
             <version>8.0</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!-- Apache Commons Lang -->
         <dependency>
             <groupId>commons-lang</groupId>
@@ -35,15 +35,15 @@
             <version>2.6</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!-- JUnit -->
-	    <dependency>
-	        <groupId>org.junit.jupiter</groupId>
-	        <artifactId>junit-jupiter-api</artifactId>
-	        <version>5.8.0</version> <!-- Use the desired JUnit 5 version -->
-	        <scope>test</scope>
-	    </dependency>
-        
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.0</version> <!-- Use the desired JUnit 5 version -->
+            <scope>test</scope>
+        </dependency>
+
         <!-- Logback Classic -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -51,7 +51,7 @@
             <version>1.2.11</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!-- Jackson Databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -59,7 +59,7 @@
             <version>2.13.4.1</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!-- Jackson Annotations -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -67,7 +67,7 @@
             <version>2.13.4</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!-- Jackson Core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -76,7 +76,7 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-  
+
     <build>
         <plugins>
             <plugin>
@@ -84,14 +84,12 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version>
+                <version>5.7.0.6970</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -111,8 +109,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>          
+            </plugin>
         </plugins>
-      </build>
-      
+    </build>
+
 </project>
