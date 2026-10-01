@@ -270,8 +270,9 @@ public final class ReflectionUtil {
 		constructorCache.put(key, c);
 
 		if (c == null) {
-			throw new SimpleException("Constructor with params= " + ArrayUtil.toCommaDelimitedString(params)
-			        + " not found in class " + clazz + "");
+			// Parameter values are never logged or put in messages: they may be passwords or other secrets.
+			throw new SimpleException("Constructor with parameterTypes="
+			        + ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes) + " not found in class " + clazz);
 		}
 		else {
 			LogUtil.debug("Constructor found=" + c);
@@ -355,13 +356,12 @@ public final class ReflectionUtil {
 		}
 
 		if (m == null) {
-			throw new SimpleException("Method Not Found for Class " + clazz + " Method=" + methodName + " params="
-			        + ArrayUtil.toCommaDelimitedString(params) + " parameterTypes="
-			        + ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
+			// Parameter values are never logged or put in messages: they may be passwords or other secrets.
+			throw new SimpleException("Method Not Found for Class " + clazz + " Method=" + methodName
+			        + " parameterTypes=" + ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
 		}
 		else {
-			LogUtil.debug("Method Found for Class {} Method={} params={} parameterTypes={}", clazz, methodName,
-			        ArrayUtil.toCommaDelimitedString(params),
+			LogUtil.debug("Method Found for Class {} Method={} parameterTypes={}", clazz, methodName,
 			        ArrayUtil.toCommaDelimitedString((Object[]) parameterTypes));
 			methodCache.put(key, m);
 			return m;

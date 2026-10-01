@@ -902,8 +902,9 @@ public final class DBUtil {
 		sb.append(sqlType);
 		sb.append(" - sql=");
 		sb.append(sql);
-		sb.append(" params=");
-		sb.append(ArrayUtil.toDelimitedString(params, "|"));
+		// Only the number of bound values is logged: values may be passwords, hashes, or personal data.
+		sb.append(" paramCount=");
+		sb.append(params == null ? 0 : params.length);
 		if (resultSetType != -1) {
 			sb.append(" [resultSetType=");
 			sb.append(resultSetType);
